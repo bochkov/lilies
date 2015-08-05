@@ -3,14 +3,16 @@ package com.sergeybochkov.lilies.model;
 import javax.persistence.*;
 import java.io.File;
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table(name = "music")
 public class Music implements Serializable {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(generator = "music_seq_generator")
     @Column(name = "music_id")
+    @SequenceGenerator(name = "music_seq_generator", sequenceName = "music_sequence")
     private Long id;
 
     @Column(name = "name")
@@ -19,21 +21,18 @@ public class Music implements Serializable {
     @Column(name = "subname")
     private String subName;
 
-    @Column(name = "composer")
     @ManyToMany
-    private Author composer;
+    private List<Author> composer;
 
-    @Column(name = "writer")
     @ManyToMany
-    private Author writer;
+    private List<Author> writer;
 
-    @Column(name = "difficulty")
     @ManyToOne
+    @JoinColumn(name = "difficulty")
     private Difficulty difficulty;
 
-    @Column(name = "instrument")
     @ManyToMany
-    private Instrument instrument;
+    private List<Instrument> instrument;
 
     @Column(name = "src_file")
     private File srcFile;
@@ -46,15 +45,9 @@ public class Music implements Serializable {
 
     public Music() {}
 
-    public Music(String name, String subName, Author composer, Author writer, Difficulty difficulty, Instrument instrument, File pdfFile, File mp3File, File srcFile) {
+    public Music(String name, String subName, File srcFile) {
         this.name = name;
         this.subName = subName;
-        this.composer = composer;
-        this.writer = writer;
-        this.difficulty = difficulty;
-        this.instrument = instrument;
-        this.pdfFile = pdfFile;
-        this.mp3File = mp3File;
         this.srcFile = srcFile;
     }
 
@@ -82,19 +75,19 @@ public class Music implements Serializable {
         this.subName = subName;
     }
 
-    public Author getComposer() {
+    public List<Author> getComposer() {
         return composer;
     }
 
-    public void setComposer(Author composer) {
+    public void setComposer(List<Author> composer) {
         this.composer = composer;
     }
 
-    public Author getWriter() {
+    public List<Author> getWriter() {
         return writer;
     }
 
-    public void setWriter(Author writer) {
+    public void setWriter(List<Author> writer) {
         this.writer = writer;
     }
 
@@ -106,12 +99,20 @@ public class Music implements Serializable {
         this.difficulty = difficulty;
     }
 
-    public Instrument getInstrument() {
+    public List<Instrument> getInstrument() {
         return instrument;
     }
 
-    public void setInstrument(Instrument instrument) {
+    public void setInstrument(List<Instrument> instrument) {
         this.instrument = instrument;
+    }
+
+    public File getSrcFile() {
+        return srcFile;
+    }
+
+    public void setSrcFile(File srcFile) {
+        this.srcFile = srcFile;
     }
 
     public File getPdfFile() {
@@ -128,13 +129,5 @@ public class Music implements Serializable {
 
     public void setMp3File(File mp3File) {
         this.mp3File = mp3File;
-    }
-
-    public File getSrcFile() {
-        return srcFile;
-    }
-
-    public void setSrcFile(File srcFile) {
-        this.srcFile = srcFile;
     }
 }

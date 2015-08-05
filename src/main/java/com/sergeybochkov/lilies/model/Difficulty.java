@@ -19,7 +19,8 @@ public class Difficulty {
 
     public Difficulty() {}
 
-    public Difficulty(String name) {
+    public Difficulty(Integer id, String name) {
+        this.id = id;
         this.name = name;
     }
 
