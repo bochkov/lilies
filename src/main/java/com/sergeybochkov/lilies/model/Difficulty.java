@@ -39,4 +39,8 @@ public class Difficulty {
     public void setName(String name) {
         this.name = name;
     }
+
+    public String str() {
+        return String.format("%s - %s", this.rating, this.name);
+    }
 }

@@ -1,13 +1,12 @@
 {% extends 'admin/index' %}
 
-{% block menu %}
-    {{ parent() }}
-    <hr/>
-    <a href="/admin/music/add/">add music</a>
+{% block cmd %}
+    <a class="button" href="/admin/music/add/">add music</a>
 {% endblock %}
 
 {% block content %}
 <table>
+    <thead>
     <tr>
         <th>Название</th>
         <th>Подимя</th>
@@ -20,6 +19,8 @@
         <th>Mp3?</th>
         <th></th>
     </tr>
+    </thead>
+    <tbody>
     {% for music in musicList %}
     <tr>
         <td>{{ music.name }}</td>
@@ -34,7 +35,7 @@
             {{ writer.str }}
             {% endfor %}
         </td>
-        <td>{{ music.difficulty }}</td>
+        <td>{{ music.difficulty.str }}</td>
         <td>{{ music.instrument.str }}</td>
         <td>{{ music.hasSrc ? "yes" : "no" }}</td>
         <td>{{ music.hasPdf ? "yes" : "no" }}</td>
@@ -42,5 +43,6 @@
         <td><a href="/admin/music/delete/">delete</a></td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

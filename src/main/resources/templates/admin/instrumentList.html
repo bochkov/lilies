@@ -1,20 +1,27 @@
 {% extends 'admin/index' %}
 
-{% block menu %}
-    {{ parent() }}
-    <hr/>
-    <a href="/admin/instrument/add/">add instrument</a>
+{% block cmd %}
+    <a class="button" href="/admin/instrument/add/">add instrument</a>
 {% endblock %}
 
 {% block content %}
 <table>
-{% for instrument in instrumentList %}
+    <thead>
     <tr>
-        <td>{{ instrument.id }}</td>
-        <td>{{ instrument.name }}</td>
-        <td>{{ instrument.slug }}</td>
-        <td><a href="/admin/instrument/delete/">delete</a></td>
+        <th>#</th>
+        <th>Название</th>
+        <th>Slug</th>
     </tr>
-{% endfor %}
+    </thead>
+    <tbody>
+    {% for instrument in instrumentList %}
+        <tr>
+            <td>{{ instrument.id }}</td>
+            <td>{{ instrument.name }}</td>
+            <td>{{ instrument.slug }}</td>
+            <td><a href="/admin/instrument/delete/">delete</a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
 </table>
 {% endblock %}

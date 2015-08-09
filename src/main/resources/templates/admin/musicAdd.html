@@ -16,7 +16,7 @@
     </label>
     <label>Сложность
         <select name="difficulty">
-            {% for diff in difficulties %}<option>{{ diff }}</option>{% endfor %}
+            {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
         </select>
     </label>
     <label>Инструмент
@@ -26,6 +26,6 @@
         <input type="file" name="src_file" />
     </label>
 
-    <button type="submit">Сохранить</button>
+    <button class="button" type="submit">Сохранить</button>
 </form>
 {% endblock %}

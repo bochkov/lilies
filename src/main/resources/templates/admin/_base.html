@@ -3,16 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Page</title>
+
+    <link rel="stylesheet" type="text/css" href="/static/css/foundation.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
 </head>
 <body>
 
-{% block menu %}
-{% endblock %}
+<div class="contain-to-grid fixed">
+    <nav class="top-bar" data-topbar role="navigation">
+        <ul class="title-area">
+            <li class="name">
+                <h1><a href="/admin/">Lilies admin</a></h1>
+            </li>
+        </ul>
+        <section class="top-bar-section">
+            <ul class="left">
+                <li><a href="/admin/music/">music</a></li>
+                <li><a href="/admin/author/">author</a></li>
+                <li><a href="/admin/instrument/">instrument</a></li>
+                <li><a href="/admin/difficulty/">difficulty</a></li>
+            </ul>
+        </section>
+    </nav>
+</div>
 
-<hr/>
 
-{% block content %}
-{% endblock %}
+<div class="row">
+
+    {% block cmd %}{% endblock %}
+
+    {% block content %}{% endblock %}
+
+</div>
+
+<script src="/static/js/foundation.min.js"></script>
 
 </body>
 </html>

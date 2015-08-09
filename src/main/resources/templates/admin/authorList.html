@@ -1,13 +1,19 @@
 {% extends 'admin/index' %}
 
-{% block menu %}
-    {{ parent() }}
-    <hr/>
-    <a href="/admin/author/add/">add author</a>
+{% block cmd %}
+    <a class="button" href="/admin/author/add/">add author</a>
 {% endblock %}
 
 {% block content %}
 <table>
+    <thead>
+    <tr>
+        <th>Фамилия</th>
+        <th>Имя</th>
+        <th>Отчество</th>
+    </tr>
+    </thead>
+    <tbody>
     {% for author in authorList %}
     <tr>
         <td>{{ author.lastName }}</td>
@@ -16,5 +22,6 @@
         <td><a href="/admin/author/delete/">delete</a></td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 {% endblock %}
