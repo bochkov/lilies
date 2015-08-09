@@ -25,8 +25,9 @@ public class Instrument implements Serializable {
 
     public Instrument() {}
 
-    public Instrument(String name) {
+    public Instrument(String name, String slug) {
         this.name = name;
+        this.slug = slug;
     }
 
     public Long getId() {
@@ -60,5 +61,9 @@ public class Instrument implements Serializable {
                 ", name='" + name + '\'' +
                 ", slug='" + slug + '\'' +
                 '}';
+    }
+
+    public String str() {
+        return name;
     }
 }

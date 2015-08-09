@@ -1,7 +1,7 @@
 {% extends 'admin/index' %}
 
 {% block menu %}
-    {{ super.menu }}
+    {{ parent() }}
     <hr/>
     <a href="/admin/instrument/add/">add instrument</a>
 {% endblock %}

@@ -9,7 +9,7 @@ public class Difficulty {
 
     @Id
     @Column(name = "rating")
-    private Integer id;
+    private Integer rating;
 
     @Column(name = "name")
     private String name;
@@ -19,17 +19,17 @@ public class Difficulty {
 
     public Difficulty() {}
 
-    public Difficulty(Integer id, String name) {
-        this.id = id;
+    public Difficulty(Integer rating, String name) {
+        this.rating = rating;
         this.name = name;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getRating() {
+        return rating;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setRating(Integer rating) {
+        this.rating = rating;
     }
 
     public String getName() {

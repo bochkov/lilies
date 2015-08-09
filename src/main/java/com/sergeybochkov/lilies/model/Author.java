@@ -75,4 +75,8 @@ public class Author implements Serializable {
                 ", middleName='" + middleName + '\'' +
                 '}';
     }
+
+    public String str() {
+        return String.format("%s %s %s", lastName, firstName, middleName);
+    }
 }

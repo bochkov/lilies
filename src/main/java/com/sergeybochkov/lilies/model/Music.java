@@ -129,4 +129,16 @@ public class Music implements Serializable {
     public void setMp3File(byte[] mp3File) {
         this.mp3File = mp3File;
     }
+
+    public boolean hasSrc() {
+        return srcFile != null && srcFile.length > 0;
+    }
+
+    public boolean hasPdf() {
+        return pdfFile != null && pdfFile.length > 0;
+    }
+
+    public boolean hasMp3() {
+        return mp3File != null && mp3File.length > 0;
+    }
 }

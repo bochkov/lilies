@@ -1,0 +1,17 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+<form action="/admin/author/save/" method="POST">
+    <label>Фамилия
+        <input type="text" name="lastName" />
+    </label>
+    <label>Имя
+        <input type="text" name="firstName" />
+    </label>
+    <label>Отчество
+        <input type="text" name="middleName" />
+    </label>
+
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

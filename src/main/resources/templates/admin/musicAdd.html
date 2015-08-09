@@ -1,0 +1,31 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+<form method="POST" action="/admin/music/save/">
+    <label>Название
+        <input type="text" name="name" />
+    </label>
+    <label>подИмя
+        <input type="text" name="subName" />
+    </label>
+    <label>Композитор
+        <input type="text" name="composer" />
+    </label>
+    <label>Автор
+        <input type="text" name="writer" />
+    </label>
+    <label>Сложность
+        <select name="difficulty">
+            {% for diff in difficulties %}<option>{{ diff }}</option>{% endfor %}
+        </select>
+    </label>
+    <label>Инструмент
+        <input type="text" name="instrument" />
+    </label>
+    <label>ly-файл
+        <input type="file" name="src_file" />
+    </label>
+
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'admin/index' %}
+
+{% block menu %}
+    {{ parent() }}
+    <hr/>
+    <a href="/admin/difficulty/add/">add difficulty</a>
+{% endblock %}
+
+{% block content %}
+<table>
+    <tr>
+        <th>Рейтинг</th>
+        <th>Описание</th>
+    </tr>
+    {% for diff in difficultyList %}
+    <tr>
+        <td>{{ diff.rating }}</td>
+        <td>{{ diff.name }}</td>
+        <td><a href="/admin/difficulty/delete/" >delete</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

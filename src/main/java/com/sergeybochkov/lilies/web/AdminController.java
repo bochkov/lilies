@@ -40,7 +40,8 @@ public class AdminController {
     @RequestMapping("/admin/music/add/")
     public String addMusic(Model model) {
         model.addAttribute("music", new Music());
-        return "admin/music/add/";
+        model.addAttribute("difficulties", difficultyService.findAll());
+        return "admin/musicAdd";
     }
 
     @RequestMapping(value = "/admin/music/save/", method = RequestMethod.POST)
@@ -72,7 +73,7 @@ public class AdminController {
     @RequestMapping(value = "/admin/difficulty/save/", method = RequestMethod.POST)
     public String saveDifficulty(@ModelAttribute("difficulty") Difficulty difficulty) {
         difficultyService.save(difficulty);
-        return "redirect:/admin/difficuty/";
+        return "redirect:/admin/difficulty/";
     }
 
     @RequestMapping("/admin/difficulty/delete")
@@ -121,7 +122,7 @@ public class AdminController {
         return "admin/authorAdd";
     }
 
-    @RequestMapping("/admin/author/save/")
+    @RequestMapping(value = "/admin/author/save/", method = RequestMethod.POST)
     public String saveAuthor(@ModelAttribute("author") Author author) {
         authorService.getOrSave(author);
         return "redirect:/admin/author/";

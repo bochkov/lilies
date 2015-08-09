@@ -1,0 +1,14 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+<form action="/admin/difficulty/save/" method="POST">
+    <label>Рейтинг
+        <input type="text" name="rating" />
+    </label>
+    <label>Описание
+        <input type="text" name="name" />
+    </label>
+
+    <button type="submit">Сохранить</button>
+</form>
+{% endblock %}

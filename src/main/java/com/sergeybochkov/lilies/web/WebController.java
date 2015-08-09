@@ -1,6 +1,7 @@
 package com.sergeybochkov.lilies.web;
 
 import com.sergeybochkov.lilies.model.Author;
+import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.service.AuthorService;
@@ -40,11 +41,11 @@ public class WebController {
         writers.add(authorService.getOrSave(new Author("Сидоров", "Сидор", "Сидорович")));
         music.setWriter(writers);
 
-        music.setDifficulty(diffService.get(3));
+        music.setDifficulty(diffService.save(new Difficulty(3, "средне")));
 
         List<Instrument> instruments = new ArrayList<>();
-        instruments.add(instrumentService.getOrSave(new Instrument("баян")));
-        instruments.add(instrumentService.getOrSave(new Instrument("аккордеон")));
+        instruments.add(instrumentService.getOrSave(new Instrument("баян", "bayan")));
+        instruments.add(instrumentService.getOrSave(new Instrument("аккордеон", "accordion")));
         music.setInstrument(instruments);
 
         try {

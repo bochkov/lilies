@@ -1,11 +1,45 @@
 {% extends 'admin/index' %}
 
+{% block menu %}
+    {{ parent() }}
+    <hr/>
+    <a href="/admin/music/add/">add music</a>
+{% endblock %}
+
 {% block content %}
 <table>
+    <tr>
+        <th>Название</th>
+        <th>Подимя</th>
+        <th>Композитор</th>
+        <th>Автор</th>
+        <th>Сложность</th>
+        <th>Инструмент</th>
+        <th>Ly?</th>
+        <th>Pdf?</th>
+        <th>Mp3?</th>
+        <th></th>
+    </tr>
     {% for music in musicList %}
     <tr>
         <td>{{ music.name }}</td>
         <td>{{ music.subName }}</td>
+        <td>
+            {% for composer in music.composer %}
+            {{ composer.str }}
+            {% endfor %}
+        </td>
+        <td>
+            {% for writer in music.writer %}
+            {{ writer.str }}
+            {% endfor %}
+        </td>
+        <td>{{ music.difficulty }}</td>
+        <td>{{ music.instrument.str }}</td>
+        <td>{{ music.hasSrc ? "yes" : "no" }}</td>
+        <td>{{ music.hasPdf ? "yes" : "no" }}</td>
+        <td>{{ music.hasMp3 ? "yes" : "no" }}</td>
+        <td><a href="/admin/music/delete/">delete</a></td>
     </tr>
     {% endfor %}
 </table>
