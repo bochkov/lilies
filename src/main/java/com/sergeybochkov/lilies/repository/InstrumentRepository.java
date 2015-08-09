@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InstrumentRepository extends JpaRepository<Instrument, Long> {
 
-    Instrument findByName(String name);
+    Instrument findBySlug(String slug);
 }

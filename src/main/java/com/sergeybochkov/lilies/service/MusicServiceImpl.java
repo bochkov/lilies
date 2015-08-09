@@ -22,4 +22,9 @@ public class MusicServiceImpl implements MusicService {
     public Music save(Music music) {
         return repo.save(music);
     }
+
+    @Override
+    public void delete(Long id) {
+        repo.delete(id);
+    }
 }

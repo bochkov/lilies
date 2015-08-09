@@ -14,8 +14,11 @@ public class Instrument implements Serializable {
     @SequenceGenerator(name = "instrument_seq_generator", sequenceName = "instrument_sequence")
     private Long id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "slug", unique = true)
+    private String slug;
 
     @ManyToMany
     private List<Music> musicList;
@@ -42,11 +45,20 @@ public class Instrument implements Serializable {
         this.name = name;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
     @Override
     public String toString() {
         return "Instrument {" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", slug='" + slug + '\'' +
                 '}';
     }
 }

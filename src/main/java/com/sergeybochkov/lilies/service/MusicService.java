@@ -9,4 +9,6 @@ public interface MusicService {
     List<Music> findAll();
 
     Music save(Music music);
+
+    void delete(Long id);
 }

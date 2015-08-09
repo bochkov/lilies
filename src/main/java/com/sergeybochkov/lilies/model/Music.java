@@ -35,20 +35,19 @@ public class Music implements Serializable {
     private List<Instrument> instrument;
 
     @Column(name = "src_file")
-    private File srcFile;
+    private byte[] srcFile;
 
     @Column(name = "pdf_file")
-    private File pdfFile;
+    private byte[] pdfFile;
 
     @Column(name = "mp3_file")
-    private File mp3File;
+    private byte[] mp3File;
 
     public Music() {}
 
-    public Music(String name, String subName, File srcFile) {
+    public Music(String name, String subName) {
         this.name = name;
         this.subName = subName;
-        this.srcFile = srcFile;
     }
 
     public Long getId() {
@@ -107,27 +106,27 @@ public class Music implements Serializable {
         this.instrument = instrument;
     }
 
-    public File getSrcFile() {
+    public byte[] getSrcFile() {
         return srcFile;
     }
 
-    public void setSrcFile(File srcFile) {
+    public void setSrcFile(byte[] srcFile) {
         this.srcFile = srcFile;
     }
 
-    public File getPdfFile() {
+    public byte[] getPdfFile() {
         return pdfFile;
     }
 
-    public void setPdfFile(File pdfFile) {
+    public void setPdfFile(byte[] pdfFile) {
         this.pdfFile = pdfFile;
     }
 
-    public File getMp3File() {
+    public byte[] getMp3File() {
         return mp3File;
     }
 
-    public void setMp3File(File mp3File) {
+    public void setMp3File(byte[] mp3File) {
         this.mp3File = mp3File;
     }
 }

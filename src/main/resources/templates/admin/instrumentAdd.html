@@ -1,0 +1,14 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+<form action="/admin/instrument/save/" method="POST">
+    <label>Название
+        <input type="text" name="name" />
+    </label>
+    <label>Slug
+        <input type="text" name="slug" />
+    </label>
+
+    <button type="submit">Submit</button>
+</form>
+{% endblock %}

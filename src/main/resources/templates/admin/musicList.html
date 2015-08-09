@@ -1,0 +1,12 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+<table>
+    {% for music in musicList %}
+    <tr>
+        <td>{{ music.name }}</td>
+        <td>{{ music.subName }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

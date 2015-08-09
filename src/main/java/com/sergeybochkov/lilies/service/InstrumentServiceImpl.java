@@ -5,6 +5,8 @@ import com.sergeybochkov.lilies.repository.InstrumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class InstrumentServiceImpl implements InstrumentService {
 
@@ -13,7 +15,17 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Instrument getOrSave(Instrument instrument) {
-        Instrument in = repo.findByName(instrument.getName());
+        Instrument in = repo.findBySlug(instrument.getSlug());
         return in != null ? in : repo.save(instrument);
+    }
+
+    @Override
+    public List<Instrument> findAll() {
+        return repo.findAll();
+    }
+
+    @Override
+    public void delete(Long id) {
+        repo.delete(id);
     }
 }
