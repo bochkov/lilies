@@ -1,0 +1,97 @@
+{% extends 'lilies/index' %}
+
+{% block title %}{{ object.name }} - {% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-2 text-right">
+        <dl class="dl">
+            {% if object.composer %}<dt>Композитор</dt><dd>{{ object.composer }}</dd>{% endif %}
+            {% if object.writer %}<dt>Слова</dt><dd>{{ object.writer }}</dd>{% endif %}
+            {% if object.instrument %}<dt>Инструмент</dt><dd>{{ object.instrument }}</dd>{% endif %}
+            <dt>Сложность</dt><dd>{{ object.difficulty|stars }}</dd>
+        </dl>
+        <div class="btn-group-vertical">
+            {% if object.has_mp3 %}
+            <a class="btn btn-default btn-sm audio-control">
+                <audio src="/media/{{ object.mp3_file }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
+                <i class="glyphicon glyphicon-music"></i> Слушать</a>
+            {% endif %}
+            <a class="btn btn-default btn-sm" href="/media/{{ object.pdf_file }}">
+                <i class="glyphicon glyphicon-save"></i> PDF</a>
+            {% if object.has_src %}
+            <a class="btn btn-default btn-sm" href="/media/{{ object.src_file }}">
+                <i class="glyphicon glyphicon-file"></i> .ly файл</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-md-9 col-md-offset-1">
+        <canvas id="pdf-canvas"></canvas>
+        <ul class="pager">
+            <li id="pdf-prev">
+                <span class="btn btn-default" onclick="goPrev();"><i class="glyphicon glyphicon-chevron-left"></i> Предыдущая страница</span>
+            </li>
+            <li id="pdf-next">
+                <span class="btn btn-default" onclick="goNext();">Следующая страница <i class="glyphicon glyphicon-chevron-right"></i></span>
+            </li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script type="text/javascript" src="/static/js/pleer.js"></script>
+<script type="text/javascript" src="/static/js/compatibility.min.js"></script>
+<script type="text/javascript" src="/static/js/pdf.min.js"></script>
+<script type="text/javascript">
+    PDFJS.workerSrc = '/static/js/pdf.min.worker.js';
+    PDFJS.disableWorker = true;
+    var pdfdoc = null,
+            pageNum = 1,
+            canvas = document.getElementById("pdf-canvas"),
+            ctx = canvas.getContext("2d");
+
+    function renderPage(num){
+        pdfdoc.getPage(num).then(function(page){
+            var scale = 760 / page.getViewport(1.0).width;
+            var viewport = page.getViewport(scale);
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = { canvasContext: ctx, viewport: viewport };
+            page.render(renderContext);
+
+            var next = $("#pdf-next"),
+                    prev = $("#pdf-prev");
+            prev.removeClass("disabled");
+            next.removeClass("disabled");
+            if (num == pdfdoc.numPages) { next.addClass("disabled"); }
+            if (num == 1) { prev.addClass("disabled"); }
+        });
+    }
+
+    function goPrev(){
+        if (pageNum <= 1) return;
+        --pageNum;
+        renderPage(pageNum);
+    }
+
+    function goNext(){
+        if (pageNum >= pdfdoc.numPages) return;
+        ++pageNum;
+        renderPage(pageNum);
+    }
+
+    PDFJS.getDocument("").then(function(_pdfdoc){
+        pdfdoc = _pdfdoc;
+        renderPage(pageNum);
+    });
+
+    $(document).keyup(function(event){
+        if (event.keyCode == 37) goPrev();
+        if (event.keyCode == 39) goNext();
+    });
+</script>
+{% endblock %}

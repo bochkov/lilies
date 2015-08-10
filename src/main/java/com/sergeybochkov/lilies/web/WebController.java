@@ -11,6 +11,7 @@ import com.sergeybochkov.lilies.service.MusicService;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -21,10 +22,24 @@ import java.util.List;
 @Controller
 public class WebController {
 
-    @Autowired private MusicService service;
+    @Autowired private MusicService musicService;
     @Autowired private DifficultyService diffService;
     @Autowired private AuthorService authorService;
     @Autowired private InstrumentService instrumentService;
+
+    @RequestMapping("/")
+    public String index(Model model) {
+        model.addAttribute("instruments", instrumentService.findAll());
+        model.addAttribute("difficulties", diffService.findAll());
+        return "lilies/index";
+    }
+
+    @RequestMapping("/about/")
+    public String about(Model model) {
+        model.addAttribute("sheets", musicService.findAll().size());
+        model.addAttribute("instruments", instrumentService.findAll().size());
+        return "lilies/about";
+    }
 
     @RequestMapping("/save/")
     public @ResponseBody Serializable saveOne() {
@@ -54,12 +69,12 @@ public class WebController {
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
-        return service.save(music);
+        return musicService.save(music);
     }
 
     @RequestMapping("/findAll/")
     public @ResponseBody List<Music> findAll() {
-        return service.findAll();
+        return musicService.findAll();
     }
 
     @RequestMapping("/showFile/")
