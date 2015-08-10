@@ -1,0 +1,33 @@
+
+{% block content2 %}
+    {% for obj_list in object_list %}
+    <div class="medium-4">
+        <h2>{{ obj_list.grouper }}</h2>
+        <ul class="no-bullet">
+        {% for obj in obj_list.list %}
+            <li><a href="/sheet-{{obj.id}}/">
+                <small class="text-muted">{{ obj.composer.str }}</small>
+                {{ obj.name }}
+                <small class="text-muted">{{ obj.subname }}</small>
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+    {% else %}
+        Ничего нет
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <ul class="no-bullet">
+    {% for music in object_list %}
+        <li><a href="/sheet-{{music.id}}/">
+            <small class="text-muted">{{ music.composer.str }}</small>
+            {{ music.name }}
+            <small class="text-muted">{{ music.subName }}</small>
+        </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

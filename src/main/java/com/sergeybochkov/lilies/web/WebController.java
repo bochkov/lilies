@@ -12,12 +12,10 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class WebController {
@@ -39,6 +37,41 @@ public class WebController {
         model.addAttribute("sheets", musicService.findAll().size());
         model.addAttribute("instruments", instrumentService.findAll().size());
         return "lilies/about";
+    }
+
+    @RequestMapping("/sheet-{id}/")
+    public String detail(Model model, @PathVariable Long id) {
+        model.addAttribute("object", musicService.findOne(id));
+        return "lilies/detail";
+    }
+
+    @RequestMapping(value = "/a/music/", method = RequestMethod.POST)
+    public String getMusic(Model model,
+                           @RequestParam(value = "difficulties[]", required = false) String[] difficulties,
+                           @RequestParam(value = "instruments[]", required = false) String[] instruments) {
+
+        List<Instrument> instrumentList = new ArrayList<>();
+        if (instruments != null)
+            for (String inst : instruments)
+                instrumentList.add(instrumentService.findBySlug(inst));
+
+        List<Difficulty> difficultyList = new ArrayList<>();
+        if (difficulties != null)
+            for (String diff : difficulties)
+                difficultyList.add(diffService.get(Integer.valueOf(diff)));
+
+        List<Music> musics = musicService.findByDifficultyOrInstrumentIn(difficultyList, instrumentList);
+
+        Map<String, List<Music>> map = new HashMap<>();
+        for (Music music : musics) {
+            String grouper = music.getName().substring(0, 1);
+            if (!map.containsKey(grouper))
+                map.put(grouper, new ArrayList<>());
+            List<Music> mu = map.get(grouper);
+            mu.add(music);
+        }
+        model.addAttribute("object_list", musics);
+        return "lilies/ajax_list";
     }
 
     @RequestMapping("/save/")

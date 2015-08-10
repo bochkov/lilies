@@ -13,7 +13,9 @@ public class PebbleResolverConfig {
         PebbleViewResolver resolver = new PebbleViewResolver();
         resolver.setPrefix("templates");
         resolver.setSuffix(".html");
-        resolver.setPebbleEngine(new PebbleEngine());
+        PebbleEngine engine = new PebbleEngine();
+        engine.addExtension(new LiliesExtension());
+        resolver.setPebbleEngine(engine);
         return resolver;
     }
 }

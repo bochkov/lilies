@@ -20,6 +20,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Instrument findBySlug(String slug) {
+        return repo.findBySlug(slug);
+    }
+
+    @Override
     public List<Instrument> findAll() {
         return repo.findAll();
     }

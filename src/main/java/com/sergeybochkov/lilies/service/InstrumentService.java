@@ -8,6 +8,8 @@ public interface InstrumentService {
 
     Instrument getOrSave(Instrument instrument);
 
+    Instrument findBySlug(String slug);
+
     List<Instrument> findAll();
 
     void delete(Long id);

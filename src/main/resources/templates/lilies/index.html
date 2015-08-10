@@ -7,6 +7,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
 
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css" />
+
     <link rel="icon" type="image/png" href="/static/favicon.png"/>
 </head>
 <body>
@@ -58,13 +60,14 @@
             {% for d in difficulties %}
             <div>
                 <label>
-                    <input class="difficulties" checked value="{{ d.rating }}" type="checkbox"> {{ d.name }}
-                    <small class="text-muted">{{ d.str }}</small>
+                    <input class="difficulties" checked value="{{ d.rating }}" type="checkbox"> {{ d.rating|stars|raw }}
+                    <small class="text-muted">{{ d.name }}</small>
                 </label>
             </div>
             {% endfor %}
         </div>
-        <div class="columns medium-8">
+        <div class="columns medium-8" id="content">
+            {% include 'lilies/ajax_list' %}
         </div>
     </div>
     {% endblock %}
