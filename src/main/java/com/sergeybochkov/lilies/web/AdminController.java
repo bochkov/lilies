@@ -13,6 +13,7 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,6 +25,8 @@ import java.io.*;
 import java.nio.file.Paths;
 
 @Controller
+@RequestMapping("/admin")
+@PreAuthorize("hasRole('ADMIN')")
 public class AdminController {
 
     @Autowired private MusicService musicService;
@@ -31,20 +34,20 @@ public class AdminController {
     @Autowired private InstrumentService instrumentService;
     @Autowired private AuthorService authorService;
 
-    @RequestMapping("/admin/")
+    @RequestMapping("/")
     public String adminIndex() {
         return "admin/musicList";
     }
 
     // =============== MUSIC ==================
 
-    @RequestMapping("/admin/music/")
+    @RequestMapping("/music/")
     public String allMusic(Model model) {
         model.addAttribute("musicList", musicService.findAll());
         return "admin/musicList";
     }
 
-    @RequestMapping("/admin/music/add/")
+    @RequestMapping("/music/add/")
     public String addMusic(Model model) {
         model.addAttribute("music", new Music());
         model.addAttribute("difficulties", difficultyService.findAll());
@@ -53,7 +56,7 @@ public class AdminController {
         return "admin/musicAdd";
     }
 
-    @RequestMapping(value = "/admin/music/save/", method = RequestMethod.POST)
+    @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
     public String saveMusic(@ModelAttribute("music") Music music, @RequestParam("src_file") MultipartFile file, BindingResult result) {
         if (result.hasErrors())
             return "admin/musicAdd";
@@ -73,7 +76,7 @@ public class AdminController {
         return "redirect:/admin/music/";
     }
 
-    @RequestMapping(value = "/admin/music/delete/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/music/delete/", method = RequestMethod.DELETE)
     public String deleteMusic(@PathVariable Long id) {
         musicService.delete(id);
         return "redirect:/admin/music";
@@ -81,25 +84,25 @@ public class AdminController {
 
     // ================= DIFFICULTY ===================
 
-    @RequestMapping("/admin/difficulty/")
+    @RequestMapping("/difficulty/")
     public String allDifficulty(Model model) {
         model.addAttribute("difficultyList", difficultyService.findAll());
         return "admin/difficultyList";
     }
 
-    @RequestMapping("/admin/difficulty/add/")
+    @RequestMapping("/difficulty/add/")
     public String addDifficulty(Model model) {
         model.addAttribute("diff", new Difficulty());
         return "admin/difficultyAdd";
     }
 
-    @RequestMapping(value = "/admin/difficulty/save/", method = RequestMethod.POST)
+    @RequestMapping(value = "/difficulty/save/", method = RequestMethod.POST)
     public String saveDifficulty(@ModelAttribute("difficulty") Difficulty difficulty) {
         difficultyService.save(difficulty);
         return "redirect:/admin/difficulty/";
     }
 
-    @RequestMapping("/admin/difficulty/delete")
+    @RequestMapping("/difficulty/delete")
     public String deleteDifficulty(@PathVariable Integer id) {
         difficultyService.delete(id);
         return "redirect:/admin/difficulty/";
@@ -107,25 +110,25 @@ public class AdminController {
 
     // ================ INSTRUMENT =======================
 
-    @RequestMapping("/admin/instrument/")
+    @RequestMapping("/instrument/")
     public String allInstruments(Model model) {
         model.addAttribute("instrumentList", instrumentService.findAll());
         return "admin/instrumentList";
     }
 
-    @RequestMapping("/admin/instrument/add/")
+    @RequestMapping("/instrument/add/")
     public String addInstrument(Model model) {
         model.addAttribute("inst", new Instrument());
         return "admin/instrumentAdd";
     }
 
-    @RequestMapping(value = "/admin/instrument/save/" , method = RequestMethod.POST)
+    @RequestMapping(value = "/instrument/save/" , method = RequestMethod.POST)
     public String saveInstrument(@ModelAttribute("instrument") Instrument instrument) {
         instrumentService.getOrSave(instrument);
         return "redirect:/admin/instrument/";
     }
 
-    @RequestMapping(value = "/admin/instrument/delete/", method = RequestMethod.POST)
+    @RequestMapping(value = "/instrument/delete/", method = RequestMethod.POST)
     public String deleteInstrument(@RequestParam Long id) {
         instrumentService.delete(id);
         return "redirect:/admin/instrument/";
@@ -133,25 +136,25 @@ public class AdminController {
 
     // =============== AUTHOR ================
 
-    @RequestMapping("/admin/author/")
+    @RequestMapping("/author/")
     public String allAuthors(Model model) {
         model.addAttribute("authorList", authorService.findAll());
         return "admin/authorList";
     }
 
-    @RequestMapping("/admin/author/add/")
+    @RequestMapping("/author/add/")
     public String addAuthor(Model model) {
         model.addAttribute("author", new Author());
         return "admin/authorAdd";
     }
 
-    @RequestMapping(value = "/admin/author/save/", method = RequestMethod.POST)
+    @RequestMapping(value = "/author/save/", method = RequestMethod.POST)
     public String saveAuthor(@ModelAttribute("author") Author author) {
         authorService.getOrSave(author);
         return "redirect:/admin/author/";
     }
 
-    @RequestMapping("/admin/author/delete/")
+    @RequestMapping("/author/delete/")
     public String deleteAuthor(@PathVariable Long id) {
         authorService.delete(id);
         return "redirect:/admin/author/";
