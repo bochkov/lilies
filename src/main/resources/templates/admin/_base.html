@@ -14,15 +14,15 @@
     <nav class="top-bar" data-topbar role="navigation">
         <ul class="title-area">
             <li class="name">
-                <h1><a href="/admin/">Lilies admin</a></h1>
+                <h1><a href="/admin/music/">Lilies admin</a></h1>
             </li>
         </ul>
         <section class="top-bar-section">
             <ul class="left">
-                <li><a href="/admin/music/">music</a></li>
-                <li><a href="/admin/author/">author</a></li>
-                <li><a href="/admin/instrument/">instrument</a></li>
-                <li><a href="/admin/difficulty/">difficulty</a></li>
+                <li class="{% block a_music %}{% endblock %}"><a href="/admin/music/">music</a></li>
+                <li class="{% block a_author %}{% endblock %}" ><a href="/admin/author/">author</a></li>
+                <li class="{% block a_instrument %}{% endblock %}" ><a href="/admin/instrument/">instrument</a></li>
+                <li class="{% block a_difficulty %}{% endblock %}" ><a href="/admin/difficulty/">difficulty</a></li>
             </ul>
         </section>
     </nav>
@@ -37,7 +37,9 @@
 
 </div>
 
+<script src="/static/js/jquery-2.1.4.min.js"></script>
 <script src="/static/js/foundation.min.js"></script>
+{% block customjs %}{% endblock %}
 
 </body>
 </html>

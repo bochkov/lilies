@@ -1,5 +1,7 @@
 {% extends 'admin/index' %}
 
+{% block a_author %}active{% endblock %}
+
 {% block cmd %}
     <a class="button" href="/admin/author/add/">add author</a>
 {% endblock %}
@@ -11,6 +13,7 @@
         <th>Фамилия</th>
         <th>Имя</th>
         <th>Отчество</th>
+        <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>

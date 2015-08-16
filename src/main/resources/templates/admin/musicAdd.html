@@ -1,7 +1,10 @@
 {% extends 'admin/index' %}
 
+{% block a_music %}active{% endblock %}
+
 {% block content %}
-<form method="POST" action="/admin/music/save/">
+{{ fields }}
+<form method="POST" action="/admin/music/save/" enctype="multipart/form-data">
     <label>Название
         <input type="text" name="name" />
     </label>
@@ -9,18 +12,24 @@
         <input type="text" name="subName" />
     </label>
     <label>Композитор
-        <input type="text" name="composer" />
+        <select name="composer" id="composer-select" multiple>
+            {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
+        </select>
     </label>
     <label>Автор
-        <input type="text" name="writer" />
+        <select name="writer" id="writer-select" multiple>
+            {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
+        </select>
     </label>
     <label>Сложность
-        <select name="difficulty">
+        <select name="difficulty" id="difficulty-select">
             {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
         </select>
     </label>
     <label>Инструмент
-        <input type="text" name="instrument" />
+        <select name="instrument" multiple id="instrument-select">
+            {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument.name}}</option>{% endfor %}
+        </select>
     </label>
     <label>ly-файл
         <input type="file" name="src_file" />

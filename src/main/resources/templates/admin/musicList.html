@@ -1,5 +1,7 @@
 {% extends 'admin/index' %}
 
+{% block a_music %}active{% endblock %}
+
 {% block cmd %}
     <a class="button" href="/admin/music/add/">add music</a>
 {% endblock %}
@@ -17,7 +19,7 @@
         <th>Ly?</th>
         <th>Pdf?</th>
         <th>Mp3?</th>
-        <th></th>
+        <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>
@@ -40,9 +42,15 @@
         <td>{{ music.hasSrc ? "yes" : "no" }}</td>
         <td>{{ music.hasPdf ? "yes" : "no" }}</td>
         <td>{{ music.hasMp3 ? "yes" : "no" }}</td>
-        <td><a href="/admin/music/delete/">delete</a></td>
+        <td><a id="delete-{{ music.id }}" href="#">delete</a></td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block customjs %}
+<script>
+
+</script>
 {% endblock %}

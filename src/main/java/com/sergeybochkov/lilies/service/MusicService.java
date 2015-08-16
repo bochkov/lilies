@@ -5,6 +5,7 @@ import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 
 import java.util.List;
+import java.util.Map;
 
 public interface MusicService {
 
@@ -12,7 +13,7 @@ public interface MusicService {
 
     List<Music> findAll();
 
-    List<Music> findByDifficultyOrInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
+    List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
     Music save(Music music);
 

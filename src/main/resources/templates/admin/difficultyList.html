@@ -1,5 +1,7 @@
 {% extends 'admin/index' %}
 
+{% block a_difficulty %}active{% endblock %}
+
 {% block cmd %}
     <a class="button" href="/admin/difficulty/add/">add difficulty</a>
 {% endblock %}
@@ -10,6 +12,7 @@
     <tr>
         <th>Рейтинг</th>
         <th>Описание</th>
+        <th>&nbsp;</th>
     </tr>
     </thead>
     <tbody>

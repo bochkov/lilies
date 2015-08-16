@@ -3,6 +3,7 @@ package com.sergeybochkov.lilies.service;
 import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.repository.DifficultyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class DifficultyServiceImpl implements DifficultyService {
 
     @Override
     public List<Difficulty> findAll() {
-        return repo.findAll();
+        return repo.findAll(new Sort("rating"));
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.sergeybochkov.lilies.service;
 import com.sergeybochkov.lilies.model.Author;
 import com.sergeybochkov.lilies.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> findAll() {
-        return repo.findAll();
+        return repo.findAll(new Sort("lastName", "firstName", "middleName"));
     }
 
     @Override

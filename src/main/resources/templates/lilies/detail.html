@@ -2,40 +2,60 @@
 
 {% block title %}{{ object.name }} - {% endblock %}
 
-{% block header %}
-{% endblock %}
-
 {% block content %}
 <div class="row">
-    <div class="col-md-2 text-right">
+    <div class="medium-2 columns text-right">
         <dl class="dl">
-            {% if object.composer %}<dt>Композитор</dt><dd>{{ object.composer }}</dd>{% endif %}
-            {% if object.writer %}<dt>Слова</dt><dd>{{ object.writer }}</dd>{% endif %}
-            {% if object.instrument %}<dt>Инструмент</dt><dd>{{ object.instrument }}</dd>{% endif %}
-            <dt>Сложность</dt><dd>{{ object.difficulty|stars }}</dd>
+            {% if object.composer.size > 0 %}
+            <dt>Композитор</dt>
+            {% for composer in object.composer %}<dd>{{ composer.str }}</dd>{% endfor %}
+            {% endif %}
+
+            {% if object.writer.size > 0 %}
+            <dt>Слова</dt>
+            {% for writer in object.writer %}<dd>{{ writer.str }}</dd>{% endfor %}
+            {% endif %}
+
+            {% if object.instrument.size > 0 %}
+            <dt>Инструмент</dt>
+            {% for inst in object.instrument %}<dd>{{ inst.str }}</dd>{% endfor %}
+            {% endif %}
+
+            <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
         </dl>
-        <div class="btn-group-vertical">
-            {% if object.has_mp3 %}
-            <a class="btn btn-default btn-sm audio-control">
-                <audio src="/media/{{ object.mp3_file }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
-                <i class="glyphicon glyphicon-music"></i> Слушать</a>
-            {% endif %}
-            <a class="btn btn-default btn-sm" href="/media/{{ object.pdf_file }}">
-                <i class="glyphicon glyphicon-save"></i> PDF</a>
-            {% if object.has_src %}
-            <a class="btn btn-default btn-sm" href="/media/{{ object.src_file }}">
-                <i class="glyphicon glyphicon-file"></i> .ly файл</a>
-            {% endif %}
-        </div>
-    </div>
-    <div class="col-md-9 col-md-offset-1">
-        <canvas id="pdf-canvas"></canvas>
-        <ul class="pager">
-            <li id="pdf-prev">
-                <span class="btn btn-default" onclick="goPrev();"><i class="glyphicon glyphicon-chevron-left"></i> Предыдущая страница</span>
+        <ul class="stack button-group">
+            {% if object.hasMp3 %}
+            <li>
+                <a class="button small audio-control">
+                    <audio src="/media/{{ object.mp3Filename }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
+                    <i class="fa fa-music"></i> Слушать</a>
             </li>
-            <li id="pdf-next">
-                <span class="btn btn-default" onclick="goNext();">Следующая страница <i class="glyphicon glyphicon-chevron-right"></i></span>
+            {% endif %}
+            {% if object.hasPdf %}
+            <li>
+                <a class="button small" target="_blank" href="/media/{{ object.pdfFilename }}">
+                    <i class="fa fa-save"></i> PDF</a>
+            </li>
+            {% endif %}
+            {% if object.hasSrc %}
+            <li>
+                <a class="button small" target="_blank" href="/media/{{ object.srcFilename }}">
+                    <i class="fa fa-file"></i> .ly файл</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+    <canvas class="columns medium-10" id="pdf-canvas"></canvas>
+</div>
+
+<div class="row">
+    <div class="medium-12 columns pagination-centered">
+        <ul class="pagination" role="menubar">
+            <li class="arrow unavailable" id="pdf-prev">
+                <a href="#" onclick="goPrev();">&laquo; Предыдущая страница</a>
+            </li>
+            <li class="arrow unavailable" id="pdf-next">
+                <a href="#" onclick="goNext()">Следующая страница &raquo;</a>
             </li>
         </ul>
     </div>
@@ -43,11 +63,10 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="/static/js/pleer.js"></script>
-<script type="text/javascript" src="/static/js/compatibility.min.js"></script>
-<script type="text/javascript" src="/static/js/pdf.min.js"></script>
+<script type="text/javascript" src="/static/js/pdf.js"></script>
+<script type="text/javascript" src="/static/js/compatibility.js"></script>
 <script type="text/javascript">
-    PDFJS.workerSrc = '/static/js/pdf.min.worker.js';
+    PDFJS.workerSrc = '/static/js/pdf.worker.js';
     PDFJS.disableWorker = true;
     var pdfdoc = null,
             pageNum = 1,
@@ -55,20 +74,19 @@
             ctx = canvas.getContext("2d");
 
     function renderPage(num){
-        pdfdoc.getPage(num).then(function(page){
-            var scale = 760 / page.getViewport(1.0).width;
+        pdfdoc.getPage(num).then(function(page) {
+            var scale = 1025 / page.getViewport(1.0).width;
             var viewport = page.getViewport(scale);
             canvas.height = viewport.height;
             canvas.width = viewport.width;
             var renderContext = { canvasContext: ctx, viewport: viewport };
             page.render(renderContext);
 
-            var next = $("#pdf-next"),
-                    prev = $("#pdf-prev");
-            prev.removeClass("disabled");
-            next.removeClass("disabled");
-            if (num == pdfdoc.numPages) { next.addClass("disabled"); }
-            if (num == 1) { prev.addClass("disabled"); }
+            var next = $("#pdf-next"), prev = $("#pdf-prev");
+            prev.removeClass("unavailable");
+            next.removeClass("unavailable");
+            if (num == pdfdoc.numPages) { next.addClass("unavailable"); }
+            if (num == 1) { prev.addClass("unavailable"); }
         });
     }
 
@@ -84,9 +102,34 @@
         renderPage(pageNum);
     }
 
-    PDFJS.getDocument("").then(function(_pdfdoc){
+    PDFJS.getDocument("/media/{{ object.pdfFilename }}").then(function(_pdfdoc){
         pdfdoc = _pdfdoc;
         renderPage(pageNum);
+    });
+
+    function audio_play(object){
+        var i = object.children("i");
+
+        var id = object.children("audio").attr("id");
+        var audio = document.getElementById(id);
+        audio.addEventListener("ended", function(){
+            i.removeClass("fa-pause").addClass("fa-music");
+        });
+
+        if (audio.paused) {
+            i.removeClass("fa-music").addClass("fa-pause");
+            audio.play();
+        }
+        else {
+            i.removeClass("fa-pause").addClass("fa-music");
+            audio.pause();
+            audio.currentTime = 0;
+        }
+    }
+
+    $(function(){
+        $(".audio-control").click(function(){ audio_play($(this)); });
+        $(document).keypress(function(event){ if (event.which == 112) audio_play($(".audio-control")); })
     });
 
     $(document).keyup(function(event){

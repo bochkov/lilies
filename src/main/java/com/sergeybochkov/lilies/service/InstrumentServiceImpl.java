@@ -3,6 +3,7 @@ package com.sergeybochkov.lilies.service;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.repository.InstrumentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,7 +27,7 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public List<Instrument> findAll() {
-        return repo.findAll();
+        return repo.findAll(new Sort("name"));
     }
 
     @Override

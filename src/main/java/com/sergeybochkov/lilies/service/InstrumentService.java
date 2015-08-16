@@ -2,6 +2,7 @@ package com.sergeybochkov.lilies.service;
 
 import com.sergeybochkov.lilies.model.Instrument;
 
+import javax.persistence.OrderBy;
 import java.util.List;
 
 public interface InstrumentService {

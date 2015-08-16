@@ -9,5 +9,7 @@ import java.util.List;
 
 public interface MusicRepository extends JpaRepository<Music, Long> {
 
-    List<Music> findByDifficultyOrInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
+    List<Music> findByDifficultyIn(List<Difficulty> difficulties);
+
+    List<Music> findByInstrumentIn(List<Instrument> instruments);
 }

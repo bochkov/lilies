@@ -4,9 +4,7 @@
     <title>{% block title %}{% endblock %}Lilies on Lilypond</title>
 
     <link rel="stylesheet" type="text/css" href="/static/css/foundation.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
-
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css" />
 
     <link rel="icon" type="image/png" href="/static/favicon.png"/>
@@ -67,34 +65,30 @@
             {% endfor %}
         </div>
         <div class="columns medium-8" id="content">
-            {% include 'lilies/ajax_list' %}
         </div>
     </div>
     {% endblock %}
 </div>
 
-<div class="row">
-    <div class="row text-small text-muted">
-        <div class="col-md-4">
-
-        </div>
-        <div class="col-md-4">
-
-        </div>
-        <div class="col-md-4 text-right">
+<footer class="row">
+    <div class="medium-12 columns">
+        <hr/>
+        <div class="columns medium-4"></div>
+        <div class="columns medium-4"></div>
+        <div class="columns medium-4 text-right">
             Сергей Бочков,
             <script>
                 var year = new Date().getFullYear();
-                if (year > 2013) document.write("2015&ndash;" + year);
+                if (year > 2015) document.write("2015&ndash;" + year);
                 else document.write("2015");
             </script>
             <br/>
             <a href="mailto:bochkov.sa@gmail.com">bochkov.sa@gmail.com</a>
         </div>
     </div>
-</div>
+</footer>
 
-<script src="http://yandex.st/jquery/2.1.1/jquery.min.js"></script>
+<script src="/static/js/jquery-2.1.4.min.js"></script>
 {% block custom_js %}
 <script>
     function load(){

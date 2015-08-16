@@ -1,5 +1,5 @@
 FROM java:8
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install ghostscript lilypond
+RUN apt-get update && apt-get -y dist-upgrade && apt-get install lilypond timidity lame
 VOLUME /tmp
 WORKDIR /opt
 ADD lilies-1.0.jar /opt/lilies-1.0.jar

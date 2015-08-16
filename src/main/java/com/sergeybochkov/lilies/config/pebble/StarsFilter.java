@@ -1,4 +1,4 @@
-package com.sergeybochkov.lilies.config;
+package com.sergeybochkov.lilies.config.pebble;
 
 import com.mitchellbosecke.pebble.extension.Filter;
 

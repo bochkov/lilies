@@ -1,7 +1,6 @@
 package com.sergeybochkov.lilies.model;
 
 import javax.persistence.*;
-import java.io.File;
 import java.io.Serializable;
 import java.util.List;
 
@@ -37,13 +36,23 @@ public class Music implements Serializable {
     @Column(name = "src_file")
     private byte[] srcFile;
 
+    @Column(name = "src_filename")
+    private String srcFilename;
+
     @Column(name = "pdf_file")
     private byte[] pdfFile;
+
+    @Column(name = "pdf_filename")
+    private String pdfFilename;
 
     @Column(name = "mp3_file")
     private byte[] mp3File;
 
-    public Music() {}
+    @Column(name = "mp3_filename")
+    private String mp3Filename;
+
+    public Music() {
+    }
 
     public Music(String name, String subName) {
         this.name = name;
@@ -128,6 +137,30 @@ public class Music implements Serializable {
 
     public void setMp3File(byte[] mp3File) {
         this.mp3File = mp3File;
+    }
+
+    public String getSrcFilename() {
+        return srcFilename;
+    }
+
+    public void setSrcFilename(String srcFilename) {
+        this.srcFilename = srcFilename;
+    }
+
+    public String getPdfFilename() {
+        return pdfFilename;
+    }
+
+    public void setPdfFilename(String pdfFilename) {
+        this.pdfFilename = pdfFilename;
+    }
+
+    public String getMp3Filename() {
+        return mp3Filename;
+    }
+
+    public void setMp3Filename(String mp3Filename) {
+        this.mp3Filename = mp3Filename;
     }
 
     public boolean hasSrc() {

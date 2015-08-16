@@ -1,5 +1,6 @@
 package com.sergeybochkov.lilies.web;
 
+import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import com.sergeybochkov.lilies.model.Author;
 import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
@@ -8,13 +9,19 @@ import com.sergeybochkov.lilies.service.AuthorService;
 import com.sergeybochkov.lilies.service.DifficultyService;
 import com.sergeybochkov.lilies.service.InstrumentService;
 import com.sergeybochkov.lilies.service.MusicService;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.validation.Valid;
+import java.io.*;
+import java.nio.file.Paths;
 
 @Controller
 public class AdminController {
@@ -26,7 +33,7 @@ public class AdminController {
 
     @RequestMapping("/admin/")
     public String adminIndex() {
-        return "admin/index";
+        return "admin/musicList";
     }
 
     // =============== MUSIC ==================
@@ -41,16 +48,32 @@ public class AdminController {
     public String addMusic(Model model) {
         model.addAttribute("music", new Music());
         model.addAttribute("difficulties", difficultyService.findAll());
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("instruments", instrumentService.findAll());
         return "admin/musicAdd";
     }
 
     @RequestMapping(value = "/admin/music/save/", method = RequestMethod.POST)
-    public String saveMusic(@ModelAttribute("music") Music music) {
+    public String saveMusic(@ModelAttribute("music") Music music, @RequestParam("src_file") MultipartFile file, BindingResult result) {
+        if (result.hasErrors())
+            return "admin/musicAdd";
+
+        File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
+        try {
+            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile));
+            stream.write(file.getBytes());
+            stream.close();
+            music.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+            music.setSrcFilename(file.getOriginalFilename());
+        }
+        catch (IOException ex) {
+            //
+        }
         musicService.save(music);
         return "redirect:/admin/music/";
     }
 
-    @RequestMapping("/admin/music/delete/")
+    @RequestMapping(value = "/admin/music/delete/", method = RequestMethod.DELETE)
     public String deleteMusic(@PathVariable Long id) {
         musicService.delete(id);
         return "redirect:/admin/music";
@@ -102,8 +125,8 @@ public class AdminController {
         return "redirect:/admin/instrument/";
     }
 
-    @RequestMapping(value = "/admin/instrument/delete/")
-    public String deleteInstrument(@PathVariable Long id) {
+    @RequestMapping(value = "/admin/instrument/delete/", method = RequestMethod.POST)
+    public String deleteInstrument(@RequestParam Long id) {
         instrumentService.delete(id);
         return "redirect:/admin/instrument/";
     }

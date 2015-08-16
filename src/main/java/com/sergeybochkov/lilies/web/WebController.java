@@ -15,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller
@@ -60,16 +61,7 @@ public class WebController {
             for (String diff : difficulties)
                 difficultyList.add(diffService.get(Integer.valueOf(diff)));
 
-        List<Music> musics = musicService.findByDifficultyOrInstrumentIn(difficultyList, instrumentList);
-
-        Map<String, List<Music>> map = new HashMap<>();
-        for (Music music : musics) {
-            String grouper = music.getName().substring(0, 1);
-            if (!map.containsKey(grouper))
-                map.put(grouper, new ArrayList<>());
-            List<Music> mu = map.get(grouper);
-            mu.add(music);
-        }
+        List<Music> musics = musicService.findByDifficultyAndInstrumentIn(difficultyList, instrumentList);
         model.addAttribute("object_list", musics);
         return "lilies/ajax_list";
     }
