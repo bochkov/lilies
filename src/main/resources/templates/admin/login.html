@@ -1,0 +1,35 @@
+{% extends 'admin/index' %}
+
+{% block content %}
+
+{% if error %}
+Invalid username and password
+{% endif %}
+
+{% if logout %}
+You have been logged out.
+{% endif %}
+
+<form action="/admin/login/" method="POST">
+    <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}" />
+    <div class="row">
+        <div class="medium-offset-3 medium-6 columns">
+            <label>Имя
+                <input type="text" name="username" />
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-offset-3 medium-6 columns">
+            <label>Пароль
+                <input type="password" name="password" />
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-offset-3 medium-6 columns">
+            <button class="button" type="submit"><i class="fa fa-sign-in"></i> Войти</button>
+        </div>
+    </div>
+</form>
+{% endblock %}

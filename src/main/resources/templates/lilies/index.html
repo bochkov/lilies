@@ -21,15 +21,19 @@
         <section class="top-bar-section">
             <ul class="right">
                 <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
+                {% if user.loggedin %}
+                    <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
+                    <li><a href="/logout/"><i class="fa fa-sign-out"></i> Выход</a></li>
+                {% endif %}
             </ul>
             <ul class="left">
                 <li class="has-form">
                     <div class="row collapse">
-                        <div class="medium-9 columns">
+                        <div class="medium-10 columns">
                             <input type="text" placeholder="По нотному архиву" name="query">
                         </div>
-                        <div class="medium-3 columns">
-                            <a href="/search/" class="alert button expand">Поиск</a>
+                        <div class="medium-2 columns">
+                            <a href="/search/" class="alert button expand"><i class="fa fa-search"></i></a>
                         </div>
                     </div>
                 </li>

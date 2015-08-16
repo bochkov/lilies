@@ -39,6 +39,11 @@ public class AdminController {
         return "admin/musicList";
     }
 
+    @RequestMapping("/login/")
+    public String login() {
+        return "admin/login";
+    }
+
     // =============== MUSIC ==================
 
     @RequestMapping("/music/")

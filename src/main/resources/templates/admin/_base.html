@@ -5,8 +5,10 @@
     <title>Admin Page</title>
 
     <link rel="stylesheet" type="text/css" href="/static/css/foundation.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/normalize.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css" />
+
+    <link rel="icon" type="image/png" href="/static/favicon.png"/>
 </head>
 <body>
 
@@ -19,7 +21,7 @@
         </ul>
         <section class="top-bar-section">
             <ul class="left">
-                <li class="{% block a_music %}{% endblock %}"><a href="/admin/music/">music</a></li>
+                <li class="{% block a_music %}{% endblock %}"><a href="/admin/music/"><i class="fa fa-music"></i> music</a></li>
                 <li class="{% block a_author %}{% endblock %}" ><a href="/admin/author/">author</a></li>
                 <li class="{% block a_instrument %}{% endblock %}" ><a href="/admin/instrument/">instrument</a></li>
                 <li class="{% block a_difficulty %}{% endblock %}" ><a href="/admin/difficulty/">difficulty</a></li>
