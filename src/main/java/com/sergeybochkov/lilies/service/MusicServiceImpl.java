@@ -37,8 +37,19 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments) {
         List<Music> list = new ArrayList<>();
-        list.addAll(repo.findByInstrumentIn(instruments));
-        list.addAll(repo.findByDifficultyIn(difficulties));
+        if (instruments.isEmpty() || difficulties.isEmpty())
+            return list;
+
+        repo.findByInstrumentIn(instruments)
+                .stream()
+                .filter(music -> !list.contains(music))
+                .forEach(list::add);
+
+        repo.findByDifficultyIn(difficulties)
+                .stream()
+                .filter(music -> !list.contains(music))
+                .forEach(list::add);
+
         return list;
     }
 

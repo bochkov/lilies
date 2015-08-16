@@ -12,7 +12,6 @@ import org.springframework.security.config.annotation.web.servlet.configuration.
 
 @Configuration
 @EnableWebMvcSecurity
-@Order(SecurityProperties.ACCESS_OVERRIDE_ORDER)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -29,10 +28,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/").permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/admin/**").access("hasRole('ADMIN')")
                 .and()
-                .formLogin().loginPage("/admin/login/").permitAll()
+                .formLogin().loginPage("/admin/login/").defaultSuccessUrl("/", false).permitAll()
                 .and()
-                .logout().permitAll();
+                .logout().logoutUrl("/admin/logout/").permitAll();
     }
 }
