@@ -54,6 +54,11 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
+    public List<Music> findByNameContainingIgnoreCase(String name) {
+        return repo.findByNameContainingIgnoreCase(name);
+    }
+
+    @Override
     public Music save(Music music) {
         Music m = repo.save(music);
         new GenerateFilesThread(m).start();

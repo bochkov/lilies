@@ -15,6 +15,8 @@ public interface MusicService {
 
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
+    List<Music> findByNameContainingIgnoreCase(String name);
+
     Music save(Music music);
 
     void delete(Long id);

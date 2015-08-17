@@ -29,12 +29,14 @@
             <ul class="left">
                 <li class="has-form">
                     <div class="row collapse">
-                        <div class="medium-10 columns">
-                            <input type="text" placeholder="По нотному архиву" name="query">
-                        </div>
-                        <div class="medium-2 columns">
-                            <a href="/search/" class="alert button expand"><i class="fa fa-search"></i></a>
-                        </div>
+                        <form role="search" action="/search/">
+                            <div class="medium-10 columns">
+                                <input type="text" placeholder="По нотному архиву" name="query" value="{{ query }}">
+                            </div>
+                            <div class="medium-2 columns">
+                                <button type="submit" class="alert button expand"><i class="fa fa-search"></i>&nbsp;</button>
+                            </div>
+                        </form>
                     </div>
                 </li>
             </ul>

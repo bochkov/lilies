@@ -12,4 +12,6 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
     List<Music> findByDifficultyIn(List<Difficulty> difficulties);
 
     List<Music> findByInstrumentIn(List<Instrument> instruments);
+
+    List<Music> findByNameContainingIgnoreCase(String name);
 }

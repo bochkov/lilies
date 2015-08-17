@@ -40,6 +40,14 @@ public class WebController {
         return "lilies/about";
     }
 
+    @RequestMapping("/search/")
+    public String search(Model model, @RequestParam String query) {
+        List<Music> musics = musicService.findByNameContainingIgnoreCase(query);
+        model.addAttribute("object_list", musics);
+        model.addAttribute("query", query);
+        return "lilies/search";
+    }
+
     @RequestMapping("/sheet-{id}/")
     public String detail(Model model, @PathVariable Long id) {
         model.addAttribute("object", musicService.findOne(id));
