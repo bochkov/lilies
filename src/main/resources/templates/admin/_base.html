@@ -20,6 +20,7 @@
             </li>
         </ul>
         <section class="top-bar-section">
+            {% if currentUser is not null %}
             <ul class="left">
                 <li class="{% block a_music %}{% endblock %}"><a href="/admin/music/"><i class="fa fa-music"></i> music</a></li>
                 <li class="{% block a_author %}{% endblock %}" ><a href="/admin/author/">author</a></li>
@@ -29,6 +30,7 @@
             <ul class="right">
                 <li class="{% block a_password %}{% endblock %}"><a href="/admin/password/"><i class="fa fa-lock"></i> Смена пароля</a></li>
             </ul>
+            {% endif %}
         </section>
     </nav>
 </div>

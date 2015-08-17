@@ -22,8 +22,10 @@
             <ul class="right">
                 <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
                 {% if currentUser is not null %}
+                <li class="divider"></li>
                     <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
                     <li><a href="/admin/logout/"><i class="fa fa-sign-out"></i> Выход</a></li>
+                <li class="divider"></li>
                 {% endif %}
             </ul>
             <ul class="left">
