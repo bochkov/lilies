@@ -1,14 +1,8 @@
 package com.sergeybochkov.lilies.web;
 
 import com.sergeybochkov.lilies.config.StaticResourceConfig;
-import com.sergeybochkov.lilies.model.Author;
-import com.sergeybochkov.lilies.model.Difficulty;
-import com.sergeybochkov.lilies.model.Instrument;
-import com.sergeybochkov.lilies.model.Music;
-import com.sergeybochkov.lilies.service.AuthorService;
-import com.sergeybochkov.lilies.service.DifficultyService;
-import com.sergeybochkov.lilies.service.InstrumentService;
-import com.sergeybochkov.lilies.service.MusicService;
+import com.sergeybochkov.lilies.model.*;
+import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,13 +20,14 @@ import java.nio.file.Paths;
 
 @Controller
 @RequestMapping("/admin")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
     @Autowired private MusicService musicService;
     @Autowired private DifficultyService difficultyService;
     @Autowired private InstrumentService instrumentService;
     @Autowired private AuthorService authorService;
+    @Autowired private UserService userService;
 
     @RequestMapping("/")
     public String adminIndex() {
@@ -42,6 +37,20 @@ public class AdminController {
     @RequestMapping("/login/")
     public String login() {
         return "admin/login";
+    }
+
+    // =========== CHANGE PASSWORD ============
+
+    @RequestMapping("/password/")
+    public String updateP(Model model) {
+        model.addAttribute("user", new User());
+        return "admin/updateP";
+    }
+
+    @RequestMapping("/password/save/")
+    public String updatePSave(@ModelAttribute User user) {
+        userService.saveOrUpdate(user);
+        return "redirect:/admin/";
     }
 
     // =============== MUSIC ==================

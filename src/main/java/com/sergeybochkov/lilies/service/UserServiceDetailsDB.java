@@ -7,10 +7,11 @@ import org.springframework.security.authentication.InternalAuthenticationService
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class DbUserDetailsService implements UserDetailsService {
+public class UserServiceDetailsDB implements UserDetailsService, UserService {
 
     @Autowired
     private UserRepository repo;
@@ -27,5 +28,19 @@ public class DbUserDetailsService implements UserDetailsService {
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
         }
         return loadedUser;
+    }
+
+    @Override
+    public User saveOrUpdate(User user) {
+        User u = repo.findByUsername(user.getUsername());
+        if (u != null) {
+            u.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            repo.save(u);
+            return u;
+        }
+        else {
+            user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            return repo.save(user);
+        }
     }
 }

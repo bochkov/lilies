@@ -21,9 +21,9 @@
         <section class="top-bar-section">
             <ul class="right">
                 <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
-                {% if user.loggedin %}
+                {% if currentUser is not null %}
                     <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
-                    <li><a href="/logout/"><i class="fa fa-sign-out"></i> Выход</a></li>
+                    <li><a href="/admin/logout/"><i class="fa fa-sign-out"></i> Выход</a></li>
                 {% endif %}
             </ul>
             <ul class="left">
