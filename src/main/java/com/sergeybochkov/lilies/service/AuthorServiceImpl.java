@@ -26,6 +26,11 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    public Author findOne(Long id) {
+        return repo.findOne(id);
+    }
+
+    @Override
     public void delete(Long id) {
         repo.delete(id);
     }

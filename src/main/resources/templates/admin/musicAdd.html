@@ -3,7 +3,7 @@
 {% block a_music %}active{% endblock %}
 
 {% block content %}
-{{ fields }}
+<h3>Добавление партитуры</h3>
 <form method="POST" action="/admin/music/save/" enctype="multipart/form-data">
     <label>Название
         <input type="text" name="name" />

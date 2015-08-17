@@ -168,9 +168,19 @@ public class AdminController {
         return "redirect:/admin/author/";
     }
 
-    @RequestMapping("/author/delete/")
-    public String deleteAuthor(@PathVariable Long id) {
-        authorService.delete(id);
-        return "redirect:/admin/author/";
+    @RequestMapping(value = "/a/author/get", method = RequestMethod.POST)
+    public @ResponseBody Author getAuthor(@RequestParam Long id) {
+        return authorService.findOne(id);
+    }
+
+    @RequestMapping(value = "/a/author/delete/", method = RequestMethod.POST)
+    public @ResponseBody Serializable deleteAuthor(@RequestParam Long id) {
+        try {
+            authorService.delete(id);
+            return new AjaxResponse("success");
+        }
+        catch (Exception ex) {
+            return new AjaxResponse("Ошибка удаления. Присутствуют связанные записи.");
+        }
     }
 }

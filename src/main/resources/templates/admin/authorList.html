@@ -22,7 +22,7 @@
         <td>{{ author.lastName }}</td>
         <td>{{ author.firstName }}</td>
         <td>{{ author.middleName }}</td>
-        <td><a href="/admin/author/delete/">delete</a></td>
+        <td><a href="#" onclick="deleteAuthor('{{author.id}}')">delete</a></td>
     </tr>
     {% endfor %}
     </tbody>
