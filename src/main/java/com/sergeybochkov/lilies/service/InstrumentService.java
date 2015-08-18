@@ -11,6 +11,8 @@ public interface InstrumentService {
 
     Instrument findBySlug(String slug);
 
+    Instrument findOne(Long id);
+
     List<Instrument> findAll();
 
     void delete(Long id);

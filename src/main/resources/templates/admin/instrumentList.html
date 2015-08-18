@@ -22,25 +22,9 @@
             <td>{{ instrument.id }}</td>
             <td>{{ instrument.name }}</td>
             <td>{{ instrument.slug }}</td>
-            <td><a href="#" onclick="del('{{instrument.id}}')">delete</a></td>
+            <td><a href="#" onclick="deleteInstrument('{{instrument.id}}')"><i class="fa fa-trash-o"></i> </a></td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
-{% endblock %}
-
-{% block customjs %}
-<script>
-    function del(id) {
-        $.post('/admin/instrument/delete/', {'id': id}).success(reloadTable());
-    }
-
-    function reloadTable() {
-
-    }
-
-    $(function() {
-        reloadTable();
-    });
-</script>
 {% endblock %}

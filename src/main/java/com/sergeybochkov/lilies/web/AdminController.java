@@ -31,7 +31,7 @@ public class AdminController {
 
     @RequestMapping("/")
     public String adminIndex() {
-        return "admin/musicList";
+        return "redirect:/admin/music/";
     }
 
     @RequestMapping("/login/")
@@ -59,6 +59,11 @@ public class AdminController {
     public String allMusic(Model model) {
         model.addAttribute("musicList", musicService.findAll());
         return "admin/musicList";
+    }
+
+    @RequestMapping(value = "/a/music/get/", method = RequestMethod.POST)
+    public @ResponseBody Music getMusic(@RequestParam Long id) {
+        return musicService.findOne(id);
     }
 
     @RequestMapping("/music/add/")
@@ -90,10 +95,15 @@ public class AdminController {
         return "redirect:/admin/music/";
     }
 
-    @RequestMapping(value = "/music/delete/", method = RequestMethod.DELETE)
-    public String deleteMusic(@PathVariable Long id) {
-        musicService.delete(id);
-        return "redirect:/admin/music";
+    @RequestMapping(value = "/a/music/delete/", method = RequestMethod.POST)
+    public @ResponseBody Serializable deleteMusic(@RequestParam Long id) {
+        try {
+            musicService.delete(id);
+            return new AjaxResponse();
+        }
+        catch (Exception ex) {
+            return new AjaxResponse("Ошибка удаления. Присутствуют связанные записи.");
+        }
     }
 
     // ================= DIFFICULTY ===================
@@ -102,6 +112,11 @@ public class AdminController {
     public String allDifficulty(Model model) {
         model.addAttribute("difficultyList", difficultyService.findAll());
         return "admin/difficultyList";
+    }
+
+    @RequestMapping(value = "/a/difficulty/get/", method = RequestMethod.POST)
+    public @ResponseBody Difficulty getDifficulty(@RequestParam Integer id) {
+        return difficultyService.get(id);
     }
 
     @RequestMapping("/difficulty/add/")
@@ -116,10 +131,15 @@ public class AdminController {
         return "redirect:/admin/difficulty/";
     }
 
-    @RequestMapping("/difficulty/delete")
-    public String deleteDifficulty(@PathVariable Integer id) {
-        difficultyService.delete(id);
-        return "redirect:/admin/difficulty/";
+    @RequestMapping(value = "/a/difficulty/delete", method = RequestMethod.POST)
+    public @ResponseBody Serializable deleteDifficulty(@RequestParam Integer id) {
+        try {
+            difficultyService.delete(id);
+            return new AjaxResponse();
+        }
+        catch (Exception ex) {
+            return new AjaxResponse("Ошибка удаления. Присутствуют связанные записи.");
+        }
     }
 
     // ================ INSTRUMENT =======================
@@ -129,6 +149,12 @@ public class AdminController {
         model.addAttribute("instrumentList", instrumentService.findAll());
         return "admin/instrumentList";
     }
+
+    @RequestMapping(value = "/a/instrument/get/", method = RequestMethod.POST)
+    public @ResponseBody Instrument getInstrument(@RequestParam Long id) {
+        return instrumentService.findOne(id);
+    }
+
 
     @RequestMapping("/instrument/add/")
     public String addInstrument(Model model) {
@@ -142,10 +168,15 @@ public class AdminController {
         return "redirect:/admin/instrument/";
     }
 
-    @RequestMapping(value = "/instrument/delete/", method = RequestMethod.POST)
-    public String deleteInstrument(@RequestParam Long id) {
-        instrumentService.delete(id);
-        return "redirect:/admin/instrument/";
+    @RequestMapping(value = "/a/instrument/delete/", method = RequestMethod.POST)
+    public @ResponseBody Serializable deleteInstrument(@RequestParam Long id) {
+        try {
+            instrumentService.delete(id);
+            return new AjaxResponse();
+        }
+        catch (Exception ex) {
+            return new AjaxResponse("Ошибка удаления. Присутствуют связанные записи.");
+        }
     }
 
     // =============== AUTHOR ================
@@ -177,7 +208,7 @@ public class AdminController {
     public @ResponseBody Serializable deleteAuthor(@RequestParam Long id) {
         try {
             authorService.delete(id);
-            return new AjaxResponse("success");
+            return new AjaxResponse();
         }
         catch (Exception ex) {
             return new AjaxResponse("Ошибка удаления. Присутствуют связанные записи.");

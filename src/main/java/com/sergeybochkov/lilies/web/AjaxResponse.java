@@ -6,6 +6,10 @@ public class AjaxResponse implements Serializable {
 
     private String result;
 
+    public AjaxResponse() {
+        this.result = "success";
+    }
+
     public AjaxResponse(String result) {
         this.result = result;
     }

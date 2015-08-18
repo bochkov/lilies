@@ -26,6 +26,11 @@ public class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public Instrument findOne(Long id) {
+        return repo.findOne(id);
+    }
+
+    @Override
     public List<Instrument> findAll() {
         return repo.findAll(new Sort("name"));
     }

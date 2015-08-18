@@ -42,15 +42,9 @@
         <td>{{ music.hasSrc ? "yes" : "no" }}</td>
         <td>{{ music.hasPdf ? "yes" : "no" }}</td>
         <td>{{ music.hasMp3 ? "yes" : "no" }}</td>
-        <td><a id="delete-{{ music.id }}" href="#">delete</a></td>
+        <td><a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a></td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
-{% endblock %}
-
-{% block customjs %}
-<script>
-
-</script>
 {% endblock %}

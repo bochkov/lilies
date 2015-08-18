@@ -67,7 +67,11 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public void delete(Long id) {
-        repo.delete(id);
+        Music m = findOne(id);
+        new File(StaticResourceConfig.MEDIA_DIR + m.getSrcFilename()).delete();
+        new File(StaticResourceConfig.MEDIA_DIR + m.getPdfFilename()).delete();
+        new File(StaticResourceConfig.MEDIA_DIR + m.getMp3Filename()).delete();
+        repo.delete(m);
     }
 
     private class GenerateFilesThread extends Thread {

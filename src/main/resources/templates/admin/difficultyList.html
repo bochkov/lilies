@@ -20,7 +20,7 @@
     <tr>
         <td>{{ diff.rating }}</td>
         <td>{{ diff.name }}</td>
-        <td><a href="/admin/difficulty/delete/" >delete</a></td>
+        <td><a href="#" onclick="deleteDifficulty('{{diff.rating}}')"><i class="fa fa-trash-o"></i> </a></td>
     </tr>
     {% endfor %}
     </tbody>
