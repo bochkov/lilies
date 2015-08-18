@@ -12,11 +12,10 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MusicServiceImpl implements MusicService {
@@ -26,7 +25,30 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public Music findOne(Long id) {
-        return repo.findOne(id);
+        Music music = repo.findOne(id);
+
+        try {
+            File srcFile = new File(StaticResourceConfig.MEDIA_DIR + music.getSrcFilename());
+            if (music.hasSrc() && music.getSrcFilename() != null && !srcFile.exists())
+                IOUtils.write(music.getSrcFile(), new FileWriter(srcFile));
+        }
+        catch (IOException ex) { ex.printStackTrace(); }
+
+        try {
+            File pdfFile = new File(StaticResourceConfig.MEDIA_DIR + music.getPdfFilename());
+            if (music.hasPdf() && music.getPdfFilename() != null && !pdfFile.exists())
+                IOUtils.write(music.getPdfFile(), new FileWriter(pdfFile));
+        }
+        catch (IOException ex) { ex.printStackTrace(); }
+
+        try {
+            File mp3File = new File(StaticResourceConfig.MEDIA_DIR + music.getMp3Filename());
+            if (music.hasMp3() && music.getMp3Filename() != null && !mp3File.exists())
+                IOUtils.write(music.getMp3File(), new FileWriter(mp3File));
+        }
+        catch (IOException ex) { ex.printStackTrace(); }
+
+        return music;
     }
 
     @Override

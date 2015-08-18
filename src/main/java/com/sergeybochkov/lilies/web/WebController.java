@@ -77,53 +77,8 @@ public class WebController {
         return "lilies/ajax_list";
     }
 
-    @RequestMapping("/save/")
-    public @ResponseBody Serializable saveOne() {
-        Music music = new Music();
-        music.setName("Ах, Самара-городок!");
-        music.setSubName("Русская народная песня");
-
-        List<Author> composers = new ArrayList<>();
-        composers.add(authorService.getOrSave(new Author("Иванов", "Иван", "Иванович")));
-        music.setComposer(composers);
-
-        List<Author> writers = new ArrayList<>();
-        writers.add(authorService.getOrSave(new Author("Петров", "Петр", "Петрович")));
-        writers.add(authorService.getOrSave(new Author("Сидоров", "Сидор", "Сидорович")));
-        music.setWriter(writers);
-
-        music.setDifficulty(diffService.save(new Difficulty(3, "средне")));
-
-        List<Instrument> instruments = new ArrayList<>();
-        instruments.add(instrumentService.getOrSave(new Instrument("баян", "bayan")));
-        instruments.add(instrumentService.getOrSave(new Instrument("аккордеон", "accordion")));
-        music.setInstrument(instruments);
-
-        try {
-            File file = new File(".gitignore");
-            music.setSrcFile(IOUtils.toByteArray(new FileInputStream(file)));
-        }
-        catch (IOException ex) { ex.printStackTrace(); }
-
-        return musicService.save(music);
-    }
-
     @RequestMapping("/findAll/")
     public @ResponseBody List<Music> findAll() {
         return musicService.findAll();
-    }
-
-    @RequestMapping("/showFile/")
-    public @ResponseBody String showFile() {
-        List<Music> musicList = findAll();
-        Music m = musicList.get(0);
-        byte[] f = m.getSrcFile();
-
-        String content = "";
-        try {
-            content = IOUtils.toString(f, "UTF-8");
-        }
-        catch (IOException ex) { ex.printStackTrace(); }
-        return content;
     }
 }
