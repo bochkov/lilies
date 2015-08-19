@@ -3,13 +3,17 @@
 {% block a_difficulty %}active{% endblock %}
 
 {% block content %}
+{% if difficulty.rating is null %}
 <h3>Добавление сложности</h3>
+{% else %}
+<h3>Редактирование</h3>
+{% endif %}
 <form action="/admin/difficulty/save/" method="POST">
     <label>Рейтинг
-        <input type="text" name="rating" />
+        <input type="text" name="rating" value="{{difficulty.rating}}" />
     </label>
     <label>Описание
-        <input type="text" name="name" />
+        <input type="text" name="name" value="{{difficulty.name}}" />
     </label>
 
     <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>

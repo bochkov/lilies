@@ -15,12 +15,6 @@ public class AuthorServiceImpl implements AuthorService {
     private AuthorRepository repo;
 
     @Override
-    public Author getOrSave(Author author) {
-        Author in = repo.findByLastNameAndFirstNameAndMiddleName(author.getLastName(), author.getFirstName(), author.getMiddleName());
-        return in != null ? in : repo.save(author);
-    }
-
-    @Override
     public List<Author> findAll() {
         return repo.findAll(new Sort("lastName", "firstName", "middleName"));
     }
@@ -33,5 +27,18 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public void delete(Long id) {
         repo.delete(id);
+    }
+
+    @Override
+    public Author save(Author author) {
+        if (author.getId() != null) {
+            Author a = repo.findOne(author.getId());
+            a.setFirstName(author.getFirstName());
+            a.setLastName(author.getLastName());
+            a.setMiddleName(author.getMiddleName());
+            return repo.save(a);
+        }
+        else
+            return repo.save(author);
     }
 }

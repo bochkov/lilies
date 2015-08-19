@@ -24,8 +24,19 @@ public class DifficultyServiceImpl implements DifficultyService {
     }
 
     @Override
+    public Difficulty findOne(Integer id) {
+        return repo.findOne(id);
+    }
+
+    @Override
     public Difficulty save(Difficulty difficulty) {
-        return repo.save(difficulty);
+        Difficulty d = repo.findOne(difficulty.getRating());
+        if (d != null) {
+            d.setName(difficulty.getName());
+            return repo.save(d);
+        }
+        else
+            return repo.save(difficulty);
     }
 
     @Override

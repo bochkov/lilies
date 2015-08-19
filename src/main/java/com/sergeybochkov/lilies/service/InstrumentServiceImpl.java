@@ -15,12 +15,6 @@ public class InstrumentServiceImpl implements InstrumentService {
     private InstrumentRepository repo;
 
     @Override
-    public Instrument getOrSave(Instrument instrument) {
-        Instrument in = repo.findBySlug(instrument.getSlug());
-        return in != null ? in : repo.save(instrument);
-    }
-
-    @Override
     public Instrument findBySlug(String slug) {
         return repo.findBySlug(slug);
     }
@@ -38,5 +32,17 @@ public class InstrumentServiceImpl implements InstrumentService {
     @Override
     public void delete(Long id) {
         repo.delete(id);
+    }
+
+    @Override
+    public Instrument save(Instrument instrument) {
+        if (instrument.getId() != null) {
+            Instrument i = repo.findOne(instrument.getId());
+            i.setName(instrument.getName());
+            i.setSlug(instrument.getSlug());
+            return repo.save(i);
+        }
+        else
+            return repo.save(instrument);
     }
 }

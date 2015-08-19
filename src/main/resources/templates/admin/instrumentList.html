@@ -22,7 +22,10 @@
             <td>{{ instrument.id }}</td>
             <td>{{ instrument.name }}</td>
             <td>{{ instrument.slug }}</td>
-            <td><a href="#" onclick="deleteInstrument('{{instrument.id}}')"><i class="fa fa-trash-o"></i> </a></td>
+            <td>
+                <a href="/admin/instrument/{{instrument.id}}/"><i class="fa fa-pencil"></i> </a>
+                <a href="#" onclick="deleteInstrument('{{instrument.id}}')"><i class="fa fa-trash-o"></i> </a>
+            </td>
         </tr>
     {% endfor %}
     </tbody>

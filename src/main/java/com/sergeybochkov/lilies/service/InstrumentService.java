@@ -7,8 +7,6 @@ import java.util.List;
 
 public interface InstrumentService {
 
-    Instrument getOrSave(Instrument instrument);
-
     Instrument findBySlug(String slug);
 
     Instrument findOne(Long id);
@@ -16,4 +14,6 @@ public interface InstrumentService {
     List<Instrument> findAll();
 
     void delete(Long id);
+
+    Instrument save(Instrument instrument);
 }

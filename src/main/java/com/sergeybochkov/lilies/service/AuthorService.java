@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface AuthorService {
 
-    Author getOrSave(Author author);
-
     List<Author> findAll();
 
     Author findOne(Long id);
 
     void delete(Long id);
+
+    Author save(Author author);
 }

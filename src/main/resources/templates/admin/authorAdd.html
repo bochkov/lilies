@@ -3,17 +3,24 @@
 {% block a_author %}active{% endblock %}
 
 {% block content %}
+
+{% if author.id is null %}
 <h3>Добавление автора</h3>
+{% else %}
+<h3>Редактировать</h3>
+{% endif %}
+
 <form action="/admin/author/save/" method="POST">
     <label>Фамилия
-        <input type="text" name="lastName" />
+        <input type="text" name="lastName" value="{{author.lastName}}" />
     </label>
     <label>Имя
-        <input type="text" name="firstName" />
+        <input type="text" name="firstName" value="{{author.firstName}}" />
     </label>
     <label>Отчество
-        <input type="text" name="middleName" />
+        <input type="text" name="middleName" value="{{author.middleName}}" />
     </label>
+    <input type="hidden" name="id" value="{{author.id}}" />
 
     <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>

@@ -11,6 +11,8 @@ public interface DifficultyService {
 
     List<Difficulty> findAll();
 
+    Difficulty findOne(Integer id);
+
     Difficulty save(Difficulty difficulty);
 
     void delete(Integer id);

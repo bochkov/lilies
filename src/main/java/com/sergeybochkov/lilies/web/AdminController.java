@@ -119,6 +119,12 @@ public class AdminController {
         return difficultyService.get(id);
     }
 
+    @RequestMapping("/difficulty/{id}/")
+    public String editDiff(Model model, @PathVariable Integer id) {
+        model.addAttribute("difficulty", difficultyService.findOne(id));
+        return "admin/difficultyAdd";
+    }
+
     @RequestMapping("/difficulty/add/")
     public String addDifficulty(Model model) {
         model.addAttribute("diff", new Difficulty());
@@ -155,6 +161,11 @@ public class AdminController {
         return instrumentService.findOne(id);
     }
 
+    @RequestMapping("/instrument/{id}/")
+    public String editInstrument(Model model, @PathVariable Long id) {
+        model.addAttribute("instrument", instrumentService.findOne(id));
+        return "admin/instrumentAdd";
+    }
 
     @RequestMapping("/instrument/add/")
     public String addInstrument(Model model) {
@@ -164,7 +175,7 @@ public class AdminController {
 
     @RequestMapping(value = "/instrument/save/" , method = RequestMethod.POST)
     public String saveInstrument(@ModelAttribute("instrument") Instrument instrument) {
-        instrumentService.getOrSave(instrument);
+        instrumentService.save(instrument);
         return "redirect:/admin/instrument/";
     }
 
@@ -195,8 +206,14 @@ public class AdminController {
 
     @RequestMapping(value = "/author/save/", method = RequestMethod.POST)
     public String saveAuthor(@ModelAttribute("author") Author author) {
-        authorService.getOrSave(author);
+        authorService.save(author);
         return "redirect:/admin/author/";
+    }
+
+    @RequestMapping(value = "/author/{id}/")
+    public String editAuthor(Model model, @PathVariable Long id) {
+        model.addAttribute("author", authorService.findOne(id));
+        return "admin/authorAdd";
     }
 
     @RequestMapping(value = "/a/author/get", method = RequestMethod.POST)

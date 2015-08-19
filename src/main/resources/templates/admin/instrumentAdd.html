@@ -3,14 +3,17 @@
 {% block a_instrument %}active{% endblock %}
 
 {% block content %}
-<h3>Новый инструмент</h3>
+{% if instrument.id is null %}<h3>Новый инструмент</h3>
+{% else %}<h3>Редактирование</h3>{% endif %}
+
 <form action="/admin/instrument/save/" method="POST">
     <label>Название
-        <input type="text" name="name" />
+        <input type="text" name="name" value="{{instrument.name}}" />
     </label>
     <label>Slug
-        <input type="text" name="slug" />
+        <input type="text" name="slug" value="{{instrument.slug}}" />
     </label>
+    <input type="hidden" name="id" value="{{instrument.id}}" />
 
     <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>
