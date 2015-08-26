@@ -15,6 +15,9 @@ public class User {
 
     private String password;
 
+    @Transient
+    private String passwordRepeat;
+
     @ManyToMany
     @JoinTable(name = "users_roles",
             joinColumns = {@JoinColumn(name = "user_id")},
@@ -52,6 +55,14 @@ public class User {
         this.password = password;
     }
 
+    public String getPasswordRepeat() {
+        return passwordRepeat;
+    }
+
+    public void setPasswordRepeat(String passwordRepeat) {
+        this.passwordRepeat = passwordRepeat;
+    }
+
     public Set<Role> getRoles() {
         return roles;
     }
@@ -66,6 +77,7 @@ public class User {
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", passwordRepeat='" + passwordRepeat + '\'' +
                 ", roles=" + roles +
                 '}';
     }

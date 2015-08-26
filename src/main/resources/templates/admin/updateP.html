@@ -9,18 +9,28 @@
     </div>
 </div>
 
+{{ errors }}
+
 <form action="/admin/password/save/" method="POST">
     <div class="row">
         <div class="medium-offset-3 medium-6 columns">
-            <label>Имя
+            <label class="error">Имя
                 <input type="text" name="username" value="{{currentUser.username}}" />
             </label>
+            <small class="error">Invalid entry</small>
         </div>
     </div>
     <div class="row">
         <div class="medium-offset-3 medium-6 columns">
             <label>Пароль
                 <input type="password" name="password" />
+            </label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="medium-offset-3 medium-6 columns">
+            <label>Повтор пароля
+                <input type="password" name="passwordRepeat" />
             </label>
         </div>
     </div>

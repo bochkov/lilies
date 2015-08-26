@@ -11,8 +11,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.validation.Valid;
 import java.io.*;
@@ -21,13 +23,18 @@ import java.nio.file.Paths;
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
-public class AdminController {
+public class AdminController extends WebMvcConfigurerAdapter {
 
     @Autowired private MusicService musicService;
     @Autowired private DifficultyService difficultyService;
     @Autowired private InstrumentService instrumentService;
     @Autowired private AuthorService authorService;
     @Autowired private UserService userService;
+
+    @InitBinder("user")
+    protected void initBinder(WebDataBinder binder) {
+        binder.addValidators(new UserValidationForm());
+    }
 
     @RequestMapping("/")
     public String adminIndex() {
@@ -48,9 +55,15 @@ public class AdminController {
     }
 
     @RequestMapping("/password/save/")
-    public String updatePSave(@ModelAttribute User user) {
-        userService.saveOrUpdate(user);
-        return "redirect:/admin/";
+    public String updatePSave(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            //model.addAttribute("fields", bindingResult.getFieldErrors());
+            return "admin/updateP";
+        }
+        else {
+            userService.save(user);
+            return "redirect:/admin/";
+        }
     }
 
     // =============== MUSIC ==================

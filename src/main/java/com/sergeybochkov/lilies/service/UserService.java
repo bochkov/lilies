@@ -4,5 +4,5 @@ import com.sergeybochkov.lilies.model.User;
 
 public interface UserService {
 
-    User saveOrUpdate(User user);
+    User save(User user);
 }
