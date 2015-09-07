@@ -57,7 +57,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     @RequestMapping("/password/save/")
     public String updatePSave(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            //model.addAttribute("fields", bindingResult.getFieldErrors());
+            model.addAttribute("fields", bindingResult);
             return "admin/updateP";
         }
         else {

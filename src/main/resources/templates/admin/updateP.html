@@ -9,22 +9,21 @@
     </div>
 </div>
 
-{{ errors }}
-
 <form action="/admin/password/save/" method="POST">
     <div class="row">
         <div class="medium-offset-3 medium-6 columns">
-            <label class="error">Имя
+            <label class="{% if fields.hasFieldErrors('username') %}error{% endif %}">Имя
                 <input type="text" name="username" value="{{currentUser.username}}" />
             </label>
-            <small class="error">Invalid entry</small>
+            {% if fields.hasFieldErrors('username') %}<small class="error">Не найден пользователь</small>{% endif %}
         </div>
     </div>
     <div class="row">
         <div class="medium-offset-3 medium-6 columns">
-            <label>Пароль
+            <label class="{% if fields.hasFieldErrors('password') %}error{% endif %}">Пароль
                 <input type="password" name="password" />
             </label>
+            {% if fields.hasFieldErrors('password') %}<small class="error">Ошибка пароля</small>{% endif %}
         </div>
     </div>
     <div class="row">
