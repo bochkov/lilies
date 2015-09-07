@@ -71,6 +71,9 @@
             {% endfor %}
         </div>
         <div class="columns medium-8" id="content">
+            <div id="preloader">
+                <img src="/static/img/preloader.gif" />
+            </div>
         </div>
     </div>
     {% endblock %}
@@ -98,6 +101,7 @@
 {% block custom_js %}
 <script>
     function load(){
+        $("#preloader").show();
         var instruments = [], difficulties = [];
         $(".instruments").each(function(index){
             if ($(this).is(":checked")) instruments.push($(this).attr("value"));
@@ -109,7 +113,9 @@
         });
         $.post("/a/music/",
                 {'difficulties[]':difficulties, 'instruments[]':instruments},
-                function(data){ $("#content").html(data); });
+                function(data){
+                    $("#preloader").hide();
+                    $("#content").html(data); });
     }
     $(function(){
         $("input").click(function(){ load(); });

@@ -26,7 +26,7 @@
         <div class="medium-10 columns">
             <label>Композитор
                 <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
-                    {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
+                    {% for author in authors %}<option value="{{author.id}}">{{author.str}}</option>{% endfor %}
                 </select>
             </label>
         </div>
@@ -39,7 +39,7 @@
         <div class="medium-10 columns">
             <label>Автор
                 <select name="writer" id="writer-select" multiple data-placeholder="Авторы">
-                    {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
+                    {% for author in authors %}<option value="{{author.id}}">{{author.str}}</option>{% endfor %}
                 </select>
             </label>
         </div>
@@ -51,7 +51,7 @@
     <div class="row">
         <div class="medium-10 columns">
             <label>Сложность
-                <select name="difficulty" id="difficulty-select" data-placeholder="Инструменты">
+                <select name="difficulty" id="difficulty-select" data-placeholder="Сложность">
                     {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
                 </select>
             </label>

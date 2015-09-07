@@ -19,6 +19,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import javax.validation.Valid;
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -89,9 +91,39 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
-    public String saveMusic(@ModelAttribute("music") Music music, @RequestParam("src_file") MultipartFile file, BindingResult result) {
-        if (result.hasErrors())
-            return "admin/musicAdd";
+    public String saveMusic(Model model,
+                            @RequestParam("name") String name,
+                            @RequestParam(value = "subname", required = false) String subName,
+                            @RequestParam(value = "composer", required = false) String composer,
+                            @RequestParam(value = "writer", required = false) String writer,
+                            @RequestParam("difficulty") Integer difficulty,
+                            @RequestParam("instrument") String instrument,
+                            @RequestParam("src_file") MultipartFile file) {
+
+        Music music = new Music();
+        music.setName(name);
+        music.setSubName(subName);
+
+        if (composer != null) {
+            List<Author> composerList = new ArrayList<>();
+            for (String c : composer.split(","))
+                composerList.add(authorService.findOne(Long.parseLong(c)));
+            music.setComposer(composerList);
+        }
+
+        if (writer != null) {
+            List<Author> writerList = new ArrayList<>();
+            for (String c : writer.split(","))
+                writerList.add(authorService.findOne(Long.parseLong(c)));
+            music.setWriter(writerList);
+        }
+
+        music.setDifficulty(difficultyService.findOne(difficulty));
+
+        List<Instrument> instrumentList = new ArrayList<>();
+        for (String i : instrument.split(","))
+            instrumentList.add(instrumentService.findBySlug(i));
+        music.setInstrument(instrumentList);
 
         File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
         try {

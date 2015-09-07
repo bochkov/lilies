@@ -7,10 +7,12 @@ import com.mitchellbosecke.pebble.node.expression.Expression;
 import com.mitchellbosecke.pebble.node.expression.FilterInvocationExpression;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
 import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+import com.sergeybochkov.lilies.model.Music;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class RegroupNode extends AbstractRenderableNode {
@@ -37,7 +39,11 @@ public class RegroupNode extends AbstractRenderableNode {
             for (Object aL : (List) evaluated) objList.add(aL);
 
         for (Object obj : objList) {
-            String grouper = "A";
+            String grouper = "_";
+            if (obj instanceof Music) {
+                Music m = (Music) obj;
+                grouper = m.getName().substring(0, 1);
+            }
 
             boolean founded = false;
             for (RegroupList rl : list) {
@@ -49,11 +55,12 @@ public class RegroupNode extends AbstractRenderableNode {
             }
             if (!founded) {
                 RegroupList rl = new RegroupList();
-                rl.setGrouper((String)grouper);
+                rl.setGrouper(grouper);
                 rl.addToList(obj);
                 list.add(rl);
             }
         }
+        Collections.sort(list);
         ctx.put(outName, list);
     }
 
