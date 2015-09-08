@@ -18,10 +18,10 @@ public class StarsFilter implements Filter {
         String html = "";
         Integer value = (Integer) input;
         for (int i = 0; i < value; ++i)
-            html += "<i class=\"fa fa-star\"></i>";
+            html += "<i class=\"glyphicon glyphicon-star\"></i>";
         int rang = value;
         while (rang < len) {
-            html += "<i class=\"fa fa-star-o\"></i>";
+            html += "<i class=\"glyphicon glyphicon-star-empty\"></i>";
             ++rang;
         }
         return html;

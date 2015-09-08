@@ -3,9 +3,9 @@
 {% block title %}{{ object.name }} - {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="medium-2 columns text-right">
-        <dl class="dl">
+<div class="container-fluid">
+    <div class="col-md-2 text-right">
+        <dl>
             {% if object.composer.size > 0 %}
             <dt>Композитор</dt>
             <dd>{{ object.composer|join(", ") }}</dd>
@@ -23,42 +23,30 @@
 
             <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
         </dl>
-        <ul class="stack button-group">
+        <div class="btn-group-vertical" role="group">
             {% if object.hasMp3 %}
-            <li>
-                <a class="button small audio-control">
+                <a class="btn btn-default audio-control">
                     <audio src="/media/{{ object.mp3Filename }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
-                    <i class="fa fa-music"></i> Слушать</a>
-            </li>
+                    <i class="glyphicon glyphicon-music"></i> Слушать</a>
             {% endif %}
             {% if object.hasPdf %}
-            <li>
-                <a class="button small" target="_blank" href="/media/{{ object.pdfFilename }}">
-                    <i class="fa fa-save"></i> PDF</a>
-            </li>
+                <a class="btn btn-default" target="_blank" href="/media/{{ object.pdfFilename }}">
+                    <i class="glyphicon glyphicon-save"></i> PDF</a>
             {% endif %}
             {% if object.hasSrc %}
-            <li>
-                <a class="button small" target="_blank" href="/media/{{ object.srcFilename }}">
-                    <i class="fa fa-file"></i> .ly файл</a>
-            </li>
+                <a class="btn btn-default" target="_blank" href="/media/{{ object.srcFilename }}">
+                    <i class="glyphicon glyphicon-file"></i> .ly файл</a>
             {% endif %}
-        </ul>
+        </div>
     </div>
-    <canvas class="columns medium-10" id="pdf-canvas"></canvas>
+    <canvas class="col-md-10" id="pdf-canvas"></canvas>
 </div>
 
-<div class="row">
-    <div class="medium-12 columns pagination-centered">
-        <ul class="pagination" role="menubar">
-            <li class="arrow unavailable" id="pdf-prev">
-                <a href="#" onclick="goPrev();">&laquo; Предыдущая страница</a>
-            </li>
-            <li class="arrow unavailable" id="pdf-next">
-                <a href="#" onclick="goNext()">Следующая страница &raquo;</a>
-            </li>
-        </ul>
-    </div>
+<div class="container-fluid">
+    <ul class="pager">
+        <li class="disabled" id="pdf-prev"><a href="#" onclick="goPrev()">&laquo; Предыдущая страница</a></li>
+        <li class="disabled" id="pdf-next"><a href="#" onclick="goNext()">Следующая страница &raquo;</a></li>
+    </ul>
 </div>
 {% endblock %}
 
@@ -83,10 +71,10 @@
             page.render(renderContext);
 
             var next = $("#pdf-next"), prev = $("#pdf-prev");
-            prev.removeClass("unavailable");
-            next.removeClass("unavailable");
-            if (num == pdfdoc.numPages) { next.addClass("unavailable"); }
-            if (num == 1) { prev.addClass("unavailable"); }
+            prev.removeClass("disabled");
+            next.removeClass("disabled");
+            if (num == pdfdoc.numPages) { next.addClass("disabled"); }
+            if (num == 1) { prev.addClass("disabled"); }
         });
     }
 
@@ -113,15 +101,15 @@
         var id = object.children("audio").attr("id");
         var audio = document.getElementById(id);
         audio.addEventListener("ended", function(){
-            i.removeClass("fa-pause").addClass("fa-music");
+            i.removeClass("glyphicon-pause").addClass("glyphicon-music");
         });
 
         if (audio.paused) {
-            i.removeClass("fa-music").addClass("fa-pause");
+            i.removeClass("glyphicon-music").addClass("glyphicon-pause");
             audio.play();
         }
         else {
-            i.removeClass("fa-pause").addClass("fa-music");
+            i.removeClass("glyphicon-pause").addClass("glyphicon-music");
             audio.pause();
             audio.currentTime = 0;
         }
