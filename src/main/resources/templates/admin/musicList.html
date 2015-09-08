@@ -28,21 +28,22 @@
         <td>{{ music.name }}</td>
         <td>{{ music.subName }}</td>
         <td>
-            {% for composer in music.composer %}
-            {{ composer.str }}
-            {% endfor %}
+            {{ music.composer|join(", ")}}
         </td>
         <td>
-            {% for writer in music.writer %}
-            {{ writer.str }}
-            {% endfor %}
+            {{ music.writer|join(", ")}}
         </td>
         <td>{{ music.difficulty.str }}</td>
-        <td>{{ music.instrument.str }}</td>
-        <td>{{ music.hasSrc ? "yes" : "no" }}</td>
-        <td>{{ music.hasPdf ? "yes" : "no" }}</td>
-        <td>{{ music.hasMp3 ? "yes" : "no" }}</td>
-        <td><a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a></td>
+        <td>
+            {{ music.instrument|join(", ")}}
+        </td>
+        <td>{{ music.hasSrc|yes|raw }}</td>
+        <td>{{ music.hasPdf|yes|raw }}</td>
+        <td>{{ music.hasMp3|yes|raw }}</td>
+        <td>
+            <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
+            <a onclick="editMusic('{{ music.id }}')" href="#"><i class="fa fa-pencil"></i> </a>
+        </td>
     </tr>
     {% endfor %}
     </tbody>

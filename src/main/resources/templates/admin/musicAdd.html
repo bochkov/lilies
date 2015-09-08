@@ -17,7 +17,7 @@
     <div class="row">
         <div class="medium-12 columns">
             <label>подИмя
-                <input type="text" name="subName" />
+                <input type="text" name="subname" />
             </label>
         </div>
     </div>
@@ -26,7 +26,7 @@
         <div class="medium-10 columns">
             <label>Композитор
                 <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
-                    {% for author in authors %}<option value="{{author.id}}">{{author.str}}</option>{% endfor %}
+                    {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
                 </select>
             </label>
         </div>
@@ -39,7 +39,7 @@
         <div class="medium-10 columns">
             <label>Автор
                 <select name="writer" id="writer-select" multiple data-placeholder="Авторы">
-                    {% for author in authors %}<option value="{{author.id}}">{{author.str}}</option>{% endfor %}
+                    {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
                 </select>
             </label>
         </div>
@@ -65,7 +65,7 @@
         <div class="medium-10 columns">
             <label>Инструмент
                 <select name="instrument" multiple id="instrument-select" data-placeholder="Инструменты">
-                    {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument.name}}</option>{% endfor %}
+                    {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
                 </select>
             </label>
         </div>

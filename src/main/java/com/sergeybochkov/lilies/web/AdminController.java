@@ -90,6 +90,12 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return "admin/musicAdd";
     }
 
+    @RequestMapping("/music/edit/{{id}}/")
+    public String editMusic(Model model, @PathVariable Long id) {
+        Music m = musicService.findOne(id);
+        return "redirect:/music/add/";
+    }
+
     @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
     public String saveMusic(Model model,
                             @RequestParam("name") String name,

@@ -7,3 +7,11 @@ body {
     padding-top: 20px;
     padding-bottom: 40px;
 }
+
+.icon-success {
+    color: green;
+}
+
+.icon-error {
+    color: red;
+}

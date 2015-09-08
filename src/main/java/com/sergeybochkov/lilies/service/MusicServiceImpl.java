@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,21 +30,21 @@ public class MusicServiceImpl implements MusicService {
         try {
             File srcFile = new File(StaticResourceConfig.MEDIA_DIR + music.getSrcFilename());
             if (music.hasSrc() && music.getSrcFilename() != null && !srcFile.exists())
-                IOUtils.write(music.getSrcFile(), new FileWriter(srcFile));
+                IOUtils.write(music.getSrcFile(), new FileOutputStream(srcFile));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File pdfFile = new File(StaticResourceConfig.MEDIA_DIR + music.getPdfFilename());
             if (music.hasPdf() && music.getPdfFilename() != null && !pdfFile.exists())
-                IOUtils.write(music.getPdfFile(), new FileWriter(pdfFile));
+                IOUtils.write(music.getPdfFile(), new FileOutputStream(pdfFile));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File mp3File = new File(StaticResourceConfig.MEDIA_DIR + music.getMp3Filename());
             if (music.hasMp3() && music.getMp3Filename() != null && !mp3File.exists())
-                IOUtils.write(music.getMp3File(), new FileWriter(mp3File));
+                IOUtils.write(music.getMp3File(), new FileOutputStream(mp3File));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 

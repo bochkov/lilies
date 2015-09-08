@@ -15,6 +15,7 @@ public class LiliesExtension extends AbstractExtension {
     public Map<String, Filter> getFilters() {
         Map<String, Filter> map = new HashMap<>();
         map.put("stars", new StarsFilter());
+        map.put("yes", new YesFilter());
         return map;
     }
 
