@@ -1,5 +1,8 @@
 package com.sergeybochkov.lilies.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -42,8 +45,9 @@ public class Music implements Serializable {
     @Column(name = "mp3_filename")
     private String mp3Filename;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "storage_id")
+    @JsonIgnore
     private Storage storage;
 
     public Music() {

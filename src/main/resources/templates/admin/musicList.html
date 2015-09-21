@@ -41,8 +41,8 @@
         <td>{{ music.storage.hasPdf|yes|raw }}</td>
         <td>{{ music.storage.hasMp3|yes|raw }}</td>
         <td>
-            <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
             <a onclick="editMusic('{{ music.id }}')" href="#"><i class="fa fa-pencil"></i> </a>
+            <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
         </td>
     </tr>
     {% endfor %}
