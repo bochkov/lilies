@@ -130,19 +130,24 @@ public class AdminController extends WebMvcConfigurerAdapter {
         for (String i : instrument.split(","))
             instrumentList.add(instrumentService.findBySlug(i));
         music.setInstrument(instrumentList);
+        musicService.save(music);
 
+        Storage storage = musicService.getStorage(music);
         File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
         try {
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile));
             stream.write(file.getBytes());
             stream.close();
-            music.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+            storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
             music.setSrcFilename(file.getOriginalFilename());
         }
         catch (IOException ex) {
             //
         }
+
         musicService.save(music);
+        musicService.save(storage);
+        musicService.generateFiles(music);
         return "redirect:/admin/music/";
     }
 
