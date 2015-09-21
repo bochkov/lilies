@@ -5,8 +5,6 @@ import com.sergeybochkov.lilies.model.*;
 import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +16,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 

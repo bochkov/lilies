@@ -6,7 +6,6 @@ import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.model.Storage;
 
 import java.util.List;
-import java.util.Map;
 
 public interface MusicService {
 

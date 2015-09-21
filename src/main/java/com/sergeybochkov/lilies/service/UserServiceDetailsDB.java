@@ -1,7 +1,6 @@
 package com.sergeybochkov.lilies.service;
 
 import com.sergeybochkov.lilies.model.User;
-import com.sergeybochkov.lilies.model.UserValidationForm;
 import com.sergeybochkov.lilies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;

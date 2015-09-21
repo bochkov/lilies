@@ -1,6 +1,5 @@
 package com.sergeybochkov.lilies.config.pebble;
 
-import com.coverity.security.Escape;
 import com.mitchellbosecke.pebble.extension.Filter;
 
 import java.util.List;
