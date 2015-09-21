@@ -24,20 +24,20 @@
             <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
         </dl>
         <ul class="stack button-group">
-            {% if object.hasMp3 %}
+            {% if object.storage.hasMp3 %}
             <li>
                 <a class="button small audio-control">
                     <audio src="/media/{{ object.mp3Filename }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
                     <i class="fa fa-music"></i> Слушать</a>
             </li>
             {% endif %}
-            {% if object.hasPdf %}
+            {% if object.storage.hasPdf %}
             <li>
                 <a class="button small" target="_blank" href="/media/{{ object.pdfFilename }}">
                     <i class="fa fa-save"></i> PDF</a>
             </li>
             {% endif %}
-            {% if object.hasSrc %}
+            {% if object.storage.hasSrc %}
             <li>
                 <a class="button small" target="_blank" href="/media/{{ object.srcFilename }}">
                     <i class="fa fa-file"></i> .ly файл</a>

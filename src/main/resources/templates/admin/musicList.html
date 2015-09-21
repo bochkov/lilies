@@ -37,9 +37,9 @@
         <td>
             {{ music.instrument|join(", ")}}
         </td>
-        <td>{{ music.hasSrc|yes|raw }}</td>
-        <td>{{ music.hasPdf|yes|raw }}</td>
-        <td>{{ music.hasMp3|yes|raw }}</td>
+        <td>{{ music.storage.hasSrc|yes|raw }}</td>
+        <td>{{ music.storage.hasPdf|yes|raw }}</td>
+        <td>{{ music.storage.hasMp3|yes|raw }}</td>
         <td>
             <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
             <a onclick="editMusic('{{ music.id }}')" href="#"><i class="fa fa-pencil"></i> </a>

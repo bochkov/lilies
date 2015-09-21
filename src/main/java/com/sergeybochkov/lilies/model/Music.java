@@ -42,7 +42,7 @@ public class Music implements Serializable {
     @Column(name = "mp3_filename")
     private String mp3Filename;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "storage_id")
     private Storage storage;
 

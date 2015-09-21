@@ -130,6 +130,9 @@ public class AdminController extends WebMvcConfigurerAdapter {
         for (String i : instrument.split(","))
             instrumentList.add(instrumentService.findBySlug(i));
         music.setInstrument(instrumentList);
+
+        music.setSrcFilename(file.getOriginalFilename());
+
         musicService.save(music);
 
         Storage storage = musicService.getStorage(music);
@@ -139,14 +142,16 @@ public class AdminController extends WebMvcConfigurerAdapter {
             stream.write(file.getBytes());
             stream.close();
             storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
-            music.setSrcFilename(file.getOriginalFilename());
         }
         catch (IOException ex) {
             //
         }
 
-        musicService.save(music);
         musicService.save(storage);
+
+        music.setStorage(storage);
+        musicService.save(music);
+
         musicService.generateFiles(music);
         return "redirect:/admin/music/";
     }

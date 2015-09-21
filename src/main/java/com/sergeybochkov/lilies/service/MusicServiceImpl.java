@@ -88,8 +88,6 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public Music save(Music music) {
         return repo.save(music);
-        //new GenerateFilesThread(m).start();
-        //return m;
     }
 
     @Override
@@ -103,8 +101,8 @@ public class MusicServiceImpl implements MusicService {
         new File(StaticResourceConfig.MEDIA_DIR + m.getSrcFilename()).delete();
         new File(StaticResourceConfig.MEDIA_DIR + m.getPdfFilename()).delete();
         new File(StaticResourceConfig.MEDIA_DIR + m.getMp3Filename()).delete();
-        repo.delete(m);
         stRepo.delete(id);
+        repo.delete(m);
     }
 
     @Override
@@ -135,7 +133,6 @@ public class MusicServiceImpl implements MusicService {
                 String name = music.getSrcFilename().substring(0, music.getSrcFilename().lastIndexOf("."));
                 File media = new File(StaticResourceConfig.MEDIA_DIR);
 
-
                 Runtime.getRuntime().exec("lilypond -dno-point-and-click " + name, null, media).waitFor();
                 music.setSrcFilename("src/" + name + ".ly");
                 new File(media, name + ".ly").renameTo(new File(media, music.getSrcFilename()));
@@ -152,7 +149,7 @@ public class MusicServiceImpl implements MusicService {
                 new File(media, name + ".mp3").renameTo(new File(media, music.getMp3Filename()));
                 storage.setMp3File(IOUtils.toByteArray(new FileInputStream(new File(media, music.getMp3Filename()))));
 
-                log.info("Генерация файлов завершена");
+                log.info("Завершена генерация файлов для произведения " + music.getName());
             }
             catch (IOException | InterruptedException ex) {
                 log.warn(ex.getMessage());
