@@ -5,15 +5,13 @@ import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.mitchellbosecke.pebble.loader.Loader;
 import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
 import com.sergeybochkov.lilies.config.pebble.LiliesExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.ViewResolver;
-
-import javax.servlet.ServletContext;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @Configuration
-public class PebbleResolverConfig {
+public class PebbleResolverConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public Loader templateLoader() {
@@ -28,7 +26,7 @@ public class PebbleResolverConfig {
     }
 
     @Bean
-    public ViewResolver viewResolver() {
+    public ViewResolver pebbleViewResolver() {
         PebbleViewResolver resolver = new PebbleViewResolver();
         resolver.setPrefix("templates");
         resolver.setSuffix(".html");
