@@ -1,6 +1,10 @@
 FROM java:8
-RUN apt-get update && apt-get -y dist-upgrade && apt-get install lilypond timidity lame
+RUN apt-get update && apt-get install -y timidity lame bzip2
 VOLUME /tmp
+WORKDIR /tmp
+RUN wget http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-2.18.2-1.linux-64.sh && \
+	chmod +x lilypond-2.18.2-1.linux-64.sh && ./lilypond-2.18.2-1.linux-64.sh --batch && \
+	rm lilypond-2.18.2-1.linux-64.sh
 WORKDIR /opt
 ADD lilies.jar /opt/lilies.jar
-CMD ["java", "-Xms512m", "-Xmx2g", "-jar", "lilies.jar"]
+ENTRYPOINT ["java", "-Xms512m", "-Xmx2g", "-jar", "lilies.jar"]
