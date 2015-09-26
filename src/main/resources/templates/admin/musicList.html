@@ -3,11 +3,11 @@
 {% block a_music %}active{% endblock %}
 
 {% block cmd %}
-    <a class="button small" href="/admin/music/add/"><i class="fa fa-plus"></i> Добавить</a>
+    <a class="btn btn-sm btn-default" href="/admin/music/add/"><i class="fa fa-plus"></i> Добавить</a>
 {% endblock %}
 
 {% block content %}
-<table>
+<table class="table table-condensed">
     <thead>
     <tr>
         <th>Название</th>
@@ -25,7 +25,7 @@
     <tbody>
     {% for music in musicList %}
     <tr>
-        <td>{{ music.name }}</td>
+        <td><a href="/admin/music/{{music.id}}/">{{ music.name }}</a></td>
         <td>{{ music.subName }}</td>
         <td>
             {{ music.composer|join(", ")}}
@@ -42,7 +42,6 @@
         <td>{{ music.hasMp3|yes|raw }}</td>
         <td>
             <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
-            <a onclick="editMusic('{{ music.id }}')" href="#"><i class="fa fa-pencil"></i> </a>
         </td>
     </tr>
     {% endfor %}

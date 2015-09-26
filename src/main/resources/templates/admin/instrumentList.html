@@ -3,31 +3,32 @@
 {% block a_instrument %}active{% endblock %}
 
 {% block cmd %}
-    <a class="button small" href="/admin/instrument/add/"><i class="fa fa-plus"></i> Добавить инструмент</a>
+    <a class="btn btn-default btn-sm" href="/admin/instrument/add/"><i class="fa fa-plus"></i> Добавить инструмент</a>
 {% endblock %}
 
 {% block content %}
-<table>
-    <thead>
-    <tr>
-        <th>#</th>
-        <th>Название</th>
-        <th>Slug</th>
-        <th>&nbsp;</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for instrument in instrumentList %}
+<div class="col-md-6">
+    <table class="table table-condensed">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Название</th>
+            <th>Slug</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for instrument in instrumentList %}
         <tr>
             <td>{{ instrument.id }}</td>
-            <td>{{ instrument.name }}</td>
+            <td><a href="/admin/instrument/{{instrument.id}}/">{{ instrument.name }}</a></td>
             <td>{{ instrument.slug }}</td>
             <td>
-                <a href="/admin/instrument/{{instrument.id}}/"><i class="fa fa-pencil"></i> </a>
                 <a href="#" onclick="deleteInstrument('{{instrument.id}}')"><i class="fa fa-trash-o"></i> </a>
             </td>
         </tr>
-    {% endfor %}
-    </tbody>
-</table>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -2,87 +2,63 @@
 
 {% block a_music %}active{% endblock %}
 
-{% block content %}
+{% block cmd %}
 <h3>Добавление партитуры</h3>
-<form method="POST" action="/admin/music/save/" enctype="multipart/form-data">
+{% endblock %}
 
-    <div class="row">
-        <div class="medium-12 columns">
-            <label>Название
-                <input type="text" name="name" />
-            </label>
+{% block content %}
+<form method="POST" action="/admin/music/save/" enctype="multipart/form-data" class="form-horizontal">
+
+    <div class="form-group">
+        <label for="name" class="col-sm-3 control-label">Название</label>
+        <div class="col-sm-9">
+            <input type="text" name="name" class="form-control" id="name" value="{{music.name}}" />
         </div>
     </div>
 
-    <div class="row">
-        <div class="medium-12 columns">
-            <label>подИмя
-                <input type="text" name="subname" />
-            </label>
+    <div class="form-group">
+        <label for="subname" class="col-sm-3 control-label">подИмя</label>
+        <div class="col-sm-9">
+            <input class="form-control" id="subname" type="text" name="subname" value="{{music.subname}}" />
         </div>
     </div>
 
-    <div class="row">
-        <div class="medium-10 columns">
-            <label>Композитор
-                <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
-                    {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
-                </select>
-            </label>
-        </div>
-        <div class="medium-offset-1 medium-1 columns">
-            <a href="#" class="button tiny"><i class="fa fa-plus"></i></a>
+    <div class="form-group">
+        <label for="composer-select" class="col-sm-3 control-label">Композиторы</label>
+        <select name="composer" class="col-sm-9" id="composer-select" multiple data-placeholder="Композиторы">
+            {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="writer-select" class="col-sm-3 control-label">Авторы</label>
+        <select name="writer" class="col-sm-9" id="writer-select" multiple data-placeholder="Авторы">
+            {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="difficulty-select" class="col-sm-3 control-label">Сложность</label>
+        <select name="difficulty" class="col-sm-9" id="difficulty-select" data-placeholder="Сложность">
+            {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="instrument-select" class="col-sm-3 control-label">Инструменты</label>
+        <select name="instrument" class="col-sm-9" multiple id="instrument-select" data-placeholder="Инструменты">
+            {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="srcfile" class="col-sm-3 control-label">ly-файл</label>
+        <div class="col-sm-9">
+            <input type="file" name="src_file" id="srcfile" />
         </div>
     </div>
 
-    <div class="row">
-        <div class="medium-10 columns">
-            <label>Автор
-                <select name="writer" id="writer-select" multiple data-placeholder="Авторы">
-                    {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
-                </select>
-            </label>
-        </div>
-        <div class="medium-1 medium-offset-1 columns">
-            <a href="#" class="button tiny"><i class="fa fa-plus"></i> </a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="medium-10 columns">
-            <label>Сложность
-                <select name="difficulty" id="difficulty-select" data-placeholder="Сложность">
-                    {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
-                </select>
-            </label>
-        </div>
-        <div class="medium-1 medium-offset-1 columns">
-            <a href="#" class="button tiny"><i class="fa fa-plus"></i> </a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="medium-10 columns">
-            <label>Инструмент
-                <select name="instrument" multiple id="instrument-select" data-placeholder="Инструменты">
-                    {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
-                </select>
-            </label>
-        </div>
-        <div class="medium-1 medium-offset-1 columns">
-            <a href="#" class="button tiny"><i class="fa fa-plus"></i> </a>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="medium-12 columns">
-            <label>ly-файл
-                <input type="file" name="src_file" />
-            </label>
-        </div>
-    </div>
-
-    <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>
+    <button class="col-sm-offset-3 btn btn-primary" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>
 {% endblock %}
 
