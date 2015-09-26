@@ -1,5 +1,7 @@
 package com.sergeybochkov.lilies.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -33,23 +35,19 @@ public class Music implements Serializable {
     @ManyToMany
     private List<Instrument> instrument;
 
-    @Column(name = "src_file")
-    private byte[] srcFile;
-
     @Column(name = "src_filename")
     private String srcFilename;
-
-    @Column(name = "pdf_file")
-    private byte[] pdfFile;
 
     @Column(name = "pdf_filename")
     private String pdfFilename;
 
-    @Column(name = "mp3_file")
-    private byte[] mp3File;
-
     @Column(name = "mp3_filename")
     private String mp3Filename;
+
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "storage_id")
+    @JsonIgnore
+    private Storage storage;
 
     public Music() {
     }
@@ -115,30 +113,6 @@ public class Music implements Serializable {
         this.instrument = instrument;
     }
 
-    public byte[] getSrcFile() {
-        return srcFile;
-    }
-
-    public void setSrcFile(byte[] srcFile) {
-        this.srcFile = srcFile;
-    }
-
-    public byte[] getPdfFile() {
-        return pdfFile;
-    }
-
-    public void setPdfFile(byte[] pdfFile) {
-        this.pdfFile = pdfFile;
-    }
-
-    public byte[] getMp3File() {
-        return mp3File;
-    }
-
-    public void setMp3File(byte[] mp3File) {
-        this.mp3File = mp3File;
-    }
-
     public String getSrcFilename() {
         return srcFilename;
     }
@@ -163,15 +137,11 @@ public class Music implements Serializable {
         this.mp3Filename = mp3Filename;
     }
 
-    public boolean hasSrc() {
-        return srcFile != null && srcFile.length > 0;
+    public Storage getStorage() {
+        return storage;
     }
 
-    public boolean hasPdf() {
-        return pdfFile != null && pdfFile.length > 0;
-    }
-
-    public boolean hasMp3() {
-        return mp3File != null && mp3File.length > 0;
+    public void setStorage(Storage storage) {
+        this.storage = storage;
     }
 }

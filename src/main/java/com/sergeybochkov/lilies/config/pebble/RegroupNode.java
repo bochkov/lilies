@@ -4,26 +4,24 @@ import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.extension.NodeVisitor;
 import com.mitchellbosecke.pebble.node.AbstractRenderableNode;
 import com.mitchellbosecke.pebble.node.expression.Expression;
-import com.mitchellbosecke.pebble.node.expression.FilterInvocationExpression;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
 import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+import com.sergeybochkov.lilies.model.Music;
 
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RegroupNode extends AbstractRenderableNode {
 
     private Expression<?> srcList;
-    private String name;
-    private FilterInvocationExpression filter;
     private String outName;
 
-    public RegroupNode(Expression<?> srcList, String name, FilterInvocationExpression filter, String outName) {
+    public RegroupNode(Expression<?> srcList, String outName) {
         this.srcList = srcList;
-        this.name = name;
-        this.filter = filter;
         this.outName = outName;
     }
 
@@ -33,11 +31,17 @@ public class RegroupNode extends AbstractRenderableNode {
 
         Object evaluated = srcList.evaluate(tmpl, ctx);
         List<Object> objList = new ArrayList<>();
-        if (evaluated instanceof List)
-            for (Object aL : (List) evaluated) objList.add(aL);
+        if (evaluated instanceof List) {
+            List<?> evList = (List<?>) evaluated;
+            objList.addAll(evList.stream().collect(Collectors.toList()));
+        }
 
         for (Object obj : objList) {
-            String grouper = "A";
+            String grouper = "_";
+            if (obj instanceof Music) {
+                Music m = (Music) obj;
+                grouper = m.getName().substring(0, 1);
+            }
 
             boolean founded = false;
             for (RegroupList rl : list) {
@@ -49,11 +53,12 @@ public class RegroupNode extends AbstractRenderableNode {
             }
             if (!founded) {
                 RegroupList rl = new RegroupList();
-                rl.setGrouper((String)grouper);
+                rl.setGrouper(grouper);
                 rl.addToList(obj);
                 list.add(rl);
             }
         }
+        Collections.sort(list);
         ctx.put(outName, list);
     }
 

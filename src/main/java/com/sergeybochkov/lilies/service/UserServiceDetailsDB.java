@@ -1,7 +1,6 @@
 package com.sergeybochkov.lilies.service;
 
 import com.sergeybochkov.lilies.model.User;
-import com.sergeybochkov.lilies.model.UserValidationForm;
 import com.sergeybochkov.lilies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -39,9 +38,12 @@ public class UserServiceDetailsDB implements UserDetailsService, UserService {
             repo.save(u);
             return u;
         }
+        /*
         else {
             user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
             return repo.save(user);
         }
+        */
+        return null;
     }
 }

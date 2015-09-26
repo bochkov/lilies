@@ -2,39 +2,83 @@
 
 {% block a_music %}active{% endblock %}
 
-{% block content %}
+{% block cmd %}
 <h3>Добавление партитуры</h3>
-<form method="POST" action="/admin/music/save/" enctype="multipart/form-data">
-    <label>Название
-        <input type="text" name="name" />
-    </label>
-    <label>подИмя
-        <input type="text" name="subName" />
-    </label>
-    <label>Композитор
-        <select name="composer" id="composer-select" multiple>
-            {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
-        </select>
-    </label>
-    <label>Автор
-        <select name="writer" id="writer-select" multiple>
-            {% for author in authors %}<option value="{{author}}">{{author.str}}</option>{% endfor %}
-        </select>
-    </label>
-    <label>Сложность
-        <select name="difficulty" id="difficulty-select">
-            {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
-        </select>
-    </label>
-    <label>Инструмент
-        <select name="instrument" multiple id="instrument-select">
-            {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument.name}}</option>{% endfor %}
-        </select>
-    </label>
-    <label>ly-файл
-        <input type="file" name="src_file" />
-    </label>
+{% endblock %}
 
-    <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>
+{% block content %}
+<div class="col-md-7">
+<form method="POST" action="/admin/music/save/" enctype="multipart/form-data" class="form-horizontal">
+
+    <div class="form-group">
+        <label for="name" class="col-sm-2 control-label">Название</label>
+        <div class="col-sm-10">
+            <input type="text" name="name" class="form-control" id="name" value="{{music.name}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="subname" class="col-sm-2 control-label">подИмя</label>
+        <div class="col-sm-10">
+            <input class="form-control" id="subname" type="text" name="subname" value="{{music.subname}}" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="composer-select" class="col-sm-2 control-label">Композиторы</label>
+        <div class="col-sm-10">
+            <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
+                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="writer-select" class="col-sm-2 control-label">Авторы</label>
+        <div class="col-sm-10">
+            <select name="writer" class="col-sm-10" id="writer-select" multiple data-placeholder="Авторы">
+                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="difficulty-select" class="col-sm-2 control-label">Сложность</label>
+        <div class="col-sm-10">
+            <select name="difficulty" class="col-sm-10" id="difficulty-select" data-placeholder="Сложность">
+                {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="instrument-select" class="col-sm-2 control-label">Инструменты</label>
+        <div class="col-sm-10">
+            <select name="instrument" class="col-sm-10" multiple id="instrument-select" data-placeholder="Инструменты">
+                {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="srcfile" class="col-sm-2 control-label">ly-файл</label>
+        <div class="col-sm-10">
+            <input type="file" name="src_file" id="srcfile" />
+        </div>
+    </div>
+
+    <button class="col-sm-offset-2 btn btn-primary" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>
+</div>
+{% endblock %}
+
+{% block custom_js %}
+<script>
+    $(function() {
+        $("#composer-select").chosen();
+        $("#writer-select").chosen();
+        $("#difficulty-select").chosen();
+        $("#instrument-select").chosen();
+    })
+</script>
 {% endblock %}

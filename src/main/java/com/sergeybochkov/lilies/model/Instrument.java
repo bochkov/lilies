@@ -56,14 +56,14 @@ public class Instrument implements Serializable {
 
     @Override
     public String toString() {
+        return name;
+    }
+
+    public String str() {
         return "Instrument {" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", slug='" + slug + '\'' +
                 '}';
-    }
-
-    public String str() {
-        return name;
     }
 }

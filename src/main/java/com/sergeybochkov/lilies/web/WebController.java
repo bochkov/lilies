@@ -1,6 +1,5 @@
 package com.sergeybochkov.lilies.web;
 
-import com.sergeybochkov.lilies.model.Author;
 import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
@@ -8,16 +7,11 @@ import com.sergeybochkov.lilies.service.AuthorService;
 import com.sergeybochkov.lilies.service.DifficultyService;
 import com.sergeybochkov.lilies.service.InstrumentService;
 import com.sergeybochkov.lilies.service.MusicService;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,19 +2,30 @@
 
 {% block a_instrument %}active{% endblock %}
 
-{% block content %}
+{% block cmd %}
 {% if instrument.id is null %}<h3>Новый инструмент</h3>
 {% else %}<h3>Редактирование</h3>{% endif %}
+{% endblock %}
 
-<form action="/admin/instrument/save/" method="POST">
-    <label>Название
-        <input type="text" name="name" value="{{instrument.name}}" />
-    </label>
-    <label>Slug
-        <input type="text" name="slug" value="{{instrument.slug}}" />
-    </label>
-    <input type="hidden" name="id" value="{{instrument.id}}" />
+{% block content %}
+<div class="col-md-6">
+    <form action="/admin/instrument/save/" method="POST" class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="name">Название</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="name" type="text" name="name" value="{{instrument.name}}" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="slug">Slug</label>
+            <div class="col-sm-10">
+                <input class="form-control" id="slug" type="text" name="slug" value="{{instrument.slug}}" />
+            </div>
+        </div>
 
-    <button class="button small" type="submit"><i class="fa fa-save"></i> Сохранить</button>
-</form>
+        <input type="hidden" name="id" value="{{instrument.id}}" />
+
+        <button class="btn btn-primary col-sm-offset-2" type="submit"><i class="fa fa-save"></i> Сохранить</button>
+    </form>
+</div>
 {% endblock %}

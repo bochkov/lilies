@@ -4,7 +4,9 @@ import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
+import com.sergeybochkov.lilies.model.Storage;
 import com.sergeybochkov.lilies.repository.MusicRepository;
+import com.sergeybochkov.lilies.repository.StorageRepository;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,29 +24,32 @@ public class MusicServiceImpl implements MusicService {
 
     @Autowired
     private MusicRepository repo;
+    @Autowired
+    private StorageRepository stRepo;
 
     @Override
     public Music findOne(Long id) {
         Music music = repo.findOne(id);
+        Storage storage = stRepo.findOne(music.getId());
 
         try {
             File srcFile = new File(StaticResourceConfig.MEDIA_DIR + music.getSrcFilename());
-            if (music.hasSrc() && music.getSrcFilename() != null && !srcFile.exists())
-                IOUtils.write(music.getSrcFile(), new FileWriter(srcFile));
+            if (storage.hasSrc() && music.getSrcFilename() != null && !srcFile.exists())
+                IOUtils.write(storage.getSrcFile(), new FileOutputStream(srcFile));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File pdfFile = new File(StaticResourceConfig.MEDIA_DIR + music.getPdfFilename());
-            if (music.hasPdf() && music.getPdfFilename() != null && !pdfFile.exists())
-                IOUtils.write(music.getPdfFile(), new FileWriter(pdfFile));
+            if (storage.hasPdf() && music.getPdfFilename() != null && !pdfFile.exists())
+                IOUtils.write(storage.getPdfFile(), new FileOutputStream(pdfFile));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File mp3File = new File(StaticResourceConfig.MEDIA_DIR + music.getMp3Filename());
-            if (music.hasMp3() && music.getMp3Filename() != null && !mp3File.exists())
-                IOUtils.write(music.getMp3File(), new FileWriter(mp3File));
+            if (storage.hasMp3() && music.getMp3Filename() != null && !mp3File.exists())
+                IOUtils.write(storage.getMp3File(), new FileOutputStream(mp3File));
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
@@ -82,9 +87,12 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public Music save(Music music) {
-        Music m = repo.save(music);
-        new GenerateFilesThread(m).start();
-        return m;
+        return repo.save(music);
+    }
+
+    @Override
+    public void generateFiles(Music music) {
+        new GenerateFilesThread(music).start();
     }
 
     @Override
@@ -93,16 +101,30 @@ public class MusicServiceImpl implements MusicService {
         new File(StaticResourceConfig.MEDIA_DIR + m.getSrcFilename()).delete();
         new File(StaticResourceConfig.MEDIA_DIR + m.getPdfFilename()).delete();
         new File(StaticResourceConfig.MEDIA_DIR + m.getMp3Filename()).delete();
+        stRepo.delete(id);
         repo.delete(m);
+    }
+
+    @Override
+    public Storage getStorage(Music music) {
+        Storage st = music.getStorage();
+        return st == null ? new Storage(music) : st;
+    }
+
+    @Override
+    public Storage save(Storage storage) {
+        return stRepo.save(storage);
     }
 
     private class GenerateFilesThread extends Thread {
 
         private final Logger log = Logger.getLogger(GenerateFilesThread.class.getName());
         private Music music;
+        private Storage storage;
 
         public GenerateFilesThread(Music music) {
             this.music = music;
+            this.storage = getStorage(music);
         }
 
         @Override
@@ -117,7 +139,7 @@ public class MusicServiceImpl implements MusicService {
 
                 music.setPdfFilename("pdf/" + name + ".pdf");
                 new File(media, name + ".pdf").renameTo(new File(media, music.getPdfFilename()));
-                music.setPdfFile(IOUtils.toByteArray(new FileInputStream(new File(media, music.getPdfFilename()))));
+                storage.setPdfFile(IOUtils.toByteArray(new FileInputStream(new File(media, music.getPdfFilename()))));
 
                 Runtime.getRuntime().exec("timidity " + name + ".midi -Ow", null, media).waitFor();
                 Runtime.getRuntime().exec("lame -h -b 128 " + name + ".wav" + " " + name + ".mp3", null, media).waitFor();
@@ -125,15 +147,16 @@ public class MusicServiceImpl implements MusicService {
                 new File(media, name + ".wav").delete();
                 music.setMp3Filename("mp3/" + name + ".mp3");
                 new File(media, name + ".mp3").renameTo(new File(media, music.getMp3Filename()));
-                music.setMp3File(IOUtils.toByteArray(new FileInputStream(new File(media, music.getMp3Filename()))));
+                storage.setMp3File(IOUtils.toByteArray(new FileInputStream(new File(media, music.getMp3Filename()))));
 
-                log.info("Генерация файлов завершена");
+                log.info("Завершена генерация файлов для произведения " + music.getName());
             }
             catch (IOException | InterruptedException ex) {
                 log.warn(ex.getMessage());
             }
             finally {
                 repo.save(music);
+                stRepo.save(storage);
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.sergeybochkov.lilies.config;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
-import com.mitchellbosecke.pebble.lexer.Lexer;
 import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
 import com.sergeybochkov.lilies.config.pebble.LiliesExtension;
 import org.springframework.context.annotation.Bean;

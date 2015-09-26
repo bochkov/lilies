@@ -68,15 +68,15 @@ public class Author implements Serializable {
 
     @Override
     public String toString() {
+        return String.format("%s %s %s", lastName, firstName, middleName);
+    }
+
+    public String str() {
         return "Author {" +
                 "id=" + id +
                 ", lastName='" + lastName + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 '}';
-    }
-
-    public String str() {
-        return String.format("%s %s %s", lastName, firstName, middleName);
     }
 }

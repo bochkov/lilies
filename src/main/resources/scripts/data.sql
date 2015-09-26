@@ -7,3 +7,6 @@ INSERT INTO users (id, username, password)
 
 INSERT INTO users_roles (user_id, role_id)
   VALUES (1, 1), (1, 2);
+
+INSERT INTO difficulty values (1, 'Легко'), (2, 'Ниже среднего'), (3, 'Средний уровень'),
+  (4, 'Выше среднего'), (5, 'Мастер');

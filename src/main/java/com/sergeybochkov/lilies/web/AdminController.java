@@ -5,8 +5,6 @@ import com.sergeybochkov.lilies.model.*;
 import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,7 +16,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.validation.Valid;
 import java.io.*;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -57,7 +56,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     @RequestMapping("/password/save/")
     public String updatePSave(Model model, @ModelAttribute @Valid User user, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            //model.addAttribute("fields", bindingResult.getFieldErrors());
+            model.addAttribute("fields", bindingResult);
             return "admin/updateP";
         }
         else {
@@ -88,23 +87,69 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return "admin/musicAdd";
     }
 
-    @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
-    public String saveMusic(@ModelAttribute("music") Music music, @RequestParam("src_file") MultipartFile file, BindingResult result) {
-        if (result.hasErrors())
-            return "admin/musicAdd";
+    @RequestMapping("/music/{id}/")
+    public String editMusic(Model model, @PathVariable Long id) {
+        model.addAttribute("music", musicService.findOne(id));
+        return "admin/musicAdd";
+    }
 
+    @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
+    public String saveMusic(Model model,
+                            @RequestParam("name") String name,
+                            @RequestParam(value = "subname", required = false) String subName,
+                            @RequestParam(value = "composer", required = false) String composer,
+                            @RequestParam(value = "writer", required = false) String writer,
+                            @RequestParam("difficulty") Integer difficulty,
+                            @RequestParam("instrument") String instrument,
+                            @RequestParam("src_file") MultipartFile file) {
+
+        Music music = new Music();
+        music.setName(name);
+        music.setSubName(subName);
+
+        if (composer != null) {
+            List<Author> composerList = new ArrayList<>();
+            for (String c : composer.split(","))
+                composerList.add(authorService.findOne(Long.parseLong(c)));
+            music.setComposer(composerList);
+        }
+
+        if (writer != null) {
+            List<Author> writerList = new ArrayList<>();
+            for (String c : writer.split(","))
+                writerList.add(authorService.findOne(Long.parseLong(c)));
+            music.setWriter(writerList);
+        }
+
+        music.setDifficulty(difficultyService.findOne(difficulty));
+
+        List<Instrument> instrumentList = new ArrayList<>();
+        for (String i : instrument.split(","))
+            instrumentList.add(instrumentService.findBySlug(i));
+        music.setInstrument(instrumentList);
+
+        music.setSrcFilename(file.getOriginalFilename());
+
+        musicService.save(music);
+
+        Storage storage = musicService.getStorage(music);
         File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
         try {
             BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile));
             stream.write(file.getBytes());
             stream.close();
-            music.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
-            music.setSrcFilename(file.getOriginalFilename());
+            storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
         }
         catch (IOException ex) {
             //
         }
+
+        musicService.save(storage);
+
+        music.setStorage(storage);
         musicService.save(music);
+
+        musicService.generateFiles(music);
         return "redirect:/admin/music/";
     }
 

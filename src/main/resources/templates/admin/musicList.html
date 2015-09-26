@@ -3,11 +3,11 @@
 {% block a_music %}active{% endblock %}
 
 {% block cmd %}
-    <a class="button small" href="/admin/music/add/"><i class="fa fa-plus"></i> Добавить</a>
+    <a class="btn btn-sm btn-default" href="/admin/music/add/"><i class="fa fa-plus"></i> Добавить</a>
 {% endblock %}
 
 {% block content %}
-<table>
+<table class="table table-condensed">
     <thead>
     <tr>
         <th>Название</th>
@@ -25,24 +25,24 @@
     <tbody>
     {% for music in musicList %}
     <tr>
-        <td>{{ music.name }}</td>
+        <td><a href="/admin/music/{{music.id}}/">{{ music.name }}</a></td>
         <td>{{ music.subName }}</td>
         <td>
-            {% for composer in music.composer %}
-            {{ composer.str }}
-            {% endfor %}
+            {{ music.composer|join(", ")}}
         </td>
         <td>
-            {% for writer in music.writer %}
-            {{ writer.str }}
-            {% endfor %}
+            {{ music.writer|join(", ")}}
         </td>
         <td>{{ music.difficulty.str }}</td>
-        <td>{{ music.instrument.str }}</td>
-        <td>{{ music.hasSrc ? "yes" : "no" }}</td>
-        <td>{{ music.hasPdf ? "yes" : "no" }}</td>
-        <td>{{ music.hasMp3 ? "yes" : "no" }}</td>
-        <td><a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a></td>
+        <td>
+            {{ music.instrument|join(", ")}}
+        </td>
+        <td>{{ music.storage.hasSrc|yes|raw }}</td>
+        <td>{{ music.storage.hasPdf|yes|raw }}</td>
+        <td>{{ music.storage.hasMp3|yes|raw }}</td>
+        <td>
+            <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
+        </td>
     </tr>
     {% endfor %}
     </tbody>
