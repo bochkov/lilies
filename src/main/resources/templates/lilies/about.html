@@ -3,13 +3,12 @@
 {% block a_about %}active{% endblock %}
 
 {% block header %}
-<div class="page-header"><h3>О сервисе</h3></div>
-<hr/>
+<div class="page-header"><h2>О сервисе</h2></div>
 {% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="columns medium-6">
+    <div class="col-md-6">
         <p class="text-justify">
             Однажды мне понадобилось собрать воедино все ноты, которые остались у меня со времен обучения в музыкальной школе.
             Так как в то время о компьютерах и не слышали, то все ноты либо ксерокопировались из сборников, либо переписывались в нотную тетрадь.
@@ -19,13 +18,13 @@
         </p>
         <h3>Горячие клавиши</h3>
         Для управления плеером и просмотром можно использовать
-        <ul class="no-bullet">
+        <ul class="list-unstyled keys">
             <li><kbd>P</kbd> &nbsp; играть композицию</li>
             <li><kbd>&larr;</kbd> &nbsp; предыдущая страница</li>
             <li><kbd>&rarr;</kbd> &nbsp; следующая страница</li>
         </ul>
     </div>
-    <div class="columns medium-5 medium-offset-1 text-right">
+    <div class="col-md-5 col-md-offset-1 text-right">
         Всего на сайте {{ sheets }} партитур для {{ instruments }} инструментов.
     </div>
 </div>

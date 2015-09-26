@@ -2,41 +2,37 @@
 
 {% block a_password %}active{% endblock %}
 
-{% block content %}
-<div class="row">
-    <div class="medium-offset-3 medium-6 columns">
-        <h2>Смена пароля</h2>
-    </div>
-</div>
+{% block cmd %}
+<h2>Смена пароля</h2>
+{% endblock %}
 
-<form action="/admin/password/save/" method="POST">
-    <div class="row">
-        <div class="medium-offset-3 medium-6 columns">
-            <label class="{% if fields.hasFieldErrors('username') %}error{% endif %}">Имя
-                <input type="text" name="username" value="{{currentUser.username}}" />
-            </label>
-            {% if fields.hasFieldErrors('username') %}<small class="error">Не найден пользователь</small>{% endif %}
+{% block content %}
+<div class="col-md-6">
+    <form action="/admin/password/save/" method="POST" class="form-horizontal">
+        <div class="form-group {% if fields.hasFieldErrors('username') %}has-error{% endif %}">
+            <label class="col-sm-3 control-label" for="name">Имя</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="name" type="text" name="username" value="{{currentUser.username}}" />
+                {% if fields.hasFieldErrors('username') %}<span class="help-block">Не найден пользователь</span>{% endif %}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="medium-offset-3 medium-6 columns">
-            <label class="{% if fields.hasFieldErrors('password') %}error{% endif %}">Пароль
-                <input type="password" name="password" />
-            </label>
-            {% if fields.hasFieldErrors('password') %}<small class="error">Ошибка пароля</small>{% endif %}
+
+        <div class="form-group {% if fields.hasFieldErrors('password') %}has-error{% endif %}">
+            <label class="col-sm-3 control-label" for="password">Пароль</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="password" type="password" name="password" />
+                {% if fields.hasFieldErrors('password') %}<span class="help-block">Ошибка пароля</span>{% endif %}
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="medium-offset-3 medium-6 columns">
-            <label>Повтор пароля
-                <input type="password" name="passwordRepeat" />
-            </label>
+
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="confirm">Повтор пароля</label>
+            <div class="col-sm-9">
+                <input class="form-control" id="confirm" type="password" name="passwordRepeat" />
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="medium-offset-3 medium-6 columns">
-            <button class="button" type="submit"><i class="fa fa-sign-in"></i> Сменить</button>
-        </div>
-    </div>
-</form>
+
+        <button class="col-sm-offset-3 btn btn-primary" type="submit"><i class="fa fa-sign-in"></i> Сменить</button>
+    </form>
+</div>
 {% endblock %}

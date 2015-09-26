@@ -3,11 +3,12 @@
 {% block a_difficulty %}active{% endblock %}
 
 {% block cmd %}
-    <a class="button small" href="/admin/difficulty/add/"><i class="fa fa-plus"></i> Добавить сложность</a>
+    <a class="btn btn-default btn-sm" href="/admin/difficulty/add/"><i class="fa fa-plus"></i> Добавить сложность</a>
 {% endblock %}
 
 {% block content %}
-<table>
+<div class="col-md-6">
+<table class="table table-condensed">
     <thead>
     <tr>
         <th>Рейтинг</th>
@@ -19,13 +20,13 @@
     {% for diff in difficultyList %}
     <tr>
         <td>{{ diff.rating }}</td>
-        <td>{{ diff.name }}</td>
+        <td><a href="/admin/difficulty/{{diff.rating}}/">{{ diff.name }}</a></td>
         <td>
-            <a href="/admin/difficulty/{{diff.rating}}/"><i class="fa fa-pencil"></i> </a>
             <a href="#" onclick="deleteDifficulty('{{diff.rating}}')"><i class="fa fa-trash-o"></i> </a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
+</div>
 {% endblock %}

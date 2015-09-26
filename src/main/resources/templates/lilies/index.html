@@ -3,57 +3,52 @@
 <head>
     <title>{% block title %}{% endblock %}Lilies on Lilypond</title>
 
-    <link rel="stylesheet" type="text/css" href="/static/css/foundation.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
 
     <link rel="icon" type="image/png" href="/static/favicon.png"/>
 </head>
 <body>
 
-<div class="contain-to-grid fixed">
-    <nav class="top-bar" data-topbar role="navigation">
-        <ul class="title-area">
-            <li class="name">
-                <h1><a href="/">Lilies on Lilypond</a></h1>
-            </li>
-        </ul>
-        <section class="top-bar-section">
-            <ul class="right">
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">Lilies on Lilypond</a>
+        </div>
+
+        <div class="navbar-right">
+            <form class="navbar-form navbar-left" role="search" action="/search/">
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="По нотному архиву" name="query" value="{{ query }}" />
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
+
+            <ul class="nav navbar-nav navbar-right">
                 <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
                 {% if currentUser is not null %}
                 <li class="divider"></li>
-                    <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
-                    <li><a href="/admin/logout/"><i class="fa fa-sign-out"></i> Выход</a></li>
+                <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
+                <li><a href="/admin/logout/"><i class="fa fa-logout"></i> Выход</a></li>
                 <li class="divider"></li>
                 {% endif %}
             </ul>
-            <ul class="left">
-                <li class="has-form">
-                    <div class="row collapse">
-                        <div class="medium-10 columns">
-                            <input type="text" placeholder="По нотному архиву" name="query" value="{{ query }}" />
-                        </div>
-                        <div class="medium-2 columns">
-                            <button type="submit" class="alert button expand"><i class="fa fa-search"></i></button>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </section>
-    </nav>
-</div>
+        </div>
+    </div>
+</nav>
 
-<div class="row">
+<div class="container">
     {% block header %}{% endblock %}
 
     {% block content %}
     <div>
-        <div class="columns medium-3">
+        <div class="col-md-3">
             <img src="/static/img/logo.png" class="logo">
             <h4>Инструмент</h4>
             {% for i in instruments %}
-            <div>
+            <div class="checkbox">
                 <label>
                     <input class="instruments" checked value="{{ i.slug }}" type="checkbox"> {{ i }}
                 </label>
@@ -62,7 +57,7 @@
 
             <h4>Сложность</h4>
             {% for d in difficulties %}
-            <div>
+            <div class="checkbox">
                 <label>
                     <input class="difficulties" checked value="{{ d.rating }}" type="checkbox"> {{ d.rating|stars|raw }}
                     <small class="text-muted">{{ d.name }}</small>
@@ -70,7 +65,7 @@
             </div>
             {% endfor %}
         </div>
-        <div class="columns medium-8" id="content">
+        <div class="col-md-8" id="content">
             <div id="preloader">
                 <img src="/static/img/preloader.gif" />
             </div>
@@ -79,21 +74,19 @@
     {% endblock %}
 </div>
 
-<footer class="row">
-    <div class="medium-12 columns">
-        <hr/>
-        <div class="columns medium-4"></div>
-        <div class="columns medium-4"></div>
-        <div class="columns medium-4 text-right">
-            Сергей Бочков,
-            <script>
-                var year = new Date().getFullYear();
-                if (year > 2015) document.write("2015&ndash;" + year);
-                else document.write("2015");
-            </script>
-            <br/>
-            <a href="mailto:bochkov.sa@gmail.com">bochkov.sa@gmail.com</a>
-        </div>
+<footer class="container">
+    <hr/>
+    <div class="col-md-4"></div>
+    <div class="col-md-4"></div>
+    <div class="col-md-4 text-right">
+        Сергей Бочков,
+        <script>
+            var year = new Date().getFullYear();
+            if (year > 2015) document.write("2015&ndash;" + year);
+            else document.write("2015");
+        </script>
+        <br/>
+        <a href="mailto:bochkov.sa@gmail.com">bochkov.sa@gmail.com</a>
     </div>
 </footer>
 
