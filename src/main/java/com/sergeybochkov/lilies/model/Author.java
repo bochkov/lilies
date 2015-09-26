@@ -24,6 +24,9 @@ public class Author implements Serializable {
     private String middleName;
 
     @ManyToMany
+    @JoinTable(name = "author_music",
+            joinColumns = @JoinColumn(name = "author_id"),
+            inverseJoinColumns = @JoinColumn(name = "music_id"))
     private List<Music> musicList;
 
     public Author() {}

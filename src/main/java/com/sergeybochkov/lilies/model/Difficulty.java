@@ -15,6 +15,9 @@ public class Difficulty {
     private String name;
 
     @OneToMany
+    @JoinTable(name = "difficulty_music",
+            joinColumns = @JoinColumn(name = "rating"),
+            inverseJoinColumns = @JoinColumn(name = "music_id"))
     private List<Music> musicList;
 
     public Difficulty() {}
