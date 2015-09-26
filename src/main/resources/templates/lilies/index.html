@@ -18,22 +18,24 @@
             <a class="navbar-brand" href="/">Lilies on Lilypond</a>
         </div>
 
-        <form class="navbar-form navbar-left" role="search">
-            <div class="form-group">
-                <input class="form-control" type="text" placeholder="По нотному архиву" name="query" value="{{ query }}" />
-                <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-            </div>
-        </form>
+        <div class="navbar-right">
+            <form class="navbar-form navbar-left" role="search" action="/search/">
+                <div class="form-group">
+                    <input class="form-control" type="text" placeholder="По нотному архиву" name="query" value="{{ query }}" />
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                </div>
+            </form>
 
-        <ul class="nav navbar-nav navbar-right">
-            <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
-            {% if currentUser is not null %}
-            <li class="divider"></li>
-            <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
-            <li><a href="/admin/logout/"><i class="fa fa-logout"></i> Выход</a></li>
-            <li class="divider"></li>
-            {% endif %}
-        </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
+                {% if currentUser is not null %}
+                <li class="divider"></li>
+                <li><a href="/admin/"><i class="fa fa-lock"></i> Админка</a></li>
+                <li><a href="/admin/logout/"><i class="fa fa-logout"></i> Выход</a></li>
+                <li class="divider"></li>
+                {% endif %}
+            </ul>
+        </div>
     </div>
 </nav>
 

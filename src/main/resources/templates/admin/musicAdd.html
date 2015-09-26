@@ -7,59 +7,69 @@
 {% endblock %}
 
 {% block content %}
+<div class="col-md-7">
 <form method="POST" action="/admin/music/save/" enctype="multipart/form-data" class="form-horizontal">
 
     <div class="form-group">
-        <label for="name" class="col-sm-3 control-label">Название</label>
-        <div class="col-sm-9">
+        <label for="name" class="col-sm-2 control-label">Название</label>
+        <div class="col-sm-10">
             <input type="text" name="name" class="form-control" id="name" value="{{music.name}}" />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="subname" class="col-sm-3 control-label">подИмя</label>
-        <div class="col-sm-9">
+        <label for="subname" class="col-sm-2 control-label">подИмя</label>
+        <div class="col-sm-10">
             <input class="form-control" id="subname" type="text" name="subname" value="{{music.subname}}" />
         </div>
     </div>
 
     <div class="form-group">
-        <label for="composer-select" class="col-sm-3 control-label">Композиторы</label>
-        <select name="composer" class="col-sm-9" id="composer-select" multiple data-placeholder="Композиторы">
-            {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
-        </select>
+        <label for="composer-select" class="col-sm-2 control-label">Композиторы</label>
+        <div class="col-sm-10">
+            <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
+                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-        <label for="writer-select" class="col-sm-3 control-label">Авторы</label>
-        <select name="writer" class="col-sm-9" id="writer-select" multiple data-placeholder="Авторы">
-            {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
-        </select>
+        <label for="writer-select" class="col-sm-2 control-label">Авторы</label>
+        <div class="col-sm-10">
+            <select name="writer" class="col-sm-10" id="writer-select" multiple data-placeholder="Авторы">
+                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-        <label for="difficulty-select" class="col-sm-3 control-label">Сложность</label>
-        <select name="difficulty" class="col-sm-9" id="difficulty-select" data-placeholder="Сложность">
-            {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
-        </select>
+        <label for="difficulty-select" class="col-sm-2 control-label">Сложность</label>
+        <div class="col-sm-10">
+            <select name="difficulty" class="col-sm-10" id="difficulty-select" data-placeholder="Сложность">
+                {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-        <label for="instrument-select" class="col-sm-3 control-label">Инструменты</label>
-        <select name="instrument" class="col-sm-9" multiple id="instrument-select" data-placeholder="Инструменты">
-            {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
-        </select>
+        <label for="instrument-select" class="col-sm-2 control-label">Инструменты</label>
+        <div class="col-sm-10">
+            <select name="instrument" class="col-sm-10" multiple id="instrument-select" data-placeholder="Инструменты">
+                {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
+            </select>
+        </div>
     </div>
 
     <div class="form-group">
-        <label for="srcfile" class="col-sm-3 control-label">ly-файл</label>
-        <div class="col-sm-9">
+        <label for="srcfile" class="col-sm-2 control-label">ly-файл</label>
+        <div class="col-sm-10">
             <input type="file" name="src_file" id="srcfile" />
         </div>
     </div>
 
-    <button class="col-sm-offset-3 btn btn-primary" type="submit"><i class="fa fa-save"></i> Сохранить</button>
+    <button class="col-sm-offset-2 btn btn-primary" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>
+</div>
 {% endblock %}
 
 {% block custom_js %}
