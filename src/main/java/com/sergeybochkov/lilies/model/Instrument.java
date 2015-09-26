@@ -21,6 +21,9 @@ public class Instrument implements Serializable {
     private String slug;
 
     @ManyToMany
+    @JoinTable(name = "instrument_music",
+            joinColumns = @JoinColumn(name = "instrument_id"),
+            inverseJoinColumns = @JoinColumn(name = "music_id"))
     private List<Music> musicList;
 
     public Instrument() {}

@@ -10,7 +10,8 @@ import java.util.Set;
 @Table(name = "roles")
 public class Role implements GrantedAuthority {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "role_seq_generator")
+    @SequenceGenerator(name = "role_seq_generator", sequenceName = "role_sequence")
     private Long id;
     private String role;
 

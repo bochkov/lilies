@@ -23,16 +23,27 @@ public class Music implements Serializable {
     private String subName;
 
     @ManyToMany
+    @JoinTable(name = "music_composer",
+            joinColumns = @JoinColumn(name = "music_id"),
+            inverseJoinColumns = @JoinColumn(name = "composer_id"))
     private List<Author> composer;
 
     @ManyToMany
+    @JoinTable(name = "music_writer",
+            joinColumns = @JoinColumn(name = "music_id"),
+            inverseJoinColumns = @JoinColumn(name = "writer_id"))
     private List<Author> writer;
 
     @ManyToOne
-    @JoinColumn(name = "difficulty")
+    @JoinTable(name = "difficulty_music",
+            joinColumns = @JoinColumn(name = "music_id"),
+            inverseJoinColumns = @JoinColumn(name = "rating"))
     private Difficulty difficulty;
 
     @ManyToMany
+    @JoinTable(name = "music_instrument",
+            joinColumns = @JoinColumn(name = "music_id"),
+            inverseJoinColumns = @JoinColumn(name = "instrument_id"))
     private List<Instrument> instrument;
 
     @Column(name = "src_filename")

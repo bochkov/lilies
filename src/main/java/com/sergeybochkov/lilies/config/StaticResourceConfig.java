@@ -1,13 +1,13 @@
 package com.sergeybochkov.lilies.config;
 
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.io.File;
 
 @Configuration
-public class StaticResourceConfig extends WebMvcAutoConfiguration.WebMvcAutoConfigurationAdapter {
+public class StaticResourceConfig extends WebMvcConfigurerAdapter {
 
     public static final String MEDIA_DIR = System.getProperty("user.dir") + "/media/";
     public static final String MEDIA_URL = "/media/**";
