@@ -10,6 +10,7 @@ import com.sergeybochkov.lilies.repository.StorageRepository;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -58,7 +59,7 @@ public class MusicServiceImpl implements MusicService {
 
     @Override
     public List<Music> findAll() {
-        return repo.findAll();
+        return repo.findAll(new Sort(Sort.Direction.ASC, "name", "composer"));
     }
 
     @Override
@@ -81,8 +82,8 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public List<Music> findByNameContainingIgnoreCase(String name) {
-        return repo.findByNameContainingIgnoreCase(name);
+    public List<Music> findBySomething(String name) {
+        return repo.findBySomething("%" + name + "%");
     }
 
     @Override

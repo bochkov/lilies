@@ -15,7 +15,7 @@ public interface MusicService {
 
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
-    List<Music> findByNameContainingIgnoreCase(String name);
+    List<Music> findBySomething(String name);
 
     Music save(Music music);
 
