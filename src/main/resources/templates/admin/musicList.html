@@ -25,7 +25,7 @@
     <tbody>
     {% for music in musicList %}
     <tr>
-        <td><a href="/admin/music/{{music.id}}/">{{ music.name }}</a></td>
+        <td><a href="/admin/music/edit/{{music.id}}/">{{ music.name }}</a></td>
         <td>{{ music.subName }}</td>
         <td>
             {{ music.composer|join(", ")}}
@@ -37,9 +37,9 @@
         <td>
             {{ music.instrument|join(", ")}}
         </td>
-        <td>{{ music.storage.hasSrc|yes|raw }}</td>
-        <td>{{ music.storage.hasPdf|yes|raw }}</td>
-        <td>{{ music.storage.hasMp3|yes|raw }}</td>
+        <td>{{ music.hasSrc|yes|raw }}</td>
+        <td>{{ music.hasPdf|yes|raw }}</td>
+        <td>{{ music.hasMp3|yes|raw }}</td>
         <td>
             <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
         </td>

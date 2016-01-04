@@ -20,7 +20,7 @@
     {% for diff in difficultyList %}
     <tr>
         <td>{{ diff.rating }}</td>
-        <td><a href="/admin/difficulty/{{diff.rating}}/">{{ diff.name }}</a></td>
+        <td><a href="/admin/difficulty/edit/{{diff.rating}}/">{{ diff.name }}</a></td>
         <td>
             <a href="#" onclick="deleteDifficulty('{{diff.rating}}')"><i class="fa fa-trash-o"></i> </a>
         </td>

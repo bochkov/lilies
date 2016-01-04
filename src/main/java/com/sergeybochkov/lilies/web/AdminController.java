@@ -5,6 +5,7 @@ import com.sergeybochkov.lilies.model.*;
 import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,8 +69,17 @@ public class AdminController extends WebMvcConfigurerAdapter {
     // =============== MUSIC ==================
 
     @RequestMapping("/music/")
-    public String allMusic(Model model) {
-        model.addAttribute("musicList", musicService.findAll());
+    public String allMusic() {
+        return "redirect:/admin/music/1/";
+    }
+
+    @RequestMapping("/music/{page}/")
+    public String allMusic(Model model, @PathVariable("page") Integer page) {
+        Page<Music> p = musicService.findAll(page);
+        int current = p.getNumber() + 1;
+        int begin = Math.max(1, current - 5);
+        int end = Math.min(begin + 10, p.getTotalPages());
+        model.addAttribute("musicList", p);
         return "admin/musicList";
     }
 
@@ -87,7 +97,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return "admin/musicAdd";
     }
 
-    @RequestMapping("/music/{id}/")
+    @RequestMapping("/music/edit/{id}/")
     public String editMusic(Model model, @PathVariable Long id) {
         model.addAttribute("music", musicService.findOne(id));
         return "admin/musicAdd";
@@ -177,7 +187,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return difficultyService.get(id);
     }
 
-    @RequestMapping("/difficulty/{id}/")
+    @RequestMapping("/difficulty/edit/{id}/")
     public String editDiff(Model model, @PathVariable Integer id) {
         model.addAttribute("difficulty", difficultyService.findOne(id));
         return "admin/difficultyAdd";
@@ -219,7 +229,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return instrumentService.findOne(id);
     }
 
-    @RequestMapping("/instrument/{id}/")
+    @RequestMapping("/instrument/edit/{id}/")
     public String editInstrument(Model model, @PathVariable Long id) {
         model.addAttribute("instrument", instrumentService.findOne(id));
         return "admin/instrumentAdd";
@@ -268,7 +278,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return "redirect:/admin/author/";
     }
 
-    @RequestMapping(value = "/author/{id}/")
+    @RequestMapping(value = "/author/edit/{id}/")
     public String editAuthor(Model model, @PathVariable Long id) {
         model.addAttribute("author", authorService.findOne(id));
         return "admin/authorAdd";

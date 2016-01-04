@@ -10,6 +10,8 @@ import com.sergeybochkov.lilies.repository.StorageRepository;
 import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +25,8 @@ import java.util.List;
 @Service
 public class MusicServiceImpl implements MusicService {
 
+    public static final int PAGE_SIZE = 50;
+
     @Autowired
     private MusicRepository repo;
     @Autowired
@@ -35,22 +39,34 @@ public class MusicServiceImpl implements MusicService {
 
         try {
             File srcFile = new File(StaticResourceConfig.MEDIA_DIR + music.getSrcFilename());
-            if (storage.hasSrc() && music.getSrcFilename() != null && !srcFile.exists())
+            if (music.getSrcFilename() != null && !srcFile.exists())
                 IOUtils.write(storage.getSrcFile(), new FileOutputStream(srcFile));
+            if (!music.hasSrc() && storage.getSrcFile() != null && storage.getSrcFile().length > 0) {
+                music.setSrcFileLength((long) storage.getSrcFile().length);
+                repo.save(music);
+            }
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File pdfFile = new File(StaticResourceConfig.MEDIA_DIR + music.getPdfFilename());
-            if (storage.hasPdf() && music.getPdfFilename() != null && !pdfFile.exists())
+            if (music.getPdfFilename() != null && !pdfFile.exists())
                 IOUtils.write(storage.getPdfFile(), new FileOutputStream(pdfFile));
+            if (!music.hasPdf() && storage.getPdfFile() != null && storage.getPdfFile().length > 0) {
+                music.setPdfFileLength((long) storage.getPdfFile().length);
+                repo.save(music);
+            }
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
         try {
             File mp3File = new File(StaticResourceConfig.MEDIA_DIR + music.getMp3Filename());
-            if (storage.hasMp3() && music.getMp3Filename() != null && !mp3File.exists())
+            if (music.getMp3Filename() != null && !mp3File.exists())
                 IOUtils.write(storage.getMp3File(), new FileOutputStream(mp3File));
+            if (!music.hasMp3() && storage.getMp3File() != null && storage.getMp3File().length > 0) {
+                music.setMp3FileLength((long) storage.getMp3File().length);
+                repo.save(music);
+            }
         }
         catch (IOException ex) { ex.printStackTrace(); }
 
@@ -60,6 +76,12 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public List<Music> findAll() {
         return repo.findAll(new Sort(Sort.Direction.ASC, "name", "composer"));
+    }
+
+    @Override
+    public Page<Music> findAll(Integer page) {
+        PageRequest pr = new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "name");
+        return repo.findAll(pr);
     }
 
     @Override

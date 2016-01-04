@@ -49,11 +49,20 @@ public class Music implements Serializable {
     @Column(name = "src_filename")
     private String srcFilename;
 
+    @Column(name = "src_length")
+    private Long srcFileLength;
+
     @Column(name = "pdf_filename")
     private String pdfFilename;
 
+    @Column(name = "pdf_length")
+    private Long pdfFileLength;
+
     @Column(name = "mp3_filename")
     private String mp3Filename;
+
+    @Column(name = "mp3_length")
+    private Long mp3FileLength;
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "storage_id")
@@ -132,12 +141,28 @@ public class Music implements Serializable {
         this.srcFilename = srcFilename;
     }
 
+    public Long getSrcFileLength() {
+        return srcFileLength;
+    }
+
+    public void setSrcFileLength(Long srcFileLength) {
+        this.srcFileLength = srcFileLength;
+    }
+
     public String getPdfFilename() {
         return pdfFilename;
     }
 
     public void setPdfFilename(String pdfFilename) {
         this.pdfFilename = pdfFilename;
+    }
+
+    public Long getPdfFileLength() {
+        return pdfFileLength;
+    }
+
+    public void setPdfFileLength(Long pdfFileLength) {
+        this.pdfFileLength = pdfFileLength;
     }
 
     public String getMp3Filename() {
@@ -154,5 +179,25 @@ public class Music implements Serializable {
 
     public void setStorage(Storage storage) {
         this.storage = storage;
+    }
+
+    public Long getMp3FileLength() {
+        return mp3FileLength;
+    }
+
+    public void setMp3FileLength(Long mp3FileLength) {
+        this.mp3FileLength = mp3FileLength;
+    }
+
+    public boolean hasPdf() {
+        return getPdfFilename() != null && getPdfFileLength() != null && getPdfFileLength() > 0;
+    }
+
+    public boolean hasSrc() {
+        return getSrcFilename() != null && getSrcFileLength() != null && getSrcFileLength() > 0;
+    }
+
+    public boolean hasMp3() {
+        return getMp3Filename() != null && getMp3FileLength() != null && getMp3FileLength() > 0;
     }
 }
