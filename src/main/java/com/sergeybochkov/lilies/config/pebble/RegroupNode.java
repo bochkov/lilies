@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,7 +59,7 @@ public class RegroupNode extends AbstractRenderableNode {
                 list.add(rl);
             }
         }
-        Collections.sort(list);
+        list.sort((o1, o2) -> o1.getGrouper().compareTo(o2.getGrouper()));
         ctx.put(outName, list);
     }
 
