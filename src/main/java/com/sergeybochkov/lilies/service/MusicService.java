@@ -4,6 +4,7 @@ import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.model.Storage;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -13,9 +14,13 @@ public interface MusicService {
 
     List<Music> findAll();
 
+    Page<Music> findAll(Integer page);
+
+    Integer pageNum(Music music);
+
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
-    List<Music> findByNameContainingIgnoreCase(String name);
+    List<Music> findBySomething(String name);
 
     Music save(Music music);
 

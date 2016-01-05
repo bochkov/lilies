@@ -39,7 +39,7 @@ public class WebController {
 
     @RequestMapping("/search/")
     public String search(Model model, @RequestParam String query) {
-        List<Music> musics = musicService.findByNameContainingIgnoreCase(query);
+        List<Music> musics = musicService.findBySomething(query);
         model.addAttribute("object_list", musics);
         model.addAttribute("query", query);
         return "lilies/search";

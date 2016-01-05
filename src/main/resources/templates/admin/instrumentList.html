@@ -21,7 +21,7 @@
         {% for instrument in instrumentList %}
         <tr>
             <td>{{ instrument.id }}</td>
-            <td><a href="/admin/instrument/{{instrument.id}}/">{{ instrument.name }}</a></td>
+            <td><a href="/admin/instrument/edit/{{instrument.id}}/">{{ instrument.name }}</a></td>
             <td>{{ instrument.slug }}</td>
             <td>
                 <a href="#" onclick="deleteInstrument('{{instrument.id}}')"><i class="fa fa-trash-o"></i> </a>

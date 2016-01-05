@@ -69,17 +69,15 @@ CREATE TABLE storage(
 CREATE SEQUENCE music_sequence INCREMENT BY 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE music (
   music_id BIGINT PRIMARY KEY NOT NULL,
-  mp3_filename VARCHAR(255),
   name VARCHAR(255),
-  pdf_filename VARCHAR(255),
-  src_filename VARCHAR(255),
   subname VARCHAR(255),
-  difficulty INT,
+  src_filename VARCHAR(255),
+  src_length BIGINT,
+  pdf_filename VARCHAR(255),
+  pdf_length BIGINT,
+  mp3_filename VARCHAR(255),
+  mp3_length BIGINT,
   storage_id BIGINT,
-  mp3_file BYTEA,
-  pdf_file BYTEA,
-  src_file BYTEA,
-  CONSTRAINT difficulty_fk FOREIGN KEY (difficulty) REFERENCES difficulty (rating),
   CONSTRAINT storage_fk FOREIGN KEY (storage_id) REFERENCES storage (id)
 );
 

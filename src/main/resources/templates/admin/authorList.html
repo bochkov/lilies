@@ -20,7 +20,7 @@
     <tbody>
     {% for author in authorList %}
     <tr>
-        <td><a href="/admin/author/{{author.id}}/">{{ author.lastName }}</a></td>
+        <td><a href="/admin/author/edit/{{author.id}}/">{{ author.lastName }}</a></td>
         <td>{{ author.firstName }}</td>
         <td>{{ author.middleName }}</td>
         <td>

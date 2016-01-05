@@ -6,7 +6,7 @@
         <ul class="list-unstyled">
         {% for obj in obj_list.list %}
             <li><a href="/sheet-{{obj.id}}/">
-                <small class="text-muted">{{ obj.composer.str }}</small>
+                <small class="text-muted">{{ obj.composer|join(", ") }}</small>
                 {{ obj.name }}
                 <small class="text-muted">{{ obj.subName }}</small>
                 </a>

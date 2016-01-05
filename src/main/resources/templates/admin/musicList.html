@@ -1,9 +1,28 @@
 {% extends 'admin/index' %}
 
+{% macro pagination(current, begin, end, pageList) %}
+<div class="row-fluid text-center">
+<nav>
+    <ul class="pagination">
+        <li class="{% if current == 1 %}disabled{% endif %}"><a href="/admin/music/1/">&lt;&lt;</a></li>
+        <li class="{% if current == 1 %}disabled{% endif %}"><a href="/admin/music/{{current-1}}/">&lt;</a></li>
+
+        {% for i in pageList %}
+        <li class="{% if current == i %}active{% endif %}"><a href="/admin/music/{{i}}/">{{i}}</a></li>
+        {% endfor %}
+
+        <li class="{% if current+1 > end %}disabled{% endif %}"><a href="/admin/music/{{current+1}}/">&gt;</a></li>
+        <li class="{% if current+1 > end %}disabled{% endif %}"><a href="/admin/music/{{end}}/">&gt;&gt;</a></li>
+    </ul>
+</nav>
+</div>
+{% endmacro %}
+
 {% block a_music %}active{% endblock %}
 
 {% block cmd %}
     <a class="btn btn-sm btn-default" href="/admin/music/add/"><i class="fa fa-plus"></i> Добавить</a>
+    {{pagination(current, begin, end, pageList)}}
 {% endblock %}
 
 {% block content %}
@@ -25,7 +44,7 @@
     <tbody>
     {% for music in musicList %}
     <tr>
-        <td><a href="/admin/music/{{music.id}}/">{{ music.name }}</a></td>
+        <td><a href="/admin/music/edit/{{music.id}}/">{{ music.name }}</a></td>
         <td>{{ music.subName }}</td>
         <td>
             {{ music.composer|join(", ")}}
@@ -37,14 +56,18 @@
         <td>
             {{ music.instrument|join(", ")}}
         </td>
-        <td>{{ music.storage.hasSrc|yes|raw }}</td>
-        <td>{{ music.storage.hasPdf|yes|raw }}</td>
-        <td>{{ music.storage.hasMp3|yes|raw }}</td>
+        <td>{{ music.hasSrc|yes|raw }}</td>
+        <td>{{ music.hasPdf|yes|raw }}</td>
+        <td>{{ music.hasMp3|yes|raw }}</td>
         <td>
-            <a onclick="deleteMusic('{{ music.id }}')" href="#"><i class="fa fa-trash-o"></i> </a>
+            <a onclick="deleteMusic('{{ music.id }}')"><i class="fa fa-trash-o"></i> </a>
         </td>
     </tr>
     {% endfor %}
     </tbody>
 </table>
+{% endblock %}
+
+{% block content_footer %}
+{{pagination(current, begin, end, pageList)}}
 {% endblock %}
