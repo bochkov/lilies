@@ -79,7 +79,16 @@ public class AdminController extends WebMvcConfigurerAdapter {
         int current = p.getNumber() + 1;
         int begin = Math.max(1, current - 5);
         int end = Math.min(begin + 10, p.getTotalPages());
+
+        int pageList[] = new int[end - begin + 1];
+        for (int i = begin - 1; i < end; ++i)
+            pageList[i] = i + 1;
+
         model.addAttribute("musicList", p);
+        model.addAttribute("pageList", pageList);
+        model.addAttribute("current", current);
+        model.addAttribute("begin", begin);
+        model.addAttribute("end", end);
         return "admin/musicList";
     }
 
@@ -104,8 +113,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
-    public String saveMusic(Model model,
-                            @RequestParam("name") String name,
+    public String saveMusic(@RequestParam("name") String name,
                             @RequestParam(value = "subname", required = false) String subName,
                             @RequestParam(value = "composer", required = false) String composer,
                             @RequestParam(value = "writer", required = false) String writer,
@@ -157,10 +165,12 @@ public class AdminController extends WebMvcConfigurerAdapter {
         musicService.save(storage);
 
         music.setStorage(storage);
-        musicService.save(music);
+        music = musicService.save(music);
 
         musicService.generateFiles(music);
-        return "redirect:/admin/music/";
+
+        int page = musicService.pageNum(music);
+        return "redirect:/admin/music/" + page + "/";
     }
 
     @RequestMapping(value = "/a/music/delete/", method = RequestMethod.POST)

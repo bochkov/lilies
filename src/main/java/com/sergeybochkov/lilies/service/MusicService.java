@@ -16,6 +16,8 @@ public interface MusicService {
 
     Page<Music> findAll(Integer page);
 
+    Integer pageNum(Music music);
+
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
     List<Music> findBySomething(String name);
