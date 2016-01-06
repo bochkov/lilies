@@ -5,6 +5,7 @@ import com.mitchellbosecke.pebble.lexer.Token;
 import com.mitchellbosecke.pebble.lexer.TokenStream;
 import com.mitchellbosecke.pebble.node.RenderableNode;
 import com.mitchellbosecke.pebble.node.expression.Expression;
+import com.mitchellbosecke.pebble.parser.Parser;
 import com.mitchellbosecke.pebble.tokenParser.AbstractTokenParser;
 
 public class RegroupToken extends AbstractTokenParser {
@@ -15,20 +16,20 @@ public class RegroupToken extends AbstractTokenParser {
     }
 
     @Override
-    public RenderableNode parse(Token token) throws ParserException {
-        TokenStream stream = this.parser.getStream();
+    public RenderableNode parse(Token token, Parser parser) throws ParserException {
+        TokenStream stream = parser.getStream();
 
         stream.next(); // skip the "regroup" token
 
-        Expression<?> srcList = this.parser.getExpressionParser().parseExpression();
+        Expression<?> srcList = parser.getExpressionParser().parseExpression();
         stream.expect(Token.Type.NAME, "by");
-        this.parser.getExpressionParser().parseNewVariableName(); // String name
+        parser.getExpressionParser().parseNewVariableName(); // String name
 
         stream.next(); // skip operator
-        this.parser.getExpressionParser().parseFilterInvocationExpression(); // FilterInvocationExpression filter
+        parser.getExpressionParser().parseFilterInvocationExpression(); // FilterInvocationExpression filter
 
         stream.expect(Token.Type.NAME, "as");
-        String outName = this.parser.getExpressionParser().parseNewVariableName();
+        String outName = parser.getExpressionParser().parseNewVariableName();
         stream.expect(Token.Type.EXECUTE_END);
 
         return new RegroupNode(srcList, outName);

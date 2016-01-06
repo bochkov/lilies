@@ -20,9 +20,9 @@ public class PebbleResolverConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public PebbleEngine pebbleEngine() {
-        PebbleEngine engine = new PebbleEngine(templateLoader());
-        engine.addExtension(new LiliesExtension());
-        return engine;
+        PebbleEngine.Builder engineBuilder = new PebbleEngine.Builder();
+        engineBuilder.extension(new LiliesExtension());
+        return engineBuilder.build();
     }
 
     @Bean
