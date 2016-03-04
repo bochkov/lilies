@@ -1,4 +1,4 @@
-FROM java:8
+FROM sb/java:latest
 RUN apt-get update && apt-get install -y timidity lame bzip2
 VOLUME /tmp
 WORKDIR /tmp
