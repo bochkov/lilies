@@ -7,4 +7,4 @@ RUN wget http://download.linuxaudio.org/lilypond/binaries/linux-64/lilypond-2.18
     rm lilypond-2.18.2-1.linux-64.sh
 WORKDIR /opt
 ADD lilies.jar /opt/lilies.jar
-ENTRYPOINT ["java", "-Xms32m", "-Xms128m", "-jar", "lilies.jar"]
+ENTRYPOINT ["java", "-Xms32m", "-Xms128m", "-Dfile.encoding=UTF-8", "-jar", "lilies.jar"]
