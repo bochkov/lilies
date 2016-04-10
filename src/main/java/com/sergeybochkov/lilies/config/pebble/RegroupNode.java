@@ -11,7 +11,7 @@ import com.sergeybochkov.lilies.model.Music;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +19,7 @@ public class RegroupNode extends AbstractRenderableNode {
 
     private Expression<?> srcList;
     private String outName;
+    private RegroupComparator comparator = new RegroupComparator();
 
     public RegroupNode(Expression<?> srcList, String outName) {
         this.srcList = srcList;
@@ -58,11 +59,21 @@ public class RegroupNode extends AbstractRenderableNode {
                 list.add(rl);
             }
         }
-        Collections.sort(list);
+        list.sort(comparator);
         ctx.put(outName, list);
     }
 
     @Override
     public void accept(NodeVisitor nodeVisitor) {
+    }
+
+    private class RegroupComparator implements Comparator<RegroupList> {
+        @Override
+        public int compare(RegroupList o1, RegroupList o2) {
+            if (o1 != null && o2 != null)
+                return o1.getGrouper().compareTo(o2.getGrouper());
+
+            return 0;
+        }
     }
 }
