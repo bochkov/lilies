@@ -33,6 +33,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/admin/login/").defaultSuccessUrl("/admin/music/").permitAll()
                 .and()
-                .logout().logoutUrl("/admin/logout/").logoutSuccessUrl("/").permitAll();
+                .logout().logoutUrl("/admin/logout/").deleteCookies("remember-me").logoutSuccessUrl("/").permitAll()
+                .and()
+                .rememberMe();
     }
 }
