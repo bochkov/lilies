@@ -3,7 +3,7 @@ package com.sergeybochkov.lilies.config.pebble;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RegroupList implements Comparable {
+public class RegroupList {
 
     private String grouper;
     private List<Object> list = new ArrayList<>();
@@ -26,14 +26,5 @@ public class RegroupList implements Comparable {
 
     public void addToList(Object object) {
         list.add(object);
-    }
-
-    @Override
-    public int compareTo(Object o) {
-        if (o instanceof RegroupList) {
-            RegroupList oList = (RegroupList) o;
-            return getGrouper().compareTo(oList.getGrouper());
-        }
-        return 0;
     }
 }

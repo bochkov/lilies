@@ -3,7 +3,11 @@
 {% block a_music %}active{% endblock %}
 
 {% block cmd %}
+{% if music.id is null %}
 <h3>Добавление партитуры</h3>
+{% else %}
+<h3>Редактирование партитуры</h3>
+{% endif %}
 {% endblock %}
 
 {% block content %}
@@ -28,7 +32,10 @@
         <label for="composer-select" class="col-sm-2 control-label">Композиторы</label>
         <div class="col-sm-10">
             <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
-                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+                {% for author in authors %}
+                {% set selected = music.composer contains author %}
+                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author}}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -37,7 +44,10 @@
         <label for="writer-select" class="col-sm-2 control-label">Авторы</label>
         <div class="col-sm-10">
             <select name="writer" class="col-sm-10" id="writer-select" multiple data-placeholder="Авторы">
-                {% for author in authors %}<option value="{{author.id}}">{{author}}</option>{% endfor %}
+                {% for author in authors %}
+                {% set selected = music.writer contains author %}
+                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author}}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -46,7 +56,10 @@
         <label for="difficulty-select" class="col-sm-2 control-label">Сложность</label>
         <div class="col-sm-10">
             <select name="difficulty" class="col-sm-10" id="difficulty-select" data-placeholder="Сложность">
-                {% for diff in difficulties %}<option value="{{diff.rating}}">{{ diff.str }}</option>{% endfor %}
+                {% for diff in difficulties %}
+                {% set selected = music.difficulty equals diff %}
+                <option value="{{diff.rating}}" {% if selected %}selected{% endif %}>{{ diff.str }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
@@ -55,17 +68,22 @@
         <label for="instrument-select" class="col-sm-2 control-label">Инструменты</label>
         <div class="col-sm-10">
             <select name="instrument" class="col-sm-10" multiple id="instrument-select" data-placeholder="Инструменты">
-                {% for instrument in instruments %}<option value="{{instrument.slug}}">{{instrument}}</option>{% endfor %}
+                {% for instrument in instruments %}
+                {% set selected = music.instrument contains instrument %}
+                <option value="{{instrument.slug}}" {% if selected %}selected{% endif %}>{{instrument}}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
 
+    {% if music.id is null %}
     <div class="form-group">
         <label for="srcfile" class="col-sm-2 control-label">ly-файл</label>
         <div class="col-sm-10">
             <input type="file" name="src_file" id="srcfile" />
         </div>
     </div>
+    {% endif %}
 
     <button class="col-sm-offset-2 btn btn-primary" type="submit"><i class="fa fa-save"></i> Сохранить</button>
 </form>

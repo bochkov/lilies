@@ -109,6 +109,9 @@ public class AdminController extends WebMvcConfigurerAdapter {
     @RequestMapping("/music/edit/{id}/")
     public String editMusic(Model model, @PathVariable Long id) {
         model.addAttribute("music", musicService.findOne(id));
+        model.addAttribute("authors", authorService.findAll());
+        model.addAttribute("difficulties", difficultyService.findAll());
+        model.addAttribute("instruments", instrumentService.findAll());
         return "admin/musicAdd";
     }
 
@@ -119,11 +122,13 @@ public class AdminController extends WebMvcConfigurerAdapter {
                             @RequestParam(value = "writer", required = false) String writer,
                             @RequestParam("difficulty") Integer difficulty,
                             @RequestParam("instrument") String instrument,
-                            @RequestParam("src_file") MultipartFile file) {
+                            @RequestParam(value = "src_file", required = false) MultipartFile file) {
 
         Music music = new Music();
         music.setName(name);
-        music.setSubName(subName);
+
+        if (subName != null)
+            music.setSubName(subName);
 
         if (composer != null) {
             List<Author> composerList = new ArrayList<>();
@@ -146,28 +151,24 @@ public class AdminController extends WebMvcConfigurerAdapter {
             instrumentList.add(instrumentService.findBySlug(i));
         music.setInstrument(instrumentList);
 
-        music.setSrcFilename(file.getOriginalFilename());
+        if (file != null) {
+            music.setSrcFilename(file.getOriginalFilename());
+            musicService.save(music);
 
-        musicService.save(music);
+            Storage storage = musicService.getStorage(music);
+            File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
+            try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile))) {
+                stream.write(file.getBytes());
+                storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+            } catch (IOException ex) {
+                //
+            }
 
-        Storage storage = musicService.getStorage(music);
-        File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
-        try {
-            BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile));
-            stream.write(file.getBytes());
-            stream.close();
-            storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+            musicService.save(storage);
+            music.setStorage(storage);
+            music = musicService.save(music);
+            musicService.generateFiles(music);
         }
-        catch (IOException ex) {
-            //
-        }
-
-        musicService.save(storage);
-
-        music.setStorage(storage);
-        music = musicService.save(music);
-
-        musicService.generateFiles(music);
 
         int page = musicService.pageNum(music);
         return "redirect:/admin/music/" + page + "/";

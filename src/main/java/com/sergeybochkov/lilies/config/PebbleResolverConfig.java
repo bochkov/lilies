@@ -3,7 +3,7 @@ package com.sergeybochkov.lilies.config;
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.mitchellbosecke.pebble.loader.Loader;
-import com.mitchellbosecke.pebble.spring.PebbleViewResolver;
+import com.mitchellbosecke.pebble.spring4.PebbleViewResolver;
 import com.sergeybochkov.lilies.config.pebble.LiliesExtension;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +20,10 @@ public class PebbleResolverConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public PebbleEngine pebbleEngine() {
-        PebbleEngine engine = new PebbleEngine(templateLoader());
-        engine.addExtension(new LiliesExtension());
-        return engine;
+        return new PebbleEngine.Builder()
+                .loader(templateLoader())
+                .extension(new LiliesExtension())
+                .build();
     }
 
     @Bean
