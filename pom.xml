@@ -57,8 +57,8 @@
 
         <dependency>
             <groupId>com.mitchellbosecke</groupId>
-            <artifactId>pebble-spring3</artifactId>
-            <version>1.5.1</version>
+            <artifactId>pebble-spring4</artifactId>
+            <version>2.2.1</version>
         </dependency>
 
         <dependency>

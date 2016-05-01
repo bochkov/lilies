@@ -22,7 +22,7 @@ public class LiliesExtension extends AbstractExtension {
     @Override
     public List<TokenParser> getTokenParsers() {
         List<TokenParser> list = new ArrayList<>();
-        list.add(new RegroupToken());
+        list.add(new RegroupParser());
         return list;
     }
 }

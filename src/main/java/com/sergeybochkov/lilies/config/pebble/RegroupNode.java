@@ -60,7 +60,8 @@ public class RegroupNode extends AbstractRenderableNode {
             }
         }
         list.sort(comparator);
-        ctx.put(outName, list);
+        ctx.getScopeChain().put(outName, list);
+        //ctx.put(outName, list);
     }
 
     @Override
