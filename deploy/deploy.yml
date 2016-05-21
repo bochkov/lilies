@@ -29,6 +29,8 @@
         image: sb/lilies
         restart_policy: always
         state: running
+        links:
+          - postgres:postgres
         expose: 8080
 
     - name: clean
