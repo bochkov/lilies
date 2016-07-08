@@ -21,6 +21,7 @@
       docker_image:
         path: /tmp/lilies-deploy
         name: sb-lilies
+        pull: no
         state: present
 
     - name: app container
