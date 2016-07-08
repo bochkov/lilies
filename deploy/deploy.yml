@@ -7,26 +7,26 @@
 
     - name: stop and delete obsolete containers
       docker:
-        image: sb/lilies
+        image: sb-lilies
         name: lilies
         state: absent
 
     - name: delete docker image
       docker_image:
         path: /tmp/lilies-deploy
-        name: sb/lilies
+        name: sb-lilies
         state: absent
 
     - name: build docker image
       docker_image:
         path: /tmp/lilies-deploy
-        name: sb/lilies
-        state: build
+        name: sb-lilies
+        state: present
 
     - name: app container
       docker:
         name: lilies
-        image: sb/lilies
+        image: sb-lilies
         restart_policy: always
         state: running
         links:
