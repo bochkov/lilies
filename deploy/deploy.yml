@@ -2,7 +2,7 @@
 - hosts: 127.0.0.1
   tasks:
     - file: path=/tmp/lilies-deploy state=directory
-    - copy: src=../target/lilies-1.2.2.jar dest=/tmp/lilies-deploy/lilies.jar
+    - copy: src=../build/libs/lilies-1.2.2.jar dest=/tmp/lilies-deploy/lilies.jar
     - copy: src=Dockerfile dest=/tmp/lilies-deploy/Dockerfile
 
     - name: stop and delete obsolete containers
