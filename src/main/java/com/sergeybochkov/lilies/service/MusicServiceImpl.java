@@ -29,10 +29,14 @@ public class MusicServiceImpl implements MusicService {
 
     private static final Logger LOG = Logger.getLogger(MusicServiceImpl.class);
 
+    private final MusicRepository repo;
+    private final StorageRepository stRepo;
+
     @Autowired
-    private MusicRepository repo;
-    @Autowired
-    private StorageRepository stRepo;
+    public MusicServiceImpl(MusicRepository repo, StorageRepository stRepo) {
+        this.repo = repo;
+        this.stRepo = stRepo;
+    }
 
     @Override
     public Music findOne(Long id) {

@@ -11,7 +11,12 @@ import java.util.List;
 @Service
 public class DifficultyServiceImpl implements DifficultyService {
 
-    @Autowired private DifficultyRepository repo;
+    private final DifficultyRepository repo;
+
+    @Autowired
+    public DifficultyServiceImpl(DifficultyRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public Difficulty get(Integer id) {

@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class InstrumentServiceImpl implements InstrumentService {
 
+    private final InstrumentRepository repo;
+
     @Autowired
-    private InstrumentRepository repo;
+    public InstrumentServiceImpl(InstrumentRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public Instrument findBySlug(String slug) {

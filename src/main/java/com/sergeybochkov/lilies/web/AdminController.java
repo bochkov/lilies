@@ -25,11 +25,21 @@ import java.util.List;
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController extends WebMvcConfigurerAdapter {
 
-    @Autowired private MusicService musicService;
-    @Autowired private DifficultyService difficultyService;
-    @Autowired private InstrumentService instrumentService;
-    @Autowired private AuthorService authorService;
-    @Autowired private UserService userService;
+    private final MusicService musicService;
+    private final DifficultyService difficultyService;
+    private final InstrumentService instrumentService;
+    private final AuthorService authorService;
+    private final UserService userService;
+
+    @Autowired
+    public AdminController(MusicService musicService, DifficultyService difficultyService,
+                           UserService userService, InstrumentService instrumentService, AuthorService authorService) {
+        this.musicService = musicService;
+        this.difficultyService = difficultyService;
+        this.userService = userService;
+        this.instrumentService = instrumentService;
+        this.authorService = authorService;
+    }
 
     @InitBinder("user")
     protected void initBinder(WebDataBinder binder) {
@@ -46,7 +56,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         return "admin/login";
     }
 
-    // =========== CHANGE PASSWORD ============
+    // ============ CHANGE PASSWORD ============
 
     @RequestMapping("/password/")
     public String updateP(Model model) {
@@ -185,7 +195,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         }
     }
 
-    // ================= DIFFICULTY ===================
+    // ================== DIFFICULTY =====================
 
     @RequestMapping("/difficulty/")
     public String allDifficulty(Model model) {
@@ -227,7 +237,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         }
     }
 
-    // ================ INSTRUMENT =======================
+    // ================== INSTRUMENT ========================
 
     @RequestMapping("/instrument/")
     public String allInstruments(Model model) {
@@ -269,7 +279,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
         }
     }
 
-    // =============== AUTHOR ================
+    // =============== AUTHOR ==================
 
     @RequestMapping("/author/")
     public String allAuthors(Model model) {

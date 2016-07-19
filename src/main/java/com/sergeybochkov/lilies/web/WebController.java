@@ -18,10 +18,19 @@ import java.util.List;
 @Controller
 public class WebController {
 
-    @Autowired private MusicService musicService;
-    @Autowired private DifficultyService diffService;
-    @Autowired private AuthorService authorService;
-    @Autowired private InstrumentService instrumentService;
+    private final MusicService musicService;
+    private final DifficultyService diffService;
+    private final AuthorService authorService;
+    private final InstrumentService instrumentService;
+
+    @Autowired
+    public WebController(DifficultyService diffService, MusicService musicService,
+                         InstrumentService instrumentService, AuthorService authorService) {
+        this.diffService = diffService;
+        this.musicService = musicService;
+        this.instrumentService = instrumentService;
+        this.authorService = authorService;
+    }
 
     @RequestMapping("/")
     public String index(Model model) {

@@ -11,8 +11,12 @@ import java.util.List;
 @Service
 public class AuthorServiceImpl implements AuthorService {
 
+    private final AuthorRepository repo;
+
     @Autowired
-    private AuthorRepository repo;
+    public AuthorServiceImpl(AuthorRepository repo) {
+        this.repo = repo;
+    }
 
     @Override
     public List<Author> findAll() {
