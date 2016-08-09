@@ -169,12 +169,18 @@ public class AdminController extends WebMvcConfigurerAdapter {
             File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
             try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile))) {
                 stream.write(file.getBytes());
-                storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
             } catch (IOException ex) {
-                //
+                ex.printStackTrace();
             }
 
-            musicService.save(storage);
+            try {
+                storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+                musicService.save(storage);
+            }
+            catch (IOException ex) {
+                ex.printStackTrace();
+            }
+
             music.setStorage(storage);
             music = musicService.save(music);
             musicService.generateFiles(music);

@@ -8,3 +8,4 @@ build/
 *.midi
 *.mp3
 media/
+*.log

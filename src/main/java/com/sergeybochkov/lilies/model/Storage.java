@@ -9,7 +9,7 @@ public class Storage implements Serializable {
 
     @Id
     @Column
-    @GeneratedValue(generator = "storage_seq_generator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storage_seq_generator")
     @SequenceGenerator(name = "storage_seq_generator", sequenceName = "storage_sequence")
     private Long id;
 
