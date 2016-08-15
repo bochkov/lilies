@@ -46,6 +46,9 @@ public class Music implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "instrument_id"))
     private List<Instrument> instrument;
 
+    @Column(name = "base_filename")
+    private String baseFilename;
+
     @Column(name = "src_filename")
     private String srcFilename;
 
@@ -131,6 +134,14 @@ public class Music implements Serializable {
 
     public void setInstrument(List<Instrument> instrument) {
         this.instrument = instrument;
+    }
+
+    public String getBaseFilename() {
+        return baseFilename;
+    }
+
+    public void setBaseFilename(String baseFilename) {
+        this.baseFilename = baseFilename;
     }
 
     public String getSrcFilename() {

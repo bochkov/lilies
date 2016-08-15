@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +46,7 @@ public class MusicServiceImpl implements MusicService {
         Storage storage = stRepo.findOne(music.getId());
 
         try {
-            File srcFile = new File(StaticResourceConfig.MEDIA_DIR + music.getSrcFilename());
+            File srcFile = new File(StaticResourceConfig.MEDIA_DIR, music.getSrcFilename());
             if (music.getSrcFilename() != null && !srcFile.exists())
                 IOUtils.write(storage.getSrcFile(), new FileOutputStream(srcFile));
             if (!music.hasSrc() && storage.getSrcFile() != null && storage.getSrcFile().length > 0) {
@@ -52,10 +54,10 @@ public class MusicServiceImpl implements MusicService {
                 repo.save(music);
             }
         }
-        catch (IOException ex) { ex.printStackTrace(); }
+        catch (IOException ex) { LOG.warn(ex); }
 
         try {
-            File pdfFile = new File(StaticResourceConfig.MEDIA_DIR + music.getPdfFilename());
+            File pdfFile = new File(StaticResourceConfig.MEDIA_DIR, music.getPdfFilename());
             if (music.getPdfFilename() != null && !pdfFile.exists())
                 IOUtils.write(storage.getPdfFile(), new FileOutputStream(pdfFile));
             if (!music.hasPdf() && storage.getPdfFile() != null && storage.getPdfFile().length > 0) {
@@ -63,10 +65,10 @@ public class MusicServiceImpl implements MusicService {
                 repo.save(music);
             }
         }
-        catch (IOException ex) { ex.printStackTrace(); }
+        catch (IOException ex) { LOG.warn(ex); }
 
         try {
-            File mp3File = new File(StaticResourceConfig.MEDIA_DIR + music.getMp3Filename());
+            File mp3File = new File(StaticResourceConfig.MEDIA_DIR, music.getMp3Filename());
             if (music.getMp3Filename() != null && !mp3File.exists())
                 IOUtils.write(storage.getMp3File(), new FileOutputStream(mp3File));
             if (!music.hasMp3() && storage.getMp3File() != null && storage.getMp3File().length > 0) {
@@ -74,7 +76,7 @@ public class MusicServiceImpl implements MusicService {
                 repo.save(music);
             }
         }
-        catch (IOException ex) { ex.printStackTrace(); }
+        catch (IOException ex) { LOG.warn(ex); }
 
         return music;
     }
@@ -105,7 +107,7 @@ public class MusicServiceImpl implements MusicService {
 
         }
         while (counter < i);
-        return null;
+        return 1;
     }
 
     @Override
@@ -145,12 +147,13 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public void delete(Long id) {
         Music m = findOne(id);
-        if (!new File(StaticResourceConfig.MEDIA_DIR + m.getSrcFilename()).delete())
+        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getSrcFilename()).delete())
             LOG.warn("Cannot delete " + m.getSrcFilename());
-        if (!new File(StaticResourceConfig.MEDIA_DIR + m.getPdfFilename()).delete())
+        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getPdfFilename()).delete())
             LOG.warn("Cannot delete " + m.getPdfFilename());
-        if (!new File(StaticResourceConfig.MEDIA_DIR + m.getMp3Filename()).delete())
+        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getMp3Filename()).delete())
             LOG.warn("Cannot delete " + m.getMp3Filename());
+
         stRepo.delete(id);
         repo.delete(m);
     }
@@ -158,7 +161,13 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public Storage getStorage(Music music) {
         Storage st = music.getStorage();
-        return st == null ? new Storage(music) : st;
+        if (st == null) {
+            st = new Storage(music);
+            stRepo.save(st);
+            music.setStorage(st);
+            repo.save(music);
+        }
+        return st;
     }
 
     @Override
@@ -167,6 +176,10 @@ public class MusicServiceImpl implements MusicService {
     }
 
     private class GenerateFilesThread extends Thread {
+
+        private static final String LY_CMD = "lilypond -dno-point-and-click %s";
+        private static final String TIMIDITY_CMD = "timidity %s.midi -Ow";
+        private static final String LAME_CMD = "lame -h -b 128 %s.wav %s.mp3";
 
         private Music music;
         private Storage storage;
@@ -179,37 +192,48 @@ public class MusicServiceImpl implements MusicService {
         @Override
         public void run() {
             try {
-                String name = music.getSrcFilename().substring(0, music.getSrcFilename().lastIndexOf("."));
-                File media = new File(StaticResourceConfig.MEDIA_DIR);
+                Path path = Files.createTempDirectory(music.getBaseFilename());
 
-                File srcFile = new File(media, music.getSrcFilename());
-                Runtime.getRuntime().exec("lilypond -dno-point-and-click " + name, null, media).waitFor();
-                music.setSrcFilename("src/" + name + ".ly");
-                music.setSrcFileLength(srcFile.length());
-                if (!new File(media, name + ".ly").renameTo(srcFile))
-                    LOG.warn("Cannot rename to " + srcFile.getName());
+                String lyFn = music.getBaseFilename() + ".ly";
+                File lyFile = new File(path.toFile(), lyFn);
 
-                music.setPdfFilename("pdf/" + name + ".pdf");
-                File pdfFile = new File(media, music.getPdfFilename());
+                String pdfFn = music.getBaseFilename() + ".pdf";
+                File pdfFile = new File(path.toFile(), pdfFn);
+
+                String mp3Fn = music.getBaseFilename() + ".mp3";
+                File mp3File = new File(path.toFile(), mp3Fn);
+
+                IOUtils.write(storage.getSrcFile(), new FileOutputStream(lyFile));
+                music.setSrcFilename("src/" + lyFn);
+                music.setSrcFileLength(lyFile.length());
+
+                String cmd = String.format(LY_CMD, lyFn);
+                Runtime.getRuntime()
+                        .exec(cmd, null, path.toFile())
+                        .waitFor();
+                LOG.info(cmd);
+
+                music.setPdfFilename("pdf/" + pdfFn);
                 music.setPdfFileLength(pdfFile.length());
-                if (!new File(media, name + ".pdf").renameTo(pdfFile))
-                    LOG.warn("Cannot rename to " + pdfFile.getName());
                 storage.setPdfFile(IOUtils.toByteArray(new FileInputStream(pdfFile)));
 
-                Runtime.getRuntime().exec("timidity " + name + ".midi -Ow", null, media).waitFor();
-                Runtime.getRuntime().exec("lame -h -b 128 " + name + ".wav" + " " + name + ".mp3", null, media).waitFor();
-                if (!new File(media, name + ".midi").delete())
-                    LOG.warn("Cannot delete " + name + ".midi");
-                if (!new File(media, name + ".wav").delete())
-                    LOG.warn("Cannot delete " + name + ".wav");
-                music.setMp3Filename("mp3/" + name + ".mp3");
-                File mp3File = new File(media, music.getMp3Filename());
+                cmd = String.format(TIMIDITY_CMD, music.getBaseFilename());
+                Runtime.getRuntime()
+                        .exec(cmd, null, path.toFile())
+                        .waitFor();
+                LOG.info(cmd);
+
+                cmd = String.format(LAME_CMD, music.getBaseFilename(), music.getBaseFilename());
+                Runtime.getRuntime()
+                        .exec(cmd, null, path.toFile())
+                        .waitFor();
+
+                music.setMp3Filename("mp3/" + mp3Fn + ".mp3");
                 music.setMp3FileLength(mp3File.length());
-                if (!new File(media, name + ".mp3").renameTo(mp3File))
-                    LOG.warn("Cannot delete " + name + ".mp3");
                 storage.setMp3File(IOUtils.toByteArray(new FileInputStream(mp3File)));
 
                 LOG.info("Завершена генерация файлов для произведения " + music.getName());
+                delete(path);
             }
             catch (IOException | InterruptedException ex) {
                 LOG.warn(ex.getMessage());
@@ -218,6 +242,17 @@ public class MusicServiceImpl implements MusicService {
                 repo.save(music);
                 stRepo.save(storage);
             }
+        }
+
+        private void delete(Path path) throws IOException {
+            File folder = path.toFile();
+            File[] files = folder.listFiles();
+            if (files != null)
+                for (File file : files)
+                    if (!file.delete())
+                        LOG.info("Ошибка удаления файла: " + file.getAbsolutePath());
+
+            Files.delete(path);
         }
     }
 }

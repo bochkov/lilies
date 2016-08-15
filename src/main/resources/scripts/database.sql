@@ -73,6 +73,7 @@ CREATE TABLE music (
   music_id BIGINT PRIMARY KEY NOT NULL,
   name VARCHAR(255),
   subname VARCHAR(255),
+  base_filename VARCHAR(255),
   src_filename VARCHAR(255),
   src_length BIGINT,
   pdf_filename VARCHAR(255),

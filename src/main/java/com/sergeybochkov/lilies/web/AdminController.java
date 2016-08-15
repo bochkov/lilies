@@ -4,6 +4,7 @@ import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import com.sergeybochkov.lilies.model.*;
 import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -24,6 +25,8 @@ import java.util.List;
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController extends WebMvcConfigurerAdapter {
+
+    private static final Logger LOG = Logger.getLogger(AdminController.class);
 
     private final MusicService musicService;
     private final DifficultyService difficultyService;
@@ -161,11 +164,11 @@ public class AdminController extends WebMvcConfigurerAdapter {
             instrumentList.add(instrumentService.findBySlug(i));
         music.setInstrument(instrumentList);
 
-        if (file != null) {
-            music.setSrcFilename(file.getOriginalFilename());
+        if (!file.isEmpty()) {
+            String fn = file.getOriginalFilename();
+            music.setBaseFilename(fn.substring(0, fn.lastIndexOf(".")));
             musicService.save(music);
 
-            Storage storage = musicService.getStorage(music);
             File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
             try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile))) {
                 stream.write(file.getBytes());
@@ -173,6 +176,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
                 ex.printStackTrace();
             }
 
+            Storage storage = musicService.getStorage(music);
             try {
                 storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
                 musicService.save(storage);
@@ -181,8 +185,9 @@ public class AdminController extends WebMvcConfigurerAdapter {
                 ex.printStackTrace();
             }
 
-            music.setStorage(storage);
             music = musicService.save(music);
+            if (!savedFile.delete())
+                LOG.warn("Файл не удален: " + savedFile.getAbsolutePath());
             musicService.generateFiles(music);
         }
 
