@@ -178,8 +178,8 @@ public class MusicServiceImpl implements MusicService {
     private class GenerateFilesThread extends Thread {
 
         private static final String LY_CMD = "lilypond -dno-point-and-click %s";
-        private static final String TIMIDITY_CMD = "timidity %s.midi -Ow";
-        private static final String LAME_CMD = "lame -h -b 128 %s.wav %s.mp3";
+        private static final String TIMIDITY_CMD = "timidity --output-24bit -Ow  %s.midi";
+        private static final String LAME_CMD = "lame -h -b 64 %s.wav %s.mp3";
 
         private Music music;
         private Storage storage;
