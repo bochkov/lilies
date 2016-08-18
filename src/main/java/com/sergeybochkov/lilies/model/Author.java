@@ -9,8 +9,8 @@ import java.util.List;
 public class Author implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "author_seq_generator")
     @Column(name = "author_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "author_seq_generator")
     @SequenceGenerator(name = "author_seq_generator", sequenceName = "author_sequence")
     private Long id;
 

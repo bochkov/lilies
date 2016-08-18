@@ -4,7 +4,7 @@ select setval('role_sequence', (select max(id) FROM roles), true);
 
 -- первоначальный пароль 12345
 INSERT INTO users (id, username, password)
-  VALUES (1, 'admin', '$2a$10$O/lfVfh06h5BgLK4cUrGKepG6mOIwLS2SyF1TH63eFg988wBQAV46');
+  VALUES (1, 'bochkov', '$2a$10$O/lfVfh06h5BgLK4cUrGKepG6mOIwLS2SyF1TH63eFg988wBQAV46');
 select setval('user_sequence', (select max(id) from users), true);
 
 INSERT INTO users_roles (user_id, role_id)

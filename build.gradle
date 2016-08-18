@@ -30,7 +30,7 @@ dependencies {
 
     compile('com.zaxxer:HikariCP')
 
-    compile('org.postgresql:postgresql:9.4.1208.jre7')
+    compile('org.postgresql:postgresql:9.4.1209')
     compile('commons-io:commons-io:2.5')
     compile('com.mitchellbosecke:pebble-spring4:2.2.1')
 

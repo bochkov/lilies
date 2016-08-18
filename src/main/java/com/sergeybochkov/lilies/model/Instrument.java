@@ -9,9 +9,9 @@ import java.util.List;
 public class Instrument implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "instrument_seq_generator")
     @Column(name = "instrument_id")
-    @SequenceGenerator(name = "instrument_seq_generator", sequenceName = "instrument_sequence")
+    @GeneratedValue(generator = "instrument_seq_generator")
+    @SequenceGenerator(name = "instrument_seq_generator", sequenceName = "instrument_sequence", allocationSize = 5)
     private Long id;
 
     @Column(name = "name")

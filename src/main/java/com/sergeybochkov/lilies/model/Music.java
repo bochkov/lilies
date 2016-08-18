@@ -11,8 +11,8 @@ import java.util.List;
 public class Music implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "music_seq_generator")
     @Column(name = "music_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "music_seq_generator")
     @SequenceGenerator(name = "music_seq_generator", sequenceName = "music_sequence")
     private Long id;
 
