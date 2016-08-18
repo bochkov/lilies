@@ -232,7 +232,7 @@ public class MusicServiceImpl implements MusicService {
                         .waitFor();
                 LOG.info(lyFn + ": Выполнено создание mp3");
 
-                music.setMp3Filename("mp3/" + mp3Fn + ".mp3");
+                music.setMp3Filename("mp3/" + mp3Fn);
                 music.setMp3FileLength(mp3File.length());
                 storage.setMp3File(IOUtils.toByteArray(new FileInputStream(mp3File)));
 
