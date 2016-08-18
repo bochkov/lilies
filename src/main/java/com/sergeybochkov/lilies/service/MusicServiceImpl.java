@@ -208,31 +208,35 @@ public class MusicServiceImpl implements MusicService {
                 music.setSrcFileLength(lyFile.length());
 
                 String cmd = String.format(LY_CMD, lyFn);
+                LOG.info(lyFn + ": Начинаем выполнять " + cmd);
                 Runtime.getRuntime()
                         .exec(cmd, null, path.toFile())
                         .waitFor();
-                LOG.info(cmd);
+                LOG.info(lyFn + ": Создание pdf и midi для выполнено");
 
                 music.setPdfFilename("pdf/" + pdfFn);
                 music.setPdfFileLength(pdfFile.length());
                 storage.setPdfFile(IOUtils.toByteArray(new FileInputStream(pdfFile)));
 
                 cmd = String.format(TIMIDITY_CMD, music.getBaseFilename());
+                LOG.info(lyFn + ": Начинаем выполнять " + cmd);
                 Runtime.getRuntime()
                         .exec(cmd, null, path.toFile())
                         .waitFor();
-                LOG.info(cmd);
+                LOG.info(lyFn + ": Выполнено создание wav");
 
                 cmd = String.format(LAME_CMD, music.getBaseFilename(), music.getBaseFilename());
+                LOG.info(lyFn + ": Начинаем выполнять " + cmd);
                 Runtime.getRuntime()
                         .exec(cmd, null, path.toFile())
                         .waitFor();
+                LOG.info(lyFn + ": Выполнено создание mp3");
 
                 music.setMp3Filename("mp3/" + mp3Fn + ".mp3");
                 music.setMp3FileLength(mp3File.length());
                 storage.setMp3File(IOUtils.toByteArray(new FileInputStream(mp3File)));
 
-                LOG.info("Завершена генерация файлов для произведения " + music.getName());
+                LOG.info(lyFn + ": Завершена генерация файлов для произведения " + music.getName());
                 delete(path);
             }
             catch (IOException | InterruptedException ex) {
