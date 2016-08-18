@@ -3,6 +3,7 @@ package com.sergeybochkov.lilies.config.pebble;
 import com.mitchellbosecke.pebble.extension.AbstractExtension;
 import com.mitchellbosecke.pebble.extension.Filter;
 import com.mitchellbosecke.pebble.tokenParser.TokenParser;
+import com.sergeybochkov.lilies.service.DifficultyService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,10 +12,16 @@ import java.util.Map;
 
 public class LiliesExtension extends AbstractExtension {
 
+    private DifficultyService difficultyService;
+
+    public LiliesExtension(DifficultyService difficultyService) {
+        this.difficultyService = difficultyService;
+    }
+
     @Override
     public Map<String, Filter> getFilters() {
         Map<String, Filter> map = new HashMap<>();
-        map.put("stars", new StarsFilter());
+        map.put("stars", new StarsFilter(difficultyService));
         map.put("yes", new YesFilter());
         return map;
     }
