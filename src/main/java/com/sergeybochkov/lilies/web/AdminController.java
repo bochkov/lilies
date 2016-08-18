@@ -7,6 +7,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -252,7 +253,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/instrument/")
     public String allInstruments(Model model) {
-        model.addAttribute("instrumentList", instrumentService.findAll());
+        model.addAttribute("instrumentList", instrumentService.findAll(new Sort("id")));
         return "admin/instrumentList";
     }
 
