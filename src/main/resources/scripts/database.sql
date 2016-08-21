@@ -2,7 +2,6 @@
 DROP TABLE IF EXISTS author CASCADE;
 DROP TABLE IF EXISTS difficulty CASCADE;
 DROP TABLE IF EXISTS instrument CASCADE;
-DROP TABLE IF EXISTS storage CASCADE;
 DROP TABLE IF EXISTS music CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
@@ -16,10 +15,8 @@ DROP TABLE IF EXISTS music_writer CASCADE;
 DROP TABLE IF EXISTS users_roles CASCADE;
 
 DROP SEQUENCE IF EXISTS author_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS hibernate_sequence RESTRICT;
 DROP SEQUENCE IF EXISTS instrument_sequence RESTRICT;
 DROP SEQUENCE IF EXISTS music_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS storage_sequence RESTRICT;
 DROP SEQUENCE IF EXISTS role_sequence RESTRICT;
 DROP SEQUENCE IF EXISTS user_sequence RESTRICT;
 
@@ -58,14 +55,6 @@ CREATE TABLE users (
   username VARCHAR(255)
 );
 
-CREATE SEQUENCE storage_sequence INCREMENT BY 50 MINVALUE 1 NO MAXVALUE;
-CREATE TABLE storage(
-  id BIGINT PRIMARY KEY NOT NULL,
-  mp3_file BYTEA,
-  pdf_file BYTEA,
-  src_file BYTEA
-);
-
 CREATE SEQUENCE music_sequence INCREMENT BY 50 MINVALUE 1 NO MAXVALUE;
 CREATE TABLE music (
   music_id BIGINT PRIMARY KEY NOT NULL,
@@ -74,12 +63,13 @@ CREATE TABLE music (
   base_filename VARCHAR(255),
   src_filename VARCHAR(255),
   src_length BIGINT,
+  src_file OID,
   pdf_filename VARCHAR(255),
   pdf_length BIGINT,
+  pdf_file OID,
   mp3_filename VARCHAR(255),
   mp3_length BIGINT,
-  storage_id BIGINT,
-  CONSTRAINT storage_fk FOREIGN KEY (storage_id) REFERENCES storage (id)
+  mp3_file OID
 );
 
 -- ManyToMany : author <-> music

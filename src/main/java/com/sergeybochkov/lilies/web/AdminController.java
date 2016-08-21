@@ -177,10 +177,8 @@ public class AdminController extends WebMvcConfigurerAdapter {
                 ex.printStackTrace();
             }
 
-            Storage storage = musicService.getStorage(music);
             try {
-                storage.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
-                musicService.save(storage);
+                music.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
             }
             catch (IOException ex) {
                 ex.printStackTrace();

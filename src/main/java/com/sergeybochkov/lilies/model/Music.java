@@ -1,6 +1,6 @@
 package com.sergeybochkov.lilies.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -55,11 +55,19 @@ public class Music implements Serializable {
     @Column(name = "src_length")
     private Long srcFileLength;
 
+    @Lob
+    @Column(name = "src_file")
+    private byte[] srcFile;
+
     @Column(name = "pdf_filename")
     private String pdfFilename;
 
     @Column(name = "pdf_length")
     private Long pdfFileLength;
+
+    @Lob
+    @Column(name = "pdf_file")
+    private byte[] pdfFile;
 
     @Column(name = "mp3_filename")
     private String mp3Filename;
@@ -67,18 +75,9 @@ public class Music implements Serializable {
     @Column(name = "mp3_length")
     private Long mp3FileLength;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "storage_id")
-    @JsonIgnore
-    private Storage storage;
-
-    public Music() {
-    }
-
-    public Music(String name, String subName) {
-        this.name = name;
-        this.subName = subName;
-    }
+    @Lob
+    @Column(name = "mp3_file")
+    private byte[] mp3File;
 
     public Long getId() {
         return id;
@@ -160,6 +159,14 @@ public class Music implements Serializable {
         this.srcFileLength = srcFileLength;
     }
 
+    public byte[] getSrcFile() {
+        return srcFile;
+    }
+
+    public void setSrcFile(byte[] srcFile) {
+        this.srcFile = srcFile;
+    }
+
     public String getPdfFilename() {
         return pdfFilename;
     }
@@ -176,6 +183,14 @@ public class Music implements Serializable {
         this.pdfFileLength = pdfFileLength;
     }
 
+    public byte[] getPdfFile() {
+        return pdfFile;
+    }
+
+    public void setPdfFile(byte[] pdfFile) {
+        this.pdfFile = pdfFile;
+    }
+
     public String getMp3Filename() {
         return mp3Filename;
     }
@@ -184,20 +199,20 @@ public class Music implements Serializable {
         this.mp3Filename = mp3Filename;
     }
 
-    public Storage getStorage() {
-        return storage;
-    }
-
-    public void setStorage(Storage storage) {
-        this.storage = storage;
-    }
-
     public Long getMp3FileLength() {
         return mp3FileLength;
     }
 
     public void setMp3FileLength(Long mp3FileLength) {
         this.mp3FileLength = mp3FileLength;
+    }
+
+    public byte[] getMp3File() {
+        return mp3File;
+    }
+
+    public void setMp3File(byte[] mp3File) {
+        this.mp3File = mp3File;
     }
 
     public boolean hasPdf() {
