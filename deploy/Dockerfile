@@ -9,5 +9,6 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
     chmod +x /usr/local/bin/dumb-init
 WORKDIR /opt
 ADD lilies.jar /opt/lilies.jar
+EXPOSE 8080
 ENTRYPOINT ["/usr/local/bin/dumb-init", "--"]
 CMD ["java", "-Xmx256m", "-Xss2m", "-Dfile.encoding=UTF-8", "-Djava.security.egd=file:/dev/./urandom", "-jar", "lilies.jar"]

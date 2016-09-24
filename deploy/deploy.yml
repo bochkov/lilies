@@ -9,34 +9,32 @@
 
     - name: stop and delete obsolete containers
       docker:
-        image: sb-lilies
+        image: registry.gitlab.com/bochkovsa/lilies
         name: lilies
         state: absent
 
     - name: delete docker image
       docker_image:
         path: /tmp/lilies-deploy
-        name: sb-lilies
+        name: registry.gitlab.com/bochkovsa/lilies
         state: absent
 
     - name: build docker image
       docker_image:
         path: /tmp/lilies-deploy
-        name: sb-lilies
-        pull: no
-        state: present
-
-    - name: app container
-      docker:
-        name: lilies
-        image: sb-lilies
-        restart_policy: always
-        state: running
-        links:
-          - postgres:postgres
-        expose: 8080
+        name: registry.gitlab.com/bochkovsa/lilies
 
     - name: clean
       file:
         path: /tmp/lilies-deploy
         state: absent
+
+    - name: app container
+      docker:
+        name: lilies
+        image: registry.gitlab.com/bochkovsa/lilies
+        restart_policy: always
+        state: running
+        links:
+          - postgres:postgres
+        expose: 8080
