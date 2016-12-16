@@ -11,15 +11,14 @@ import com.sergeybochkov.lilies.model.Music;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class RegroupNode extends AbstractRenderableNode {
+public final class RegroupNode extends AbstractRenderableNode {
 
-    private Expression<?> srcList;
-    private String outName;
-    private RegroupComparator comparator = new RegroupComparator();
+    private final Expression<?> srcList;
+    private final String outName;
 
     public RegroupNode(Expression<?> srcList, String outName) {
         this.srcList = srcList;
@@ -46,35 +45,23 @@ public class RegroupNode extends AbstractRenderableNode {
 
             boolean founded = false;
             for (RegroupList rl : list) {
-                if (rl.getGrouper().equals(grouper)) {
-                    rl.addToList(obj);
+                if (rl.grouper().equals(grouper)) {
+                    rl.add(obj);
                     founded = true;
                     break;
                 }
             }
             if (!founded) {
-                RegroupList rl = new RegroupList();
-                rl.setGrouper(grouper);
-                rl.addToList(obj);
+                RegroupList rl = new RegroupList(grouper);
+                rl.add(obj);
                 list.add(rl);
             }
         }
-        list.sort(comparator);
+        Collections.sort(list);
         ctx.getScopeChain().put(outName, list);
-        //ctx.put(outName, list);
     }
 
     @Override
     public void accept(NodeVisitor nodeVisitor) {
-    }
-
-    private class RegroupComparator implements Comparator<RegroupList> {
-        @Override
-        public int compare(RegroupList o1, RegroupList o2) {
-            if (o1 != null && o2 != null)
-                return o1.getGrouper().compareTo(o2.getGrouper());
-
-            return 0;
-        }
     }
 }

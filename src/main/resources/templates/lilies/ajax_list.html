@@ -4,7 +4,7 @@
     <div class="col-md-4">
         <h2>{{ obj_list.grouper }}</h2>
         <ul class="list-unstyled">
-        {% for obj in obj_list.list %}
+        {% for obj in obj_list.objects %}
             <li><a href="/sheet-{{obj.id}}/">
                 <small class="text-muted">{{ obj.composer|join(", ") }}</small>
                 {{ obj.name }}

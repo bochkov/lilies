@@ -10,9 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class LiliesExtension extends AbstractExtension {
+public final class LiliesExtension extends AbstractExtension {
 
-    private DifficultyService difficultyService;
+    private final DifficultyService difficultyService;
 
     public LiliesExtension(DifficultyService difficultyService) {
         this.difficultyService = difficultyService;
