@@ -1,6 +1,6 @@
 package com.sergeybochkov.lilies.model;
 
-import org.hibernate.annotations.Type;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,8 +12,8 @@ public class Music implements Serializable {
 
     @Id
     @Column(name = "music_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "music_seq_generator")
-    @SequenceGenerator(name = "music_seq_generator", sequenceName = "music_sequence")
+    @GeneratedValue(generator = "music_seq_generator")
+    @GenericGenerator(name = "music_seq_generator", strategy = "increment")
     private Long id;
 
     @Column(name = "name")

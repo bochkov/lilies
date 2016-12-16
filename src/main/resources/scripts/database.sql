@@ -14,14 +14,7 @@ DROP TABLE IF EXISTS music_instrument CASCADE;
 DROP TABLE IF EXISTS music_writer CASCADE;
 DROP TABLE IF EXISTS users_roles CASCADE;
 
-DROP SEQUENCE IF EXISTS author_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS instrument_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS music_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS role_sequence RESTRICT;
-DROP SEQUENCE IF EXISTS user_sequence RESTRICT;
-
--- создание сиквенсов и таблиц
-CREATE SEQUENCE author_sequence INCREMENT BY 50 MINVALUE 1 NO MAXVALUE;
+-- создание таблиц
 CREATE TABLE author (
   author_id BIGINT PRIMARY KEY NOT NULL,
   first_name VARCHAR(255),
@@ -30,104 +23,75 @@ CREATE TABLE author (
 );
 
 CREATE TABLE difficulty (
-  rating INT PRIMARY KEY NOT NULL,
+  rating INTEGER PRIMARY KEY NOT NULL,
   name VARCHAR(255)
 );
 
-CREATE SEQUENCE instrument_sequence INCREMENT BY 5 MINVALUE 1 NO MAXVALUE;
 CREATE TABLE instrument (
   instrument_id BIGINT PRIMARY KEY NOT NULL,
   name VARCHAR(255),
   slug VARCHAR(255)
 );
-CREATE UNIQUE INDEX instrument_slug ON instrument (slug);
+CREATE UNIQUE INDEX instrument_index ON instrument (slug);
 
-CREATE SEQUENCE role_sequence INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
+CREATE TABLE music (
+  music_id BIGINT PRIMARY KEY NOT NULL,
+  base_filename VARCHAR(255),
+  mp3_file OID,
+  mp3_length BIGINT,
+  mp3_filename VARCHAR(255),
+  name VARCHAR(255),
+  pdf_file OID,
+  pdf_length BIGINT,
+  pdf_filename VARCHAR(255),
+  src_file OID,
+  src_length BIGINT,
+  src_filename VARCHAR(255),
+  subname VARCHAR(255)
+);
+
 CREATE TABLE roles (
   id BIGINT PRIMARY KEY NOT NULL,
   role VARCHAR(255)
 );
 
-CREATE SEQUENCE user_sequence INCREMENT BY 1 MINVALUE 1 NO MAXVALUE;
 CREATE TABLE users (
   id BIGINT PRIMARY KEY NOT NULL,
   password VARCHAR(255),
   username VARCHAR(255)
 );
 
-CREATE SEQUENCE music_sequence INCREMENT BY 50 MINVALUE 1 NO MAXVALUE;
-CREATE TABLE music (
-  music_id BIGINT PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
-  subname VARCHAR(255),
-  base_filename VARCHAR(255),
-  src_filename VARCHAR(255),
-  src_length BIGINT,
-  src_file OID,
-  pdf_filename VARCHAR(255),
-  pdf_length BIGINT,
-  pdf_file OID,
-  mp3_filename VARCHAR(255),
-  mp3_length BIGINT,
-  mp3_file OID
-);
-
--- ManyToMany : author <-> music
 CREATE TABLE author_music (
-  author_id BIGINT NOT NULL,
-  music_id BIGINT NOT NULL,
-  CONSTRAINT author_fk FOREIGN KEY (author_id) REFERENCES author (author_id),
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id)
+  author_id BIGINT NOT NULL REFERENCES author (author_id),
+  music_id BIGINT NOT NULL REFERENCES music (music_id)
 );
 
--- ManyToMany : instrument <-> music
-CREATE TABLE instrument_music (
-  instrument_id BIGINT NOT NULL,
-  music_id BIGINT NOT NULL,
-  CONSTRAINT instrument_fk FOREIGN KEY (instrument_id) REFERENCES instrument (instrument_id),
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id)
-);
-
--- ManyToMany : music <-> composer (author)
-CREATE TABLE music_composer (
-  music_id BIGINT NOT NULL,
-  composer_id BIGINT NOT NULL,
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id),
-  CONSTRAINT composer_fk FOREIGN KEY (composer_id) REFERENCES author (author_id)
-);
-
--- ManyToMany : music <-> writer (author)
-CREATE TABLE music_writer (
-  music_id BIGINT NOT NULL,
-  writer_id BIGINT NOT NULL,
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id),
-  CONSTRAINT writer_fk FOREIGN KEY (writer_id) REFERENCES author (author_id)
-);
-
--- ManyToOne : difficulty <-> music
 CREATE TABLE difficulty_music (
-  rating INT NOT NULL,
-  music_id BIGINT NOT NULL,
-  CONSTRAINT diff_fk FOREIGN KEY (rating) REFERENCES difficulty (rating),
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id)
+  rating INTEGER REFERENCES difficulty (rating),
+  music_id BIGINT PRIMARY KEY NOT NULL REFERENCES music (music_id)
 );
-CREATE UNIQUE INDEX music_rating ON difficulty_music (music_id);
 
--- ManyToMany : music <-> instrument
+CREATE TABLE instrument_music (
+  instrument_id BIGINT NOT NULL REFERENCES instrument (instrument_id),
+  music_id BIGINT NOT NULL REFERENCES music (music_id)
+);
+
+CREATE TABLE music_composer (
+  music_id BIGINT NOT NULL REFERENCES music (music_id),
+  composer_id BIGINT NOT NULL REFERENCES author (author_id)
+);
 CREATE TABLE music_instrument (
-  music_id BIGINT NOT NULL,
-  instrument_id BIGINT NOT NULL,
-  CONSTRAINT instrument_fk FOREIGN KEY (instrument_id) REFERENCES instrument (instrument_id),
-  CONSTRAINT music_fk FOREIGN KEY (music_id) REFERENCES music (music_id)
+  music_id BIGINT NOT NULL REFERENCES music (music_id),
+  instrument_id BIGINT NOT NULL REFERENCES instrument (instrument_id)
 );
 
--- ManyToMany : user <-> roles
+CREATE TABLE music_writer (
+  music_id BIGINT NOT NULL REFERENCES music(music_id),
+  writer_id BIGINT NOT NULL REFERENCES author (author_id)
+);
+
 CREATE TABLE users_roles (
-  user_id bigint NOT NULL,
-  role_id bigint NOT NULL,
-  CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id),
-  CONSTRAINT user_fk FOREIGN KEY (user_id) REFERENCES users (id) MATCH SIMPLE
-  ON UPDATE CASCADE ON DELETE CASCADE,
-  CONSTRAINT role_fk FOREIGN KEY (role_id) REFERENCES roles (id) MATCH SIMPLE
-  ON UPDATE CASCADE ON DELETE CASCADE
+  user_id BIGINT NOT NULL REFERENCES users (id),
+  role_id BIGINT NOT NULL REFERENCES roles (id),
+  CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id)
 );

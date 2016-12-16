@@ -1,5 +1,7 @@
 package com.sergeybochkov.lilies.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -11,7 +13,7 @@ public class Instrument implements Serializable {
     @Id
     @Column(name = "instrument_id")
     @GeneratedValue(generator = "instrument_seq_generator")
-    @SequenceGenerator(name = "instrument_seq_generator", sequenceName = "instrument_sequence", allocationSize = 5)
+    @GenericGenerator(name = "instrument_seq_generator", strategy = "increment")
     private Long id;
 
     @Column(name = "name")

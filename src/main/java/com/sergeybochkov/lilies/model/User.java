@@ -1,5 +1,7 @@
 package com.sergeybochkov.lilies.model;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -8,8 +10,8 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_generator")
-    @SequenceGenerator(name = "user_seq_generator", sequenceName = "user_sequence", allocationSize = 1)
+    @GeneratedValue(generator = "user_seq_generator")
+    @GenericGenerator(name = "user_seq_generator", strategy = "increment")
     private Long id;
 
     private String username;

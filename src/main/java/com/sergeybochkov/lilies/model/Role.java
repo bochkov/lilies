@@ -1,6 +1,7 @@
 package com.sergeybochkov.lilies.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -11,8 +12,8 @@ import java.util.Set;
 public class Role implements GrantedAuthority {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq_generator")
-    @SequenceGenerator(name = "role_seq_generator", sequenceName = "role_sequence", allocationSize = 1)
+    @GeneratedValue(generator = "role_seq_generator")
+    @GenericGenerator(name = "role_seq_generator", strategy = "increment")
     private Long id;
     private String role;
 
