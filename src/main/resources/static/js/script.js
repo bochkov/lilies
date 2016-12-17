@@ -15,7 +15,7 @@ function sw(title, text) {
 }
 
 function deleteAuthor(id) {
-    $.post("/admin/a/author/get/", {'id': id}).success(function(author) {
+    $.post("/admin/a/author/get/", {'id': id}, function(author) {
         var a = author.lastName + " " + author.firstName + " " + author.middleName;
         swal(sw("Удалить автора?", "Удаляем автора " + a), function() {
             $.post('/admin/a/author/delete/', {'id': id}).success(function(data) {
@@ -30,7 +30,7 @@ function deleteAuthor(id) {
 }
 
 function deleteInstrument(id) {
-    $.post("/admin/a/instrument/get/", {id: id}).success(function(instrument) {
+    $.post("/admin/a/instrument/get/", {id: id}, function(instrument) {
         swal(sw("Удалить инструмент?", "Удаляем инструмент " + instrument.name), function () {
             $.post("/admin/a/instrument/delete/", {id: id}).success(function(data) {
                 if (data.result === "success") {
@@ -44,7 +44,7 @@ function deleteInstrument(id) {
 }
 
 function deleteDifficulty(id) {
-    $.post("/admin/a/difficulty/get/", {id: id}).success(function(diff) {
+    $.post("/admin/a/difficulty/get/", {id: id}, function(diff) {
         swal(sw("Удалить сложность?", "Удаляем сложность " + diff.name), function() {
             $.post("/admin/a/difficulty/delete/", {id: id}).success(function(data) {
                 if (data.result === "success") {
@@ -58,7 +58,7 @@ function deleteDifficulty(id) {
 }
 
 function deleteMusic(id) {
-    $.post("/admin/a/music/get/", {id: id}).success(function(music) {
+    $.post("/admin/a/music/get/", {id: id}, function(music) {
         swal(sw("Удалить партитуру?", "Удаляем партитуру " + music.name), function() {
             $.post("/admin/a/music/delete/", {id: id}).success(function(data) {
                 if (data.result === "success") {

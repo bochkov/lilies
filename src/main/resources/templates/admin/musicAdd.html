@@ -31,7 +31,7 @@
     <div class="form-group">
         <label for="composer-select" class="col-sm-2 control-label">Композиторы</label>
         <div class="col-sm-10">
-            <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
+            <select name="composer" class="col-sm-10" id="composer-select" multiple data-placeholder="Композиторы">
                 {% for author in authors %}
                 {% set selected = music.composer contains author %}
                 <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author.print}}</option>

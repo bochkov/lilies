@@ -49,7 +49,7 @@ public final class GenerateFiles extends Thread {
             LOG.info(String.format("%s: Создан wav", music.getBaseFilename()));
 
             cmd = String.format(LAME_CMD, music.getBaseFilename(), music.getBaseFilename());
-            LOG.info(String.format("%s: Начинаемы выполнять %s", music.getBaseFilename(), cmd));
+            LOG.info(String.format("%s: Начинаем выполнять %s", music.getBaseFilename(), cmd));
             Runtime.getRuntime().exec(cmd, null, tmpFolder.toFile()).waitFor();
             LOG.info(String.format("%s: Создан mp3", music.getBaseFilename()));
 
