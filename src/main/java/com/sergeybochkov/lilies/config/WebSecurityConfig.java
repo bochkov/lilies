@@ -1,6 +1,6 @@
 package com.sergeybochkov.lilies.config;
 
-import com.sergeybochkov.lilies.service.UserServiceDetailsDB;
+import com.sergeybochkov.lilies.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,17 +13,16 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final UserServiceDetailsDB service;
+    private final UserServiceImpl service;
 
     @Autowired
-    public WebSecurityConfig(UserServiceDetailsDB service) {
+    public WebSecurityConfig(UserServiceImpl service) {
         this.service = service;
     }
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth
-                .userDetailsService(service)
+        auth.userDetailsService(service)
                 .passwordEncoder(new BCryptPasswordEncoder());
     }
 

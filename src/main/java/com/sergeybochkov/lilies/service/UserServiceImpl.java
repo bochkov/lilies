@@ -11,12 +11,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserServiceDetailsDB implements UserDetailsService, UserService {
+public final class UserServiceImpl implements UserDetailsService, UserService {
 
     private final UserRepository repo;
 
     @Autowired
-    public UserServiceDetailsDB(UserRepository repo) {
+    public UserServiceImpl(UserRepository repo) {
         this.repo = repo;
     }
 

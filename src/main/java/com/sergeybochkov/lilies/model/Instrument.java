@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "instrument")
-public class Instrument implements Serializable {
+public final class Instrument implements Serializable {
 
     @Id
     @Column(name = "instrument_id")
@@ -30,7 +30,8 @@ public class Instrument implements Serializable {
 
     public Instrument() {}
 
-    public Instrument(String name, String slug) {
+    public Instrument(Long id, String name, String slug) {
+        this.id = id;
         this.name = name;
         this.slug = slug;
     }
@@ -39,36 +40,15 @@ public class Instrument implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getSlug() {
         return slug;
     }
 
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    @Override
-    public String toString() {
+    public String print() {
         return name;
-    }
-
-    public String str() {
-        return "Instrument {" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", slug='" + slug + '\'' +
-                '}';
     }
 }

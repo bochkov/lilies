@@ -4,7 +4,8 @@ import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import com.sergeybochkov.lilies.model.*;
 import com.sergeybochkov.lilies.service.*;
 import org.apache.commons.io.IOUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Sort;
@@ -25,9 +26,9 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 @PreAuthorize("hasAuthority('ADMIN')")
-public class AdminController extends WebMvcConfigurerAdapter {
+public final class AdminController extends WebMvcConfigurerAdapter {
 
-    private static final Logger LOG = Logger.getLogger(AdminController.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AdminController.class);
 
     private final MusicService musicService;
     private final DifficultyService difficultyService;
@@ -36,8 +37,11 @@ public class AdminController extends WebMvcConfigurerAdapter {
     private final UserService userService;
 
     @Autowired
-    public AdminController(MusicService musicService, DifficultyService difficultyService,
-                           UserService userService, InstrumentService instrumentService, AuthorService authorService) {
+    public AdminController(UserService userService,
+                           MusicService musicService,
+                           DifficultyService difficultyService,
+                           InstrumentService instrumentService,
+                           AuthorService authorService) {
         this.musicService = musicService;
         this.difficultyService = difficultyService;
         this.userService = userService;
@@ -47,7 +51,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
 
     @InitBinder("user")
     protected void initBinder(WebDataBinder binder) {
-        binder.addValidators(new UserValidationForm());
+        binder.addValidators(new UserForm());
     }
 
     @RequestMapping("/")
@@ -107,7 +111,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/a/music/get/", method = RequestMethod.POST)
-    public @ResponseBody Music getMusic(@RequestParam Long id) {
+    public @ResponseBody Serializable getMusic(@RequestParam Long id) {
         return musicService.findOne(id);
     }
 
@@ -138,60 +142,34 @@ public class AdminController extends WebMvcConfigurerAdapter {
                             @RequestParam("instrument") String instrument,
                             @RequestParam(value = "src_file", required = false) MultipartFile file) {
 
-        Music music = new Music();
-        music.setName(name);
-
-        if (subName != null)
-            music.setSubName(subName);
-
-        if (composer != null) {
-            List<Author> composerList = new ArrayList<>();
+        List<Author> composerList = new ArrayList<>();
+        if (composer != null)
             for (String c : composer.split(","))
                 composerList.add(authorService.findOne(Long.parseLong(c)));
-            music.setComposer(composerList);
-        }
 
-        if (writer != null) {
-            List<Author> writerList = new ArrayList<>();
+        List<Author> writerList = new ArrayList<>();
+        if (writer != null)
             for (String c : writer.split(","))
                 writerList.add(authorService.findOne(Long.parseLong(c)));
-            music.setWriter(writerList);
-        }
-
-        music.setDifficulty(difficultyService.findOne(difficulty));
 
         List<Instrument> instrumentList = new ArrayList<>();
         for (String i : instrument.split(","))
             instrumentList.add(instrumentService.findBySlug(i));
-        music.setInstrument(instrumentList);
 
+        File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
         if (!file.isEmpty()) {
-            String fn = file.getOriginalFilename();
-            music.setBaseFilename(fn.substring(0, fn.lastIndexOf(".")));
-            musicService.save(music);
-
-            File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
-            try (BufferedOutputStream stream = new BufferedOutputStream(new FileOutputStream(savedFile))) {
-                stream.write(file.getBytes());
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
             try {
-                music.setSrcFile(IOUtils.toByteArray(new FileInputStream(savedFile)));
+                IOUtils.write(file.getBytes(), new FileOutputStream(savedFile));
             }
             catch (IOException ex) {
-                ex.printStackTrace();
+                LOG.error(ex.getMessage(), ex);
             }
-
-            music = musicService.save(music);
-            if (!savedFile.delete())
-                LOG.warn("Файл не удален: " + savedFile.getAbsolutePath());
-            musicService.generateFiles(music);
         }
 
-        int page = musicService.pageNum(music);
-        return "redirect:/admin/music/" + page + "/";
+        Music music = musicService.save(new Music(name, subName, composerList, writerList,
+                difficultyService.findOne(difficulty), instrumentList, savedFile));
+        musicService.generateFiles(music);
+        return String.format("redirect:/admin/music/%s/", musicService.pageNum(music));
     }
 
     @RequestMapping(value = "/a/music/delete/", method = RequestMethod.POST)
@@ -214,7 +192,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/a/difficulty/get/", method = RequestMethod.POST)
-    public @ResponseBody Difficulty getDifficulty(@RequestParam Integer id) {
+    public @ResponseBody Serializable getDifficulty(@RequestParam Integer id) {
         return difficultyService.get(id);
     }
 
@@ -256,7 +234,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/a/instrument/get/", method = RequestMethod.POST)
-    public @ResponseBody Instrument getInstrument(@RequestParam Long id) {
+    public @ResponseBody Serializable getInstrument(@RequestParam Long id) {
         return instrumentService.findOne(id);
     }
 
@@ -316,7 +294,7 @@ public class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/a/author/get", method = RequestMethod.POST)
-    public @ResponseBody Author getAuthor(@RequestParam Long id) {
+    public @ResponseBody Serializable getAuthor(@RequestParam Long id) {
         return authorService.findOne(id);
     }
 

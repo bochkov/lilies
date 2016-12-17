@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class AuthorServiceImpl implements AuthorService {
+public final class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository repo;
 
@@ -35,14 +35,6 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Author save(Author author) {
-        if (author.getId() != null) {
-            Author a = repo.findOne(author.getId());
-            a.setFirstName(author.getFirstName());
-            a.setLastName(author.getLastName());
-            a.setMiddleName(author.getMiddleName());
-            return repo.save(a);
-        }
-        else
-            return repo.save(author);
+        return repo.save(author);
     }
 }

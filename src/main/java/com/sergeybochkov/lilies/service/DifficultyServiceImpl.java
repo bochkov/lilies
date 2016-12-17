@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class DifficultyServiceImpl implements DifficultyService {
+public final class DifficultyServiceImpl implements DifficultyService {
 
     private final DifficultyRepository repo;
 
@@ -36,12 +36,9 @@ public class DifficultyServiceImpl implements DifficultyService {
     @Override
     public Difficulty save(Difficulty difficulty) {
         Difficulty d = repo.findOne(difficulty.getRating());
-        if (d != null) {
-            d.setName(difficulty.getName());
-            return repo.save(d);
-        }
-        else
-            return repo.save(difficulty);
+        return d != null ?
+                repo.save(new Difficulty(d.getRating(), d.getName())) :
+                repo.save(difficulty);
     }
 
     @Override

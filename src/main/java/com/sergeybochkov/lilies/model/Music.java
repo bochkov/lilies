@@ -1,14 +1,23 @@
 package com.sergeybochkov.lilies.model;
 
+import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.GenericGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "music")
-public class Music implements Serializable {
+public final class Music implements Serializable {
+
+    private static final Logger LOG = LoggerFactory.getLogger(Music.class);
 
     @Id
     @Column(name = "music_id")
@@ -79,151 +88,137 @@ public class Music implements Serializable {
     @Column(name = "mp3_file")
     private byte[] mp3File;
 
-    public Long getId() {
-        return id;
+    public Music() {
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Music(String name, String subName, List<Author> composer, List<Author> writer,
+                 Difficulty difficulty, List<Instrument> instrument, File srcFile) {
+        this.name = name;
+        this.subName = subName;
+        this.composer = new ArrayList<>(composer);
+        this.writer = new ArrayList<>(writer);
+        this.difficulty = difficulty;
+        this.instrument = new ArrayList<>(instrument);
+        this.baseFilename = srcFile.getName().substring(0, srcFile.getName().lastIndexOf("."));
+        if (srcFile.exists()) {
+            try {
+                this.srcFile = IOUtils.toByteArray(new FileInputStream(srcFile));
+            } catch (IOException ex) {
+                LOG.warn(ex.getMessage(), ex);
+            }
+        }
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getSubName() {
         return subName;
-    }
-
-    public void setSubName(String subName) {
-        this.subName = subName;
     }
 
     public List<Author> getComposer() {
         return composer;
     }
 
-    public void setComposer(List<Author> composer) {
-        this.composer = composer;
-    }
-
     public List<Author> getWriter() {
         return writer;
-    }
-
-    public void setWriter(List<Author> writer) {
-        this.writer = writer;
     }
 
     public Difficulty getDifficulty() {
         return difficulty;
     }
 
-    public void setDifficulty(Difficulty difficulty) {
-        this.difficulty = difficulty;
-    }
-
     public List<Instrument> getInstrument() {
         return instrument;
-    }
-
-    public void setInstrument(List<Instrument> instrument) {
-        this.instrument = instrument;
     }
 
     public String getBaseFilename() {
         return baseFilename;
     }
 
-    public void setBaseFilename(String baseFilename) {
-        this.baseFilename = baseFilename;
-    }
-
     public String getSrcFilename() {
         return srcFilename;
-    }
-
-    public void setSrcFilename(String srcFilename) {
-        this.srcFilename = srcFilename;
     }
 
     public Long getSrcFileLength() {
         return srcFileLength;
     }
 
-    public void setSrcFileLength(Long srcFileLength) {
-        this.srcFileLength = srcFileLength;
-    }
-
     public byte[] getSrcFile() {
         return srcFile;
-    }
-
-    public void setSrcFile(byte[] srcFile) {
-        this.srcFile = srcFile;
     }
 
     public String getPdfFilename() {
         return pdfFilename;
     }
 
-    public void setPdfFilename(String pdfFilename) {
-        this.pdfFilename = pdfFilename;
-    }
-
     public Long getPdfFileLength() {
         return pdfFileLength;
-    }
-
-    public void setPdfFileLength(Long pdfFileLength) {
-        this.pdfFileLength = pdfFileLength;
     }
 
     public byte[] getPdfFile() {
         return pdfFile;
     }
 
-    public void setPdfFile(byte[] pdfFile) {
-        this.pdfFile = pdfFile;
-    }
-
     public String getMp3Filename() {
         return mp3Filename;
-    }
-
-    public void setMp3Filename(String mp3Filename) {
-        this.mp3Filename = mp3Filename;
     }
 
     public Long getMp3FileLength() {
         return mp3FileLength;
     }
 
-    public void setMp3FileLength(Long mp3FileLength) {
-        this.mp3FileLength = mp3FileLength;
-    }
-
     public byte[] getMp3File() {
         return mp3File;
     }
 
-    public void setMp3File(byte[] mp3File) {
-        this.mp3File = mp3File;
+    public void updateSrc(File file) {
+        this.srcFilename = "src/" + file.getName();
+        this.srcFileLength = file.length();
+    }
+
+    public void updatePdf(File file) {
+        this.pdfFilename = "pdf/" + file.getName();
+        this.pdfFileLength = file.length();
+        try {
+            this.pdfFile = IOUtils.toByteArray(new FileInputStream(file));
+        }
+        catch (IOException ex) {
+            LOG.warn(String.format("%s not found, pdf file not stored", file.getName()), ex);
+        }
+    }
+
+    public void updateMp3(File file) {
+        this.mp3Filename = "mp3/" + file.getName();
+        this.mp3FileLength = file.length();
+        try {
+            this.mp3File = IOUtils.toByteArray(new FileInputStream(file));
+        }
+        catch (IOException ex) {
+            LOG.warn(String.format("%s not found, mp3 file not stored", file.getName()), ex);
+        }
     }
 
     public boolean hasPdf() {
-        return getPdfFilename() != null && getPdfFileLength() != null && getPdfFileLength() > 0;
+        return getPdfFilename() != null
+                && getPdfFileLength() != null
+                && getPdfFileLength() > 0;
     }
 
     public boolean hasSrc() {
-        return getSrcFilename() != null && getSrcFileLength() != null && getSrcFileLength() > 0;
+        return getSrcFilename() != null
+                && getSrcFileLength() != null
+                && getSrcFileLength() > 0;
     }
 
     public boolean hasMp3() {
-        return getMp3Filename() != null && getMp3FileLength() != null && getMp3FileLength() > 0;
+        return getMp3Filename() != null
+                && getMp3FileLength() != null
+                && getMp3FileLength() > 0;
     }
 }

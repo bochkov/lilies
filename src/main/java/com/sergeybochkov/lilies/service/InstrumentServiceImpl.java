@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class InstrumentServiceImpl implements InstrumentService {
+public final class InstrumentServiceImpl implements InstrumentService {
 
     private final InstrumentRepository repo;
 
@@ -45,13 +45,6 @@ public class InstrumentServiceImpl implements InstrumentService {
 
     @Override
     public Instrument save(Instrument instrument) {
-        if (instrument.getId() != null) {
-            Instrument i = repo.findOne(instrument.getId());
-            i.setName(instrument.getName());
-            i.setSlug(instrument.getSlug());
-            return repo.save(i);
-        }
-        else
-            return repo.save(instrument);
+        return repo.save(instrument);
     }
 }

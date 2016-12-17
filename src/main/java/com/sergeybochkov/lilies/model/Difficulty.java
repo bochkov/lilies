@@ -1,11 +1,12 @@
 package com.sergeybochkov.lilies.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "difficulty")
-public class Difficulty {
+public final class Difficulty implements Serializable {
 
     @Id
     @Column(name = "rating")
@@ -31,19 +32,11 @@ public class Difficulty {
         return rating;
     }
 
-    public void setRating(Integer rating) {
-        this.rating = rating;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String str() {
+    public String print() {
         return String.format("%s - %s", this.rating, this.name);
     }
 }

@@ -3,7 +3,7 @@ package com.sergeybochkov.lilies.model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-public class UserValidationForm implements Validator {
+public final class UserForm implements Validator {
 
     @Override
     public boolean supports(Class<?> aClass) {

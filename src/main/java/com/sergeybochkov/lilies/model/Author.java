@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "author")
-public class Author implements Serializable {
+public final class Author implements Serializable {
 
     @Id
     @Column(name = "author_id")
@@ -31,7 +31,8 @@ public class Author implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "music_id"))
     private List<Music> musicList;
 
-    public Author() {}
+    public Author() {
+    }
 
     public Author(String lastName, String firstName, String middleName) {
         this.lastName = lastName;
@@ -43,45 +44,19 @@ public class Author implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getLastName() {
         return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getFirstName() {
         return firstName;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
     public String getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
-    }
-
-    @Override
-    public String toString() {
+    public String print() {
         return String.format("%s %s %s", lastName, firstName, middleName);
-    }
-
-    public String str() {
-        return "Author {" +
-                "id=" + id +
-                ", lastName='" + lastName + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", middleName='" + middleName + '\'' +
-                '}';
     }
 }
