@@ -40,14 +40,6 @@ public class PebbleResolverConfig extends WebMvcConfigurerAdapter {
         PebbleViewResolver resolver = new PebbleViewResolver();
         resolver.setPrefix("templates");
         resolver.setSuffix(".html");
-
-        // if angularjs used
-        /*
-        Lexer lexer = engine.getLexer();
-        lexer.setPrintOpenDelimiter("<<");
-        lexer.setPrintCloseDelimiter(">>");
-        */
-
         resolver.setPebbleEngine(pebbleEngine());
         return resolver;
     }

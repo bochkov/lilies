@@ -12,24 +12,24 @@ import java.util.Map;
 
 public final class LiliesExtension extends AbstractExtension {
 
-    private final DifficultyService difficultyService;
+    private final List<TokenParser> parsers;
+    private final Map<String, Filter> filterMap;
 
     public LiliesExtension(DifficultyService difficultyService) {
-        this.difficultyService = difficultyService;
+        this.parsers = new ArrayList<>();
+        this.parsers.add(new RegroupParser());
+        this.filterMap = new HashMap<>();
+        this.filterMap.put("yes", new YesFilter());
+        this.filterMap.put("stars", new StarsFilter(difficultyService.findAll().size()));
     }
 
     @Override
     public Map<String, Filter> getFilters() {
-        Map<String, Filter> map = new HashMap<>();
-        map.put("stars", new StarsFilter(difficultyService));
-        map.put("yes", new YesFilter());
-        return map;
+        return filterMap;
     }
 
     @Override
     public List<TokenParser> getTokenParsers() {
-        List<TokenParser> list = new ArrayList<>();
-        list.add(new RegroupParser());
-        return list;
+        return parsers;
     }
 }

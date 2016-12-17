@@ -1,39 +1,36 @@
 package com.sergeybochkov.lilies.config.pebble;
 
 import com.mitchellbosecke.pebble.extension.Filter;
-import com.sergeybochkov.lilies.service.DifficultyService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class StarsFilter implements Filter {
+public final class StarsFilter implements Filter {
 
-    private DifficultyService difficultyService;
+    private static final String EMPTY_STAR = "<i class=\"fa fa-star-o\"></i>";
+    private static final String FILL_STAR = "<i class=\"fa fa-star\"></i>";
 
-    public StarsFilter(DifficultyService diffService) {
-        this.difficultyService = diffService;
+    private final int maxSize;
+
+    public StarsFilter(int maxSize) {
+        this.maxSize = maxSize;
     }
 
     @Override
     public Object apply(Object input, Map<String, Object> map) {
-        if (input == null)
-            return null;
-
-        int len = difficultyService.findAll().size();
-        String html = "";
+        StringBuilder html = new StringBuilder();
         Integer value = (Integer) input;
         for (int i = 0; i < value; ++i)
-            html += "<i class=\"fa fa-star\"></i>";
+            html.append(FILL_STAR);
         int rang = value;
-        while (rang < len) {
-            html += "<i class=\"fa fa-star-o\"></i>";
-            ++rang;
-        }
-        return html;
+        while (++rang < maxSize)
+            html.append(EMPTY_STAR);
+        return html.toString();
     }
 
     @Override
     public List<String> getArgumentNames() {
-        return null;
+        return new ArrayList<>();
     }
 }
