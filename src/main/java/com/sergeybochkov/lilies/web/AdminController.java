@@ -185,6 +185,12 @@ public final class AdminController extends WebMvcConfigurerAdapter {
         }
     }
 
+    @RequestMapping(value = "/a/music/regenerate/", method = RequestMethod.POST)
+    public @ResponseBody Serializable regenerate(@RequestParam Long id) {
+        musicService.generateFiles(musicService.findOne(id));
+        return new AjaxResponse();
+    }
+
     // ================== DIFFICULTY =====================
 
     @RequestMapping("/difficulty/")

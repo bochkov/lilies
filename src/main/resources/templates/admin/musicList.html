@@ -60,6 +60,9 @@
         <td>{{ music.hasPdf|yes|raw }}</td>
         <td>{{ music.hasMp3|yes|raw }}</td>
         <td>
+            <a href="#" onclick="regenerate('{{ music.id }}')"><i class="fa fa-refresh"></i></a>
+        </td>
+        <td>
             <a href="#" onclick="deleteMusic('{{ music.id }}')"><i class="fa fa-trash-o"></i></a>
         </td>
     </tr>
