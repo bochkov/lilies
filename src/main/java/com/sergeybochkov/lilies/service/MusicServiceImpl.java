@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public final class MusicServiceImpl implements MusicService {
+public class MusicServiceImpl implements MusicService {
 
     public static final int PAGE_SIZE = 50;
 

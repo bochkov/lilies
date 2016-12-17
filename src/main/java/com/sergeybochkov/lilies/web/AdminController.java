@@ -198,19 +198,21 @@ public final class AdminController extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/difficulty/edit/{id}/")
     public String editDiff(Model model, @PathVariable Integer id) {
-        model.addAttribute("difficulty", difficultyService.findOne(id));
+        Difficulty diff = difficultyService.findOne(id);
+        model.addAttribute("rating", diff.getRating());
+        model.addAttribute("name", diff.getName());
         return "admin/difficultyAdd";
     }
 
     @RequestMapping("/difficulty/add/")
-    public String addDifficulty(Model model) {
-        model.addAttribute("diff", new Difficulty());
+    public String addDifficulty() {
         return "admin/difficultyAdd";
     }
 
     @RequestMapping(value = "/difficulty/save/", method = RequestMethod.POST)
-    public String saveDifficulty(@ModelAttribute("difficulty") Difficulty difficulty) {
-        difficultyService.save(difficulty);
+    public String saveDifficulty(@RequestParam Integer rating,
+                                 @RequestParam String name) {
+        difficultyService.save(new Difficulty(rating, name));
         return "redirect:/admin/difficulty/";
     }
 
@@ -240,19 +242,23 @@ public final class AdminController extends WebMvcConfigurerAdapter {
 
     @RequestMapping("/instrument/edit/{id}/")
     public String editInstrument(Model model, @PathVariable Long id) {
-        model.addAttribute("instrument", instrumentService.findOne(id));
+        Instrument instrument = instrumentService.findOne(id);
+        model.addAttribute("id", instrument.getId());
+        model.addAttribute("slug", instrument.getSlug());
+        model.addAttribute("name", instrument.getName());
         return "admin/instrumentAdd";
     }
 
     @RequestMapping("/instrument/add/")
-    public String addInstrument(Model model) {
-        model.addAttribute("inst", new Instrument());
+    public String addInstrument() {
         return "admin/instrumentAdd";
     }
 
     @RequestMapping(value = "/instrument/save/" , method = RequestMethod.POST)
-    public String saveInstrument(@ModelAttribute("instrument") Instrument instrument) {
-        instrumentService.save(instrument);
+    public String saveInstrument(@RequestParam(required = false) Long id,
+                                 @RequestParam String slug,
+                                 @RequestParam String name) {
+        instrumentService.save(new Instrument(id, name, slug));
         return "redirect:/admin/instrument/";
     }
 
@@ -276,20 +282,26 @@ public final class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping("/author/add/")
-    public String addAuthor(Model model) {
-        model.addAttribute("author", new Author());
+    public String addAuthor() {
         return "admin/authorAdd";
     }
 
     @RequestMapping(value = "/author/save/", method = RequestMethod.POST)
-    public String saveAuthor(@ModelAttribute("author") Author author) {
-        authorService.save(author);
+    public String saveAuthor(@RequestParam(required = false) Long id,
+                             @RequestParam String lastName,
+                             @RequestParam(required = false) String firstName,
+                             @RequestParam(required = false) String middleName) {
+        authorService.save(new Author(id,lastName, firstName, middleName));
         return "redirect:/admin/author/";
     }
 
     @RequestMapping(value = "/author/edit/{id}/")
     public String editAuthor(Model model, @PathVariable Long id) {
-        model.addAttribute("author", authorService.findOne(id));
+        Author author = authorService.findOne(id);
+        model.addAttribute("id", author.getId());
+        model.addAttribute("lastName", author.getLastName());
+        model.addAttribute("firstName", author.getFirstName());
+        model.addAttribute("middleName", author.getMiddleName());
         return "admin/authorAdd";
     }
 

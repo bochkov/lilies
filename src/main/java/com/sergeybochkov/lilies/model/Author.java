@@ -34,7 +34,8 @@ public final class Author implements Serializable {
     public Author() {
     }
 
-    public Author(String lastName, String firstName, String middleName) {
+    public Author(Long id, String lastName, String firstName, String middleName) {
+        this.id = id;
         this.lastName = lastName;
         this.firstName = firstName;
         this.middleName = middleName;

@@ -34,7 +34,7 @@
             <select name="composer" id="composer-select" multiple data-placeholder="Композиторы">
                 {% for author in authors %}
                 {% set selected = music.composer contains author %}
-                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author}}</option>
+                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author.print}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -46,7 +46,7 @@
             <select name="writer" class="col-sm-10" id="writer-select" multiple data-placeholder="Авторы">
                 {% for author in authors %}
                 {% set selected = music.writer contains author %}
-                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author}}</option>
+                <option value="{{author.id}}" {% if selected %}selected{% endif %}>{{author.print}}</option>
                 {% endfor %}
             </select>
         </div>
@@ -58,7 +58,7 @@
             <select name="difficulty" class="col-sm-10" id="difficulty-select" data-placeholder="Сложность">
                 {% for diff in difficulties %}
                 {% set selected = music.difficulty equals diff %}
-                <option value="{{diff.rating}}" {% if selected %}selected{% endif %}>{{ diff.str }}</option>
+                <option value="{{diff.rating}}" {% if selected %}selected{% endif %}>{{ diff.print }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -70,7 +70,7 @@
             <select name="instrument" class="col-sm-10" multiple id="instrument-select" data-placeholder="Инструменты">
                 {% for instrument in instruments %}
                 {% set selected = music.instrument contains instrument %}
-                <option value="{{instrument.slug}}" {% if selected %}selected{% endif %}>{{instrument}}</option>
+                <option value="{{instrument.slug}}" {% if selected %}selected{% endif %}>{{instrument.print}}</option>
                 {% endfor %}
             </select>
         </div>

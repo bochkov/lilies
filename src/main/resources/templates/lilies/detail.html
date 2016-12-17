@@ -8,17 +8,17 @@
         <dl>
             {% if object.composer.size > 0 %}
             <dt>Композитор</dt>
-            <dd>{{ object.composer|join(", ") }}</dd>
+            <dd>{% for composer in object.composer %}{{ composer.print }}<br/>{% endfor %}</dd>
             {% endif %}
 
             {% if object.writer.size > 0 %}
             <dt>Слова</dt>
-            <dd>{{ object.writer|join(", ") }}</dd>
+            <dd>{% for writer in object.writer %}{{ writer.print }}<br/>{% endfor %}</dd>
             {% endif %}
 
             {% if object.instrument.size > 0 %}
             <dt>Инструмент</dt>
-            <dd>{{ object.instrument|join(", ") }}</dd>
+            <dd>{% for inst in object.instrument %}{{ inst.print }}<br/>{% endfor %}</dd>
             {% endif %}
 
             <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
