@@ -52,7 +52,7 @@
         <td>
             {% for writer in music.writer %}{{ writer.print }}<br/>{% endfor %}
         </td>
-        <td>{{ music.difficulty.str }}</td>
+        <td>{{ music.difficulty.print }}</td>
         <td>
             {% for inst in music.instrument %}{{ inst.print }}<br/>{% endfor %}
         </td>

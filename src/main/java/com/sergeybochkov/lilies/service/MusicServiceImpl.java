@@ -40,27 +40,33 @@ public class MusicServiceImpl implements MusicService {
         Music music = repo.findOne(id);
         // if src file not in filesystem - save it
         try {
-            File srcFile = new File(StaticResourceConfig.MEDIA_DIR, music.getSrcFilename());
-            if (music.getSrcFilename() != null && !srcFile.exists())
-                IOUtils.write(music.getSrcFile(), new FileOutputStream(srcFile));
+            if (music.hasSrc()) {
+                File srcFile = new File(StaticResourceConfig.MEDIA_DIR, music.getSrcFilename());
+                if (music.getSrcFilename() != null && !srcFile.exists())
+                    IOUtils.write(music.getSrcFile(), new FileOutputStream(srcFile));
+            }
         }
         catch (IOException ex) {
             LOG.warn(ex.getMessage(), ex);
         }
         // if pdf file not if filesystem - save it
         try {
-            File pdfFile = new File(StaticResourceConfig.MEDIA_DIR, music.getPdfFilename());
-            if (music.getPdfFilename() != null && !pdfFile.exists())
-                IOUtils.write(music.getPdfFile(), new FileOutputStream(pdfFile));
+            if (music.hasPdf()) {
+                File pdfFile = new File(StaticResourceConfig.MEDIA_DIR, music.getPdfFilename());
+                if (music.getPdfFilename() != null && !pdfFile.exists())
+                    IOUtils.write(music.getPdfFile(), new FileOutputStream(pdfFile));
+            }
         }
         catch (IOException ex) {
             LOG.warn(ex.getMessage(), ex);
         }
         // if mp3 file not if filesystem - save it
         try {
-            File mp3File = new File(StaticResourceConfig.MEDIA_DIR, music.getMp3Filename());
-            if (music.getMp3Filename() != null && !mp3File.exists())
-                IOUtils.write(music.getMp3File(), new FileOutputStream(mp3File));
+            if (music.hasMp3()) {
+                File mp3File = new File(StaticResourceConfig.MEDIA_DIR, music.getMp3Filename());
+                if (music.getMp3Filename() != null && !mp3File.exists())
+                    IOUtils.write(music.getMp3File(), new FileOutputStream(mp3File));
+            }
         }
         catch (IOException ex) {
             LOG.warn(ex.getMessage(), ex);
@@ -99,27 +105,15 @@ public class MusicServiceImpl implements MusicService {
     @Override
     @Transactional
     public List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments) {
-        List<Music> list = new ArrayList<>();
-        if (instruments.isEmpty() || difficulties.isEmpty())
-            return list;
-
-        repo.findByInstrumentIn(instruments)
-                .stream()
-                .filter(music -> !list.contains(music))
-                .forEach(list::add);
-
-        repo.findByDifficultyIn(difficulties)
-                .stream()
-                .filter(music -> !list.contains(music))
-                .forEach(list::add);
-
-        return list;
+        if (difficulties.isEmpty() || instruments.isEmpty())
+            return new ArrayList<>();
+        return repo.findByDifficultyAndInstrumentIn(difficulties, instruments);
     }
 
     @Override
     @Transactional
-    public List<Music> findBySomething(String name) {
-        return repo.findBySomething(name);
+    public List<Music> findBySomething(String something) {
+        return repo.findBySomething(String.format("%%%s%%", something));
     }
 
     @Override
@@ -135,11 +129,11 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public void delete(Long id) {
         Music m = findOne(id);
-        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getSrcFilename()).delete())
+        if (m.hasSrc() && !new File(StaticResourceConfig.MEDIA_DIR, m.getSrcFilename()).delete())
             LOG.warn("Cannot delete " + m.getSrcFilename());
-        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getPdfFilename()).delete())
+        if (m.hasPdf() && !new File(StaticResourceConfig.MEDIA_DIR, m.getPdfFilename()).delete())
             LOG.warn("Cannot delete " + m.getPdfFilename());
-        if (!new File(StaticResourceConfig.MEDIA_DIR, m.getMp3Filename()).delete())
+        if (m.hasMp3() && !new File(StaticResourceConfig.MEDIA_DIR, m.getMp3Filename()).delete())
             LOG.warn("Cannot delete " + m.getMp3Filename());
         repo.delete(m);
     }

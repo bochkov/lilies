@@ -24,7 +24,7 @@ public final class StarsFilter implements Filter {
         for (int i = 0; i < value; ++i)
             html.append(FILL_STAR);
         int rang = value;
-        while (++rang < maxSize)
+        while (rang++ < maxSize)
             html.append(EMPTY_STAR);
         return html.toString();
     }

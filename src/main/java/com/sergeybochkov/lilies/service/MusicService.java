@@ -19,7 +19,7 @@ public interface MusicService {
 
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
-    List<Music> findBySomething(String name);
+    List<Music> findBySomething(String something);
 
     Music save(Music music);
 
