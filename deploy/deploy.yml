@@ -4,11 +4,11 @@
 
   tasks:
     - file: path=/tmp/lilies-deploy state=directory
-    - copy: src=../build/libs/lilies-1.2.3.jar dest=/tmp/lilies-deploy/lilies.jar
+    - copy: src=../build/libs/lilies-1.2.5.jar dest=/tmp/lilies-deploy/lilies.jar
     - copy: src=Dockerfile dest=/tmp/lilies-deploy/Dockerfile
 
     - name: stop and delete obsolete containers
-      docker:
+      docker_container:
         image: registry.gitlab.com/bochkovsa/lilies
         name: lilies
         state: absent
@@ -23,18 +23,9 @@
       docker_image:
         path: /tmp/lilies-deploy
         name: registry.gitlab.com/bochkovsa/lilies
+        push: yes
 
     - name: clean
       file:
         path: /tmp/lilies-deploy
         state: absent
-
-    - name: app container
-      docker:
-        name: lilies
-        image: registry.gitlab.com/bochkovsa/lilies
-        restart_policy: always
-        state: running
-        links:
-          - postgres:postgres
-        expose: 8080
