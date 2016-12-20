@@ -20,7 +20,7 @@ public final class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<Author> findAll() {
-        return repo.findAll(new Sort("lastName", "firstName", "middleName"));
+        return repo.findAll(new Sort("lastname", "firstname", "middlename"));
     }
 
     @Override

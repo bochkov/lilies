@@ -15,74 +15,75 @@ DROP TABLE IF EXISTS users_roles CASCADE;
 
 -- создание таблиц
 CREATE TABLE author (
-  author_id BIGINT PRIMARY KEY NOT NULL,
-  last_name VARCHAR(255) NOT NULL,
-  first_name VARCHAR(255),
+  author_id   BIGINT PRIMARY KEY NOT NULL,
+  last_name   VARCHAR(255)       NOT NULL,
+  first_name  VARCHAR(255),
   middle_name VARCHAR(255)
 );
 
 CREATE TABLE difficulty (
   rating INTEGER PRIMARY KEY NOT NULL,
-  name VARCHAR(255)
+  name   VARCHAR(255)
 );
 
 CREATE TABLE instrument (
   instrument_id BIGINT PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
-  slug VARCHAR(255)
+  name          VARCHAR(255),
+  slug          VARCHAR(255)
 );
-CREATE UNIQUE INDEX instrument_index ON instrument (slug);
+CREATE UNIQUE INDEX instrument_index
+  ON instrument (slug);
 
 CREATE TABLE music (
-  music_id BIGINT PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
-  subname VARCHAR(255),
+  music_id      BIGINT PRIMARY KEY NOT NULL,
+  name          VARCHAR(255),
+  subname       VARCHAR(255),
   base_filename VARCHAR(255),
-  difficulty INTEGER REFERENCES difficulty(rating),
-  src_file OID,
-  src_length BIGINT,
-  src_filename VARCHAR(255),
-  mp3_file OID,
-  mp3_length BIGINT,
-  mp3_filename VARCHAR(255),
-  pdf_file OID,
-  pdf_length BIGINT,
-  pdf_filename VARCHAR(255)
+  difficulty    INTEGER REFERENCES difficulty (rating),
+  src_file      OID,
+  src_length    BIGINT,
+  src_filename  VARCHAR(255),
+  mp3_file      OID,
+  mp3_length    BIGINT,
+  mp3_filename  VARCHAR(255),
+  pdf_file      OID,
+  pdf_length    BIGINT,
+  pdf_filename  VARCHAR(255)
 );
 
 CREATE TABLE roles (
-  id BIGINT PRIMARY KEY NOT NULL,
+  id   BIGINT PRIMARY KEY NOT NULL,
   role VARCHAR(255)
 );
 
 CREATE TABLE users (
-  id BIGINT PRIMARY KEY NOT NULL,
+  id       BIGINT PRIMARY KEY NOT NULL,
   username VARCHAR(255),
   password VARCHAR(255)
 );
 
 CREATE TABLE author_music (
   author_id BIGINT NOT NULL REFERENCES author (author_id),
-  music_id BIGINT NOT NULL REFERENCES music (music_id)
+  music_id  BIGINT NOT NULL REFERENCES music (music_id)
 );
 
 CREATE TABLE instrument_music (
   instrument_id BIGINT NOT NULL REFERENCES instrument (instrument_id),
-  music_id BIGINT NOT NULL REFERENCES music (music_id)
+  music_id      BIGINT NOT NULL REFERENCES music (music_id)
 );
 
 CREATE TABLE music_composer (
-  music_id BIGINT NOT NULL REFERENCES music (music_id),
+  music_id    BIGINT NOT NULL REFERENCES music (music_id),
   composer_id BIGINT NOT NULL REFERENCES author (author_id)
 );
 
 CREATE TABLE music_instrument (
-  music_id BIGINT NOT NULL REFERENCES music (music_id),
+  music_id      BIGINT NOT NULL REFERENCES music (music_id),
   instrument_id BIGINT NOT NULL REFERENCES instrument (instrument_id)
 );
 
 CREATE TABLE music_writer (
-  music_id BIGINT NOT NULL REFERENCES music(music_id),
+  music_id  BIGINT NOT NULL REFERENCES music (music_id),
   writer_id BIGINT NOT NULL REFERENCES author (author_id)
 );
 
