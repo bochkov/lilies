@@ -24,6 +24,11 @@ public final class DifficultyServiceImpl implements DifficultyService {
     }
 
     @Override
+    public List<Difficulty> findByRatingIn(Integer[] ratings) {
+        return repo.findByRatingIn(ratings);
+    }
+
+    @Override
     public List<Difficulty> findAll() {
         return repo.findAll(new Sort("rating"));
     }

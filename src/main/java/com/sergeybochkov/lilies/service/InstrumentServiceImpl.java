@@ -24,6 +24,11 @@ public final class InstrumentServiceImpl implements InstrumentService {
     }
 
     @Override
+    public List<Instrument> findBySlugIn(String[] slugs) {
+        return repo.findBySlugIn(slugs);
+    }
+
+    @Override
     public Instrument findOne(Long id) {
         return repo.findOne(id);
     }

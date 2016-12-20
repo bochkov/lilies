@@ -9,6 +9,8 @@ public interface InstrumentService {
 
     Instrument findBySlug(String slug);
 
+    List<Instrument> findBySlugIn(String[] slugs);
+
     Instrument findOne(Long id);
 
     List<Instrument> findAll();

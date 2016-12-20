@@ -8,6 +8,8 @@ public interface DifficultyService {
 
     Difficulty get(Integer id);
 
+    List<Difficulty> findByRatingIn(Integer[] ratings);
+
     List<Difficulty> findAll();
 
     Difficulty findOne(Integer id);

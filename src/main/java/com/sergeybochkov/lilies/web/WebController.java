@@ -62,18 +62,14 @@ public final class WebController {
 
     @RequestMapping(value = "/a/music/", method = RequestMethod.POST)
     public String getMusic(Model model,
-                           @RequestParam(value = "difficulties[]", required = false) String[] difficulties,
+                           @RequestParam(value = "difficulties[]", required = false) Integer[] difficulties,
                            @RequestParam(value = "instruments[]", required = false) String[] instruments) {
-        List<Instrument> instrumentList = new ArrayList<>();
-        if (instruments != null)
-            for (String inst : instruments)
-                instrumentList.add(instrumentService.findBySlug(inst));
-
-        List<Difficulty> difficultyList = new ArrayList<>();
-        if (difficulties != null)
-            for (String diff : difficulties)
-                difficultyList.add(diffService.get(Integer.valueOf(diff)));
-
+        List<Instrument> instrumentList = instruments == null ?
+                new ArrayList<>() :
+                instrumentService.findBySlugIn(instruments);
+        List<Difficulty> difficultyList = difficulties == null ?
+                new ArrayList<>() :
+                diffService.findByRatingIn(difficulties);
         model.addAttribute("object_list", musicService.findByDifficultyAndInstrumentIn(difficultyList, instrumentList));
         return "lilies/ajax_list";
     }

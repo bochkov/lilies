@@ -14,7 +14,7 @@ public interface MusicRepository extends JpaRepository<Music, Long> {
     @Transactional
     @Query("SELECT DISTINCT m FROM Music m " +
             "LEFT OUTER JOIN m.instrument i " +
-            "WHERE d IN(?1) AND i IN(?2)")
+            "WHERE m.difficulty IN(?1) AND i IN(?2)")
     List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
     @Transactional
