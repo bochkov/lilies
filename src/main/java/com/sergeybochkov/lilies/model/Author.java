@@ -17,13 +17,13 @@ public final class Author implements Serializable {
     private Long id;
 
     @Column(name = "last_name")
-    private String lastName;
+    private String lastname;
 
     @Column(name = "first_name")
-    private String firstName;
+    private String firstname;
 
     @Column(name = "middle_name")
-    private String middleName;
+    private String middlename;
 
     @ManyToMany
     @JoinTable(name = "author_music",
@@ -34,11 +34,11 @@ public final class Author implements Serializable {
     public Author() {
     }
 
-    public Author(Long id, String lastName, String firstName, String middleName) {
+    public Author(Long id, String lastname, String firstname, String middlename) {
         this.id = id;
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.middleName = middleName;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.middlename = middlename;
     }
 
     public Long getId() {
@@ -46,18 +46,18 @@ public final class Author implements Serializable {
     }
 
     public String getLastName() {
-        return lastName;
+        return lastname;
     }
 
     public String getFirstName() {
-        return firstName;
+        return firstname;
     }
 
     public String getMiddleName() {
-        return middleName;
+        return middlename;
     }
 
     public String print() {
-        return String.format("%s %s %s", lastName, firstName, middleName);
+        return String.format("%s %s %s", lastname, firstname, middlename);
     }
 }

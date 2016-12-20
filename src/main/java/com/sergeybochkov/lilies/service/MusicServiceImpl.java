@@ -25,7 +25,7 @@ import java.util.List;
 @Service
 public class MusicServiceImpl implements MusicService {
 
-    public static final int PAGE_SIZE = 50;
+    public static final int PAGE_SIZE = 25;
 
     private static final Logger LOG = LoggerFactory.getLogger(MusicServiceImpl.class);
 
@@ -86,22 +86,21 @@ public class MusicServiceImpl implements MusicService {
     @Override
     @Transactional
     public Page<Music> findAll(Integer page) {
-        return repo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "name"));
+        return repo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "id"));
     }
 
     @Override
     public Integer pageNum(Music music) {
-        int counter = 1;
-        int i = 1;
+        int curPage = 1;
+        int totalPages;
         do {
-            Page<Music> page = findAll(counter);
-            for (Music m : page)
-                if (m.equals(music))
-                    return counter;
-            if (counter <= page.getTotalPages())
-                ++counter;
-        }
-        while (counter < i);
+            Page<Music> page = findAll(curPage);
+            totalPages = page.getTotalPages();
+            if (page.getContent().contains(music)) {
+                return curPage;
+            }
+            ++curPage;
+        } while (curPage <= totalPages);
         return 1;
     }
 

@@ -15,12 +15,6 @@ public final class Difficulty implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @OneToMany
-    @JoinTable(name = "difficulty_music",
-            joinColumns = @JoinColumn(name = "rating"),
-            inverseJoinColumns = @JoinColumn(name = "music_id"))
-    private List<Music> musicList;
-
     public Difficulty() {}
 
     public Difficulty(Integer rating, String name) {

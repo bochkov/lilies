@@ -1,6 +1,7 @@
 package com.sergeybochkov.lilies.model;
 
 import org.apache.commons.io.IOUtils;
+import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ public final class Music implements Serializable {
     private String name;
 
     @Column(name = "subname")
-    private String subName;
+    private String subname;
 
     @ManyToMany
     @JoinTable(name = "music_composer",
@@ -44,9 +45,7 @@ public final class Music implements Serializable {
     private List<Author> writer;
 
     @ManyToOne
-    @JoinTable(name = "difficulty_music",
-            joinColumns = @JoinColumn(name = "music_id"),
-            inverseJoinColumns = @JoinColumn(name = "rating"))
+    @JoinColumn(name = "difficulty")
     private Difficulty difficulty;
 
     @ManyToMany
@@ -91,10 +90,10 @@ public final class Music implements Serializable {
     public Music() {
     }
 
-    public Music(String name, String subName, List<Author> composer, List<Author> writer,
+    public Music(String name, String subname, List<Author> composer, List<Author> writer,
                  Difficulty difficulty, List<Instrument> instrument, File srcFile) {
         this.name = name;
-        this.subName = subName;
+        this.subname = subname;
         this.composer = new ArrayList<>(composer);
         this.writer = new ArrayList<>(writer);
         this.difficulty = difficulty;
@@ -117,8 +116,8 @@ public final class Music implements Serializable {
         return name;
     }
 
-    public String getSubName() {
-        return subName;
+    public String getSubname() {
+        return subname;
     }
 
     public List<Author> getComposer() {
@@ -205,20 +204,20 @@ public final class Music implements Serializable {
     }
 
     public boolean hasPdf() {
-        return getPdfFilename() != null
-                && getPdfFileLength() != null
-                && getPdfFileLength() > 0;
+        return pdfFilename != null
+                && pdfFileLength != null
+                && pdfFileLength > 0;
     }
 
     public boolean hasSrc() {
-        return getSrcFilename() != null
-                && getSrcFileLength() != null
-                && getSrcFileLength() > 0;
+        return srcFilename != null
+                && srcFileLength != null
+                && srcFileLength > 0;
     }
 
     public boolean hasMp3() {
-        return getMp3Filename() != null
-                && getMp3FileLength() != null
-                && getMp3FileLength() > 0;
+        return mp3Filename != null
+                && mp3FileLength != null
+                && mp3FileLength > 0;
     }
 }

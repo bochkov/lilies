@@ -74,8 +74,7 @@ public final class WebController {
             for (String diff : difficulties)
                 difficultyList.add(diffService.get(Integer.valueOf(diff)));
 
-        model.addAttribute("object_list",
-                musicService.findByDifficultyAndInstrumentIn(difficultyList, instrumentList));
+        model.addAttribute("object_list", musicService.findByDifficultyAndInstrumentIn(difficultyList, instrumentList));
         return "lilies/ajax_list";
     }
 

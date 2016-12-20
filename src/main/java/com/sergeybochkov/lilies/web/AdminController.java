@@ -168,10 +168,11 @@ public final class AdminController extends WebMvcConfigurerAdapter {
 
         Music music = musicService.save(new Music(name, subName, composerList, writerList,
                 difficultyService.findOne(difficulty), instrumentList, savedFile));
+        int page = musicService.pageNum(music);
         if (savedFile.exists() && !savedFile.delete())
             LOG.warn(String.format("Не удален загруженный файл %s", savedFile.getAbsolutePath()));
         musicService.generateFiles(music);
-        return String.format("redirect:/admin/music/%s/", musicService.pageNum(music));
+        return String.format("redirect:/admin/music/%s/", page);
     }
 
     @RequestMapping(value = "/a/music/delete/", method = RequestMethod.POST)
