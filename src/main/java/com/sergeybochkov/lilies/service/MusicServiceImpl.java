@@ -5,6 +5,7 @@ import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.repository.MusicRepository;
+import com.sergeybochkov.lilies.web.NotFoundException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,8 +37,10 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public Music findOne(Long id) {
+    public Music findOne(Long id) throws NotFoundException {
         Music music = repo.findOne(id);
+        if (music == null)
+            throw new NotFoundException();
         // if src file not in filesystem - save it
         try {
             if (music.hasSrc()) {
