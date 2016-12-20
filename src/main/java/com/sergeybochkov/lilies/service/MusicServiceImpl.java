@@ -15,7 +15,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -23,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class MusicServiceImpl implements MusicService {
+public final class MusicServiceImpl implements MusicService {
 
     public static final int PAGE_SIZE = 25;
 
@@ -78,13 +77,11 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    @Transactional
     public List<Music> findAll() {
         return repo.findAll(new Sort(Sort.Direction.ASC, "name", "composer"));
     }
 
     @Override
-    @Transactional
     public Page<Music> findAll(Integer page) {
         return repo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "id"));
     }
@@ -105,7 +102,6 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    @Transactional
     public List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments) {
         if (difficulties.isEmpty() || instruments.isEmpty())
             return new ArrayList<>();
@@ -113,7 +109,6 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    @Transactional
     public List<Music> findBySomething(String something) {
         return repo.findBySomething(String.format("%%%s%%", something));
     }
