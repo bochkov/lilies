@@ -32,7 +32,8 @@ public final class UserServiceImpl implements UserDetailsService, UserService {
     public User save(User user) {
         User u = repo.findByUsername(user.getUsername());
         return u != null ?
-                repo.save(new User(u.getId(), u.getUsername(), new BCryptPasswordEncoder().encode(user.getPassword()))) :
+                repo.save(new User(u.getId(), u.getUsername(),
+                        new BCryptPasswordEncoder().encode(user.getPassword()), u.getRoles())) :
                 null;
     }
 }

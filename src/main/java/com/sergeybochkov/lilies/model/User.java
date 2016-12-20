@@ -29,10 +29,11 @@ public final class User {
 
     public User() {}
 
-    public User(Long id, String username, String password) {
+    public User(Long id, String username, String password, Set<Role> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
+        this.roles = roles;
     }
 
     public Long getId() {
