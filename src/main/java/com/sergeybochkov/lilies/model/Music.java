@@ -1,16 +1,13 @@
 package com.sergeybochkov.lilies.model;
 
+import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import org.apache.commons.io.IOUtils;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -219,5 +216,50 @@ public final class Music implements Serializable {
         return mp3Filename != null
                 && mp3FileLength != null
                 && mp3FileLength > 0;
+    }
+
+    public void createFiles() {
+        // if src file not in filesystem - save it
+        try {
+            if (hasSrc()) {
+                File file = new File(StaticResourceConfig.MEDIA_DIR, srcFilename);
+                if (!file.exists())
+                    IOUtils.write(srcFile, new FileOutputStream(file));
+            }
+        }
+        catch (IOException ex) {
+            LOG.warn(ex.getMessage(), ex);
+        }
+        // if pdf file not if filesystem - save it
+        try {
+            if (hasPdf()) {
+                File file = new File(StaticResourceConfig.MEDIA_DIR, pdfFilename);
+                if (!file.exists())
+                    IOUtils.write(pdfFile, new FileOutputStream(file));
+            }
+        }
+        catch (IOException ex) {
+            LOG.warn(ex.getMessage(), ex);
+        }
+        // if mp3 file not if filesystem - save it
+        try {
+            if (hasMp3()) {
+                File file = new File(StaticResourceConfig.MEDIA_DIR, mp3Filename);
+                if (!file.exists())
+                    IOUtils.write(mp3File, new FileOutputStream(file));
+            }
+        }
+        catch (IOException ex) {
+            LOG.warn(ex.getMessage(), ex);
+        }
+    }
+
+    public void deleteFiles() {
+        if (hasSrc() && !new File(StaticResourceConfig.MEDIA_DIR, srcFilename).delete())
+            LOG.warn("Cannot delete " + srcFilename);
+        if (hasPdf() && !new File(StaticResourceConfig.MEDIA_DIR, pdfFilename).delete())
+            LOG.warn("Cannot delete " + pdfFilename);
+        if (hasMp3() && !new File(StaticResourceConfig.MEDIA_DIR, mp3Filename).delete())
+            LOG.warn("Cannot delete " + mp3Filename);
     }
 }
