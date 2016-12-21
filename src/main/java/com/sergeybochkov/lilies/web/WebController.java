@@ -2,14 +2,16 @@ package com.sergeybochkov.lilies.web;
 
 import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
-import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.service.DifficultyService;
 import com.sergeybochkov.lilies.service.InstrumentService;
 import com.sergeybochkov.lilies.service.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,10 +74,5 @@ public final class WebController {
                 diffService.findByRatingIn(difficulties);
         model.addAttribute("object_list", musicService.findByDifficultyAndInstrumentIn(difficultyList, instrumentList));
         return "lilies/ajax_list";
-    }
-
-    @RequestMapping("/findAll/")
-    public @ResponseBody List<Music> findAll() {
-        return musicService.findAll();
     }
 }

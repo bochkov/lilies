@@ -5,6 +5,7 @@ import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.repository.MusicRepository;
 import com.sergeybochkov.lilies.repository.StorageRepository;
+import com.sergeybochkov.lilies.service.generator.GenerateFiles;
 import com.sergeybochkov.lilies.web.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @Service
+@Transactional
 public class MusicServiceImpl implements MusicService {
 
     public static final int PAGE_SIZE = 25;
@@ -35,7 +37,6 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    @Transactional
     public Music findOne(Long id) throws NotFoundException {
         Music music = mRepo.findOne(id);
         if (music == null)
@@ -50,8 +51,9 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
+    @Transactional
     public Page<Music> findAll(Integer page) {
-        return mRepo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "id"));
+        return mRepo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "name", "composer"));
     }
 
     @Override
@@ -84,6 +86,11 @@ public class MusicServiceImpl implements MusicService {
     @Override
     public Music save(Music music) {
         sRepo.save(music.getStorage());
+        return mRepo.save(music);
+    }
+
+    @Override
+    public Music update(Music music) {
         return mRepo.save(music);
     }
 

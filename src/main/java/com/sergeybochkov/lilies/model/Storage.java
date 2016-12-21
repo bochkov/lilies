@@ -1,6 +1,5 @@
 package com.sergeybochkov.lilies.model;
 
-import com.sergeybochkov.lilies.config.StaticResourceConfig;
 import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
@@ -53,17 +52,20 @@ public class Storage implements Serializable {
         return id;
     }
 
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     public byte[] getSrcFile() {
         return srcFile;
     }
 
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     public byte[] getPdfFile() {
         return pdfFile;
     }
 
-    @Lob @Basic(fetch = FetchType.LAZY)
+    @Lob
+    @Basic(fetch = FetchType.LAZY)
     public byte[] getMp3File() {
         return mp3File;
     }
@@ -87,42 +89,4 @@ public class Storage implements Serializable {
     public void exportMp3(File outFile) throws IOException {
         IOUtils.write(mp3File, new FileOutputStream(outFile));
     }
-
-    /*
-    public void createFiles() {
-        // if src file not in filesystem - save it
-        try {
-            if (hasSrc()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, srcFilename);
-                if (!file.exists())
-                    IOUtils.write(srcFile, new FileOutputStream(file));
-            }
-        }
-        catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
-        }
-        // if pdf file not if filesystem - save it
-        try {
-            if (hasPdf()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, pdfFilename);
-                if (!file.exists())
-                    IOUtils.write(pdfFile, new FileOutputStream(file));
-            }
-        }
-        catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
-        }
-        // if mp3 file not if filesystem - save it
-        try {
-            if (hasMp3()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, mp3Filename);
-                if (!file.exists())
-                    IOUtils.write(mp3File, new FileOutputStream(file));
-            }
-        }
-        catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
-        }
-    }
-    */
 }

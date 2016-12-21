@@ -137,12 +137,13 @@ public final class AdminController extends WebMvcConfigurerAdapter {
     }
 
     @RequestMapping(value = "/music/save/", method = RequestMethod.POST)
-    public String saveMusic(@RequestParam("name") String name,
+    public String saveMusic(@RequestParam(value = "id", required = false) Long id,
+                            @RequestParam(value = "name") String name,
                             @RequestParam(value = "subname", required = false) String subName,
                             @RequestParam(value = "composer", required = false) String composer,
                             @RequestParam(value = "writer", required = false) String writer,
-                            @RequestParam("difficulty") Integer difficulty,
-                            @RequestParam("instrument") String instrument,
+                            @RequestParam(value = "difficulty") Integer difficulty,
+                            @RequestParam(value = "instrument") String instrument,
                             @RequestParam(value = "src_file", required = false) MultipartFile file) {
 
         List<Author> composerList = new ArrayList<>();
@@ -159,23 +160,28 @@ public final class AdminController extends WebMvcConfigurerAdapter {
         for (String i : instrument.split(","))
             instrumentList.add(instrumentService.findBySlug(i));
 
-        File savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
-        if (!file.isEmpty()) {
-            try {
-                IOUtils.write(file.getBytes(), new FileOutputStream(savedFile));
+        File savedFile;
+        Music music;
+        if (file != null) {
+            savedFile = new File(StaticResourceConfig.MEDIA_DIR, file.getOriginalFilename());
+            if (!file.isEmpty()) {
+                try {
+                    IOUtils.write(file.getBytes(), new FileOutputStream(savedFile));
+                } catch (IOException ex) {
+                    LOG.error(ex.getMessage(), ex);
+                }
             }
-            catch (IOException ex) {
-                LOG.error(ex.getMessage(), ex);
-            }
+            music = musicService.save(new Music(id, name, subName, composerList,
+                    writerList, difficultyService.findOne(difficulty), instrumentList, savedFile));
+            if (savedFile.exists() && !savedFile.delete())
+                LOG.warn(String.format("Не удален загруженный файл %s", savedFile.getAbsolutePath()));
+            musicService.generateFiles(music);
         }
+        else
+            music = musicService.update(new Music(id, name, subName, composerList,
+                    writerList, difficultyService.findOne(difficulty), instrumentList, musicService.findOne(id)));
 
-        Music music = musicService.save(new Music(name, subName, composerList, writerList,
-                difficultyService.findOne(difficulty), instrumentList, savedFile));
-        int page = musicService.pageNum(music);
-        if (savedFile.exists() && !savedFile.delete())
-            LOG.warn(String.format("Не удален загруженный файл %s", savedFile.getAbsolutePath()));
-        musicService.generateFiles(music);
-        return String.format("redirect:/admin/music/%s/", page);
+        return String.format("redirect:/admin/music/%s/", musicService.pageNum(music));
     }
 
     @RequestMapping(value = "/a/music/delete/", method = RequestMethod.POST)

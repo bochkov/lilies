@@ -29,6 +29,7 @@
 <table class="table table-condensed">
     <thead>
     <tr>
+        <th>ID</th>
         <th>Название</th>
         <th>Подимя</th>
         <th>Композитор</th>
@@ -48,10 +49,16 @@
         <td><a href="/admin/music/edit/{{music.id}}/">{{ music.name }}</a></td>
         <td>{{ music.subName }}</td>
         <td>
-            {% for composer in music.composer %}{{ composer.print }}<br/>{% endfor %}
+            {% for composer in music.composer %}
+            <a href="/admin/author/edit/{{ composer.id }}/">{{ composer.fio }}</a>
+            <br/>
+            {% endfor %}
         </td>
         <td>
-            {% for writer in music.writer %}{{ writer.print }}<br/>{% endfor %}
+            {% for writer in music.writer %}
+            <a href="/admin/author/edit/{{ writer.id }}/">{{ writer.fio }}</a>
+            <br/>
+            {% endfor %}
         </td>
         <td>{{ music.difficulty.print }}</td>
         <td>

@@ -57,7 +57,19 @@ public final class Author implements Serializable {
         return middlename;
     }
 
+    public List<Music> getMusicList() {
+        return musicList;
+    }
+
     public String print() {
         return String.format("%s %s %s", lastname, firstname, middlename);
+    }
+
+    public String fio() {
+        if (middlename.isEmpty() && !firstname.isEmpty())
+            return String.format("%s %s.", lastname, firstname.charAt(0));
+        if (!middlename.isEmpty() && !firstname.isEmpty())
+            return String.format("%s %s. %s.", lastname, firstname.charAt(0), middlename.charAt(0));
+        return lastname;
     }
 }

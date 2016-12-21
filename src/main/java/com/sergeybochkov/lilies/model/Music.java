@@ -1,14 +1,12 @@
 package com.sergeybochkov.lilies.model;
 
 import com.sergeybochkov.lilies.config.StaticResourceConfig;
-import org.apache.commons.io.IOUtils;
 import org.hibernate.annotations.GenericGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,16 +80,32 @@ public final class Music implements Serializable {
     public Music() {
     }
 
-    public Music(String name, String subname, List<Author> composer, List<Author> writer,
+    public Music(Long id, String name, String subname, List<Author> composer, List<Author> writer,
+                 Difficulty difficulty, List<Instrument> instruments, Music music) {
+        this(id, name, subname, composer, writer, difficulty, instruments, (File) null);
+        this.baseFilename = music.getBaseFilename();
+        this.srcFilename = music.getSrcFilename();
+        this.srcFileLength = music.getSrcFileLength();
+        this.pdfFilename = music.getPdfFilename();
+        this.pdfFileLength = music.getPdfFileLength();
+        this.mp3Filename = music.getMp3Filename();
+        this.mp3FileLength = music.getMp3FileLength();
+        this.storage = music.getStorage();
+    }
+
+    public Music(Long id, String name, String subname, List<Author> composer, List<Author> writer,
                  Difficulty difficulty, List<Instrument> instrument, File srcFile) {
+        this.id = id;
         this.name = name;
         this.subname = subname;
         this.composer = new ArrayList<>(composer);
         this.writer = new ArrayList<>(writer);
         this.difficulty = difficulty;
         this.instrument = new ArrayList<>(instrument);
-        this.baseFilename = srcFile.getName().substring(0, srcFile.getName().lastIndexOf("."));
-        this.storage = new Storage(srcFile);
+        if (srcFile != null) {
+            this.baseFilename = srcFile.getName().substring(0, srcFile.getName().lastIndexOf("."));
+            this.storage = new Storage(srcFile);
+        }
     }
 
     public Long getId() {
@@ -197,6 +211,7 @@ public final class Music implements Serializable {
     }
 
     public void updateSrc(File file) throws IOException {
+        this.storage.exportSrc(file);
         this.srcFilename = "src/" + file.getName();
         this.srcFileLength = file.length();
     }

@@ -1,4 +1,4 @@
-package com.sergeybochkov.lilies.service;
+package com.sergeybochkov.lilies.service.generator;
 
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.model.Storage;
@@ -15,10 +15,6 @@ import java.nio.file.Path;
 public final class GenerateFiles implements Runnable {
 
     private static final Logger LOG = LoggerFactory.getLogger(GenerateFiles.class);
-
-    private static final String LY_CMD = "lilypond -dno-point-and-click %s.ly";
-    private static final String TIMIDITY_CMD = "timidity --output-24bit -Ow %s.midi";
-    private static final String LAME_CMD = "lame -h -b 64 %s.wav %s.mp3";
 
     private final Music music;
     private final Storage storage;
@@ -38,34 +34,17 @@ public final class GenerateFiles implements Runnable {
         String baseFilename = music.getBaseFilename();
         try {
             tmpFolder = Files.createTempDirectory(baseFilename);
-
-            File src = new File(tmpFolder.toFile(), baseFilename + ".ly");
-            storage.exportSrc(src);
-            music.updateSrc(src);
+            music.updateSrc(new File(tmpFolder.toFile(), baseFilename + ".ly"));
             mRepo.save(music);
 
-            String cmd = String.format(LY_CMD, baseFilename);
-            LOG.info(String.format("%s: Начинаем выполнять %s", baseFilename, cmd));
-            Runtime.getRuntime().exec(cmd, null, tmpFolder.toFile()).waitFor();
-            LOG.info(String.format("%s: Созданы pdf и midi", baseFilename));
-
-            File pdf = new File(tmpFolder.toFile(), baseFilename + ".pdf");
+            File pdf = new Lilypond(baseFilename, tmpFolder.toFile()).produce();
             storage.storePdf(pdf);
             sRepo.save(storage);
             music.updatePdf(pdf);
             mRepo.save(music);
 
-            cmd = String.format(TIMIDITY_CMD, baseFilename);
-            LOG.info(String.format("%s: Начинаем выполнять %s", baseFilename, cmd));
-            Runtime.getRuntime().exec(cmd, null, tmpFolder.toFile()).waitFor();
-            LOG.info(String.format("%s: Создан wav", baseFilename));
-
-            cmd = String.format(LAME_CMD, baseFilename, baseFilename);
-            LOG.info(String.format("%s: Начинаем выполнять %s", baseFilename, cmd));
-            Runtime.getRuntime().exec(cmd, null, tmpFolder.toFile()).waitFor();
-            LOG.info(String.format("%s: Создан mp3", baseFilename));
-
-            File mp3 = new File(tmpFolder.toFile(), baseFilename + ".mp3");
+            new Timidity(baseFilename, tmpFolder.toFile()).produce(); // produces wav
+            File mp3 = new Lame(baseFilename, tmpFolder.toFile()).produce();
             storage.storeMp3(mp3);
             sRepo.save(storage);
             music.updateMp3(mp3);

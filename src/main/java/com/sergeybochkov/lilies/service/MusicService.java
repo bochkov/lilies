@@ -23,6 +23,8 @@ public interface MusicService {
 
     Music save(Music music);
 
+    Music update(Music music);
+
     void generateFiles(Music music);
 
     void delete(Long id);

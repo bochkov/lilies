@@ -6,18 +6,15 @@ import com.sergeybochkov.lilies.model.Music;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface MusicRepository extends JpaRepository<Music, Long> {
 
-    @Transactional
     @Query("SELECT DISTINCT m FROM Music m " +
             "LEFT OUTER JOIN m.instrument i " +
             "WHERE m.difficulty IN(?1) AND i IN(?2)")
     List<Music> findByDifficultyInAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments);
 
-    @Transactional
     @Query("SELECT m FROM Music m " +
             "LEFT JOIN m.composer c " +
             "LEFT JOIN m.writer w " +
