@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.*;
-import java.io.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -51,6 +54,10 @@ public final class Music implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "instrument_id"))
     private List<Instrument> instrument;
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "storage_id")
+    private Storage storage;
+
     @Column(name = "base_filename")
     private String baseFilename;
 
@@ -60,32 +67,17 @@ public final class Music implements Serializable {
     @Column(name = "src_length")
     private Long srcFileLength;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "src_file")
-    private byte[] srcFile;
-
     @Column(name = "pdf_filename")
     private String pdfFilename;
 
     @Column(name = "pdf_length")
     private Long pdfFileLength;
 
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "pdf_file")
-    private byte[] pdfFile;
-
     @Column(name = "mp3_filename")
     private String mp3Filename;
 
     @Column(name = "mp3_length")
     private Long mp3FileLength;
-
-    @Lob
-    @Basic(fetch = FetchType.LAZY)
-    @Column(name = "mp3_file")
-    private byte[] mp3File;
 
     public Music() {
     }
@@ -99,13 +91,7 @@ public final class Music implements Serializable {
         this.difficulty = difficulty;
         this.instrument = new ArrayList<>(instrument);
         this.baseFilename = srcFile.getName().substring(0, srcFile.getName().lastIndexOf("."));
-        if (srcFile.exists()) {
-            try {
-                this.srcFile = IOUtils.toByteArray(new FileInputStream(srcFile));
-            } catch (IOException ex) {
-                LOG.warn(ex.getMessage(), ex);
-            }
-        }
+        this.storage = new Storage(srcFile);
     }
 
     public Long getId() {
@@ -148,20 +134,12 @@ public final class Music implements Serializable {
         return srcFileLength;
     }
 
-    public byte[] getSrcFile() {
-        return srcFile;
-    }
-
     public String getPdfFilename() {
         return pdfFilename;
     }
 
     public Long getPdfFileLength() {
         return pdfFileLength;
-    }
-
-    public byte[] getPdfFile() {
-        return pdfFile;
     }
 
     public String getMp3Filename() {
@@ -172,35 +150,8 @@ public final class Music implements Serializable {
         return mp3FileLength;
     }
 
-    public byte[] getMp3File() {
-        return mp3File;
-    }
-
-    public void updateSrc(File file) {
-        this.srcFilename = "src/" + file.getName();
-        this.srcFileLength = file.length();
-    }
-
-    public void updatePdf(File file) {
-        this.pdfFilename = "pdf/" + file.getName();
-        this.pdfFileLength = file.length();
-        try {
-            this.pdfFile = IOUtils.toByteArray(new FileInputStream(file));
-        }
-        catch (IOException ex) {
-            LOG.warn(String.format("%s not found, pdf file not stored", file.getName()), ex);
-        }
-    }
-
-    public void updateMp3(File file) {
-        this.mp3Filename = "mp3/" + file.getName();
-        this.mp3FileLength = file.length();
-        try {
-            this.mp3File = IOUtils.toByteArray(new FileInputStream(file));
-        }
-        catch (IOException ex) {
-            LOG.warn(String.format("%s not found, mp3 file not stored", file.getName()), ex);
-        }
+    public Storage getStorage() {
+        return storage;
     }
 
     public boolean hasPdf() {
@@ -222,39 +173,42 @@ public final class Music implements Serializable {
     }
 
     public void createFiles() {
-        // if src file not in filesystem - save it
         try {
-            if (hasSrc()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, srcFilename);
-                if (!file.exists())
-                    IOUtils.write(srcFile, new FileOutputStream(file));
-            }
+            if (hasSrc())
+                storage.exportSrc(new File(StaticResourceConfig.MEDIA_DIR, srcFilename));
         }
         catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
+            LOG.warn("Cannot export " + srcFilename);
         }
-        // if pdf file not if filesystem - save it
         try {
-            if (hasPdf()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, pdfFilename);
-                if (!file.exists())
-                    IOUtils.write(pdfFile, new FileOutputStream(file));
-            }
+            if (hasPdf())
+                storage.exportPdf(new File(StaticResourceConfig.MEDIA_DIR, pdfFilename));
         }
         catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
+            LOG.warn("Cannot export " + pdfFilename);
         }
-        // if mp3 file not if filesystem - save it
         try {
-            if (hasMp3()) {
-                File file = new File(StaticResourceConfig.MEDIA_DIR, mp3Filename);
-                if (!file.exists())
-                    IOUtils.write(mp3File, new FileOutputStream(file));
-            }
+            if (hasMp3())
+                storage.exportMp3(new File(StaticResourceConfig.MEDIA_DIR, mp3Filename));
         }
         catch (IOException ex) {
-            LOG.warn(ex.getMessage(), ex);
+            LOG.warn("Cannot export " + mp3Filename);
         }
+    }
+
+    public void updateSrc(File file) throws IOException {
+        this.srcFilename = "src/" + file.getName();
+        this.srcFileLength = file.length();
+    }
+
+    public void updatePdf(File file) throws IOException {
+        this.pdfFilename = "pdf/" + file.getName();
+        this.pdfFileLength = file.length();
+    }
+
+    public void updateMp3(File file) {
+        this.mp3Filename = "mp3/" + file.getName();
+        this.mp3FileLength = file.length();
     }
 
     public void deleteFiles() {

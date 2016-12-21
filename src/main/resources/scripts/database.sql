@@ -2,6 +2,7 @@
 DROP TABLE IF EXISTS author CASCADE;
 DROP TABLE IF EXISTS difficulty CASCADE;
 DROP TABLE IF EXISTS instrument CASCADE;
+DROP TABLE IF EXISTS storage CASCADE;
 DROP TABLE IF EXISTS music CASCADE;
 DROP TABLE IF EXISTS roles CASCADE;
 DROP TABLE IF EXISTS users CASCADE;
@@ -34,19 +35,24 @@ CREATE TABLE instrument (
 CREATE UNIQUE INDEX instrument_index
   ON instrument (slug);
 
+CREATE TABLE storage (
+  storage_id BIGINT PRIMARY KEY NOT NULL,
+  src_file   OID,
+  mp3_file   OID,
+  pdf_file   OID
+) WITHOUT OIDS;
+
 CREATE TABLE music (
   music_id      BIGINT PRIMARY KEY NOT NULL,
   name          VARCHAR(255),
   subname       VARCHAR(255),
-  base_filename VARCHAR(255),
   difficulty    INTEGER REFERENCES difficulty (rating),
-  src_file      OID,
+  storage_id    BIGINT REFERENCES storage (storage_id),
+  base_filename VARCHAR(255),
   src_length    BIGINT,
   src_filename  VARCHAR(255),
-  mp3_file      OID,
   mp3_length    BIGINT,
   mp3_filename  VARCHAR(255),
-  pdf_file      OID,
   pdf_length    BIGINT,
   pdf_filename  VARCHAR(255)
 );

@@ -4,6 +4,7 @@ import com.sergeybochkov.lilies.model.Difficulty;
 import com.sergeybochkov.lilies.model.Instrument;
 import com.sergeybochkov.lilies.model.Music;
 import com.sergeybochkov.lilies.repository.MusicRepository;
+import com.sergeybochkov.lilies.repository.StorageRepository;
 import com.sergeybochkov.lilies.web.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,24 +12,32 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
-public final class MusicServiceImpl implements MusicService {
+public class MusicServiceImpl implements MusicService {
 
     public static final int PAGE_SIZE = 25;
 
-    private final MusicRepository repo;
+    private final ExecutorService executor = Executors.newFixedThreadPool(5);
+
+    private final MusicRepository mRepo;
+    private final StorageRepository sRepo;
 
     @Autowired
-    public MusicServiceImpl(MusicRepository repo) {
-        this.repo = repo;
+    public MusicServiceImpl(MusicRepository mRepo, StorageRepository sRepo) {
+        this.mRepo = mRepo;
+        this.sRepo = sRepo;
     }
 
     @Override
+    @Transactional
     public Music findOne(Long id) throws NotFoundException {
-        Music music = repo.findOne(id);
+        Music music = mRepo.findOne(id);
         if (music == null)
             throw new NotFoundException();
         music.createFiles();
@@ -37,12 +46,12 @@ public final class MusicServiceImpl implements MusicService {
 
     @Override
     public List<Music> findAll() {
-        return repo.findAll(new Sort(Sort.Direction.ASC, "name", "composer"));
+        return mRepo.findAll(new Sort(Sort.Direction.ASC, "name", "composer"));
     }
 
     @Override
     public Page<Music> findAll(Integer page) {
-        return repo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "id"));
+        return mRepo.findAll(new PageRequest(page - 1, PAGE_SIZE, Sort.Direction.ASC, "id"));
     }
 
     @Override
@@ -64,28 +73,29 @@ public final class MusicServiceImpl implements MusicService {
     public List<Music> findByDifficultyAndInstrumentIn(List<Difficulty> difficulties, List<Instrument> instruments) {
         if (difficulties.isEmpty() || instruments.isEmpty())
             return new ArrayList<>();
-        return repo.findByDifficultyInAndInstrumentIn(difficulties, instruments);
+        return mRepo.findByDifficultyInAndInstrumentIn(difficulties, instruments);
     }
 
     @Override
     public List<Music> findBySomething(String something) {
-        return repo.findBySomething(String.format("%%%s%%", something));
+        return mRepo.findBySomething(String.format("%%%s%%", something));
     }
 
     @Override
     public Music save(Music music) {
-        return repo.save(music);
+        sRepo.save(music.getStorage());
+        return mRepo.save(music);
     }
 
     @Override
     public void generateFiles(Music music) {
-        new GenerateFiles(repo, music).start();
+        executor.submit(new GenerateFiles(mRepo, sRepo, music));
     }
 
     @Override
     public void delete(Long id) {
         Music m = findOne(id);
         m.deleteFiles();
-        repo.delete(m);
+        mRepo.delete(m);
     }
 }
