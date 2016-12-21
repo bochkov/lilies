@@ -61,6 +61,7 @@ public final class Music implements Serializable {
     private Long srcFileLength;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "src_file")
     private byte[] srcFile;
 
@@ -71,6 +72,7 @@ public final class Music implements Serializable {
     private Long pdfFileLength;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "pdf_file")
     private byte[] pdfFile;
 
@@ -81,6 +83,7 @@ public final class Music implements Serializable {
     private Long mp3FileLength;
 
     @Lob
+    @Basic(fetch = FetchType.LAZY)
     @Column(name = "mp3_file")
     private byte[] mp3File;
 
