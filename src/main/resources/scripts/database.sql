@@ -2,21 +2,16 @@
 DROP TABLE IF EXISTS author CASCADE;
 DROP TABLE IF EXISTS difficulty CASCADE;
 DROP TABLE IF EXISTS instrument CASCADE;
-DROP TABLE IF EXISTS storage CASCADE;
 DROP TABLE IF EXISTS music CASCADE;
-DROP TABLE IF EXISTS roles CASCADE;
-DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS storage CASCADE;
 
-DROP TABLE IF EXISTS author_music CASCADE;
-DROP TABLE IF EXISTS instrument_music CASCADE;
 DROP TABLE IF EXISTS music_composer CASCADE;
 DROP TABLE IF EXISTS music_instrument CASCADE;
 DROP TABLE IF EXISTS music_writer CASCADE;
-DROP TABLE IF EXISTS users_roles CASCADE;
 
 -- создание таблиц
 CREATE TABLE author (
-  author_id   BIGINT PRIMARY KEY NOT NULL,
+  author_id   SERIAL PRIMARY KEY NOT NULL,
   last_name   VARCHAR(255)       NOT NULL,
   first_name  VARCHAR(255),
   middle_name VARCHAR(255)
@@ -26,56 +21,34 @@ CREATE TABLE difficulty (
   rating INTEGER PRIMARY KEY NOT NULL,
   name   VARCHAR(255)
 );
+INSERT INTO difficulty values (1, 'Легко'),
+  (2, 'Ниже среднего'), (3, 'Средний уровень'),
+  (4, 'Выше среднего'), (5, 'Мастер');
 
 CREATE TABLE instrument (
-  instrument_id BIGINT PRIMARY KEY NOT NULL,
+  instrument_id SERIAL PRIMARY KEY NOT NULL,
   name          VARCHAR(255),
   slug          VARCHAR(255)
 );
 CREATE UNIQUE INDEX instrument_index
   ON instrument (slug);
+INSERT INTO instrument VALUES (1, 'Аккордеон', 'accordion'),
+  (2, 'Фортепиано', 'piano'), (3, 'Баян', 'bayan'), (4, 'Гитара', 'guitar');
 
 CREATE TABLE storage (
-  storage_id BIGINT PRIMARY KEY NOT NULL,
-  src_file   OID,
-  mp3_file   OID,
-  pdf_file   OID
+  storage_id SERIAL PRIMARY KEY NOT NULL,
+  filename   VARCHAR(255)       NOT NULL,
+  src        OID,
+  pdf        OID,
+  mp3        OID
 ) WITHOUT OIDS;
 
 CREATE TABLE music (
-  music_id      BIGINT PRIMARY KEY NOT NULL,
-  name          VARCHAR(255),
-  subname       VARCHAR(255),
-  difficulty    INTEGER REFERENCES difficulty (rating),
-  storage_id    BIGINT REFERENCES storage (storage_id),
-  base_filename VARCHAR(255),
-  src_length    BIGINT,
-  src_filename  VARCHAR(255),
-  mp3_length    BIGINT,
-  mp3_filename  VARCHAR(255),
-  pdf_length    BIGINT,
-  pdf_filename  VARCHAR(255)
-);
-
-CREATE TABLE roles (
-  id   BIGINT PRIMARY KEY NOT NULL,
-  role VARCHAR(255)
-);
-
-CREATE TABLE users (
-  id       BIGINT PRIMARY KEY NOT NULL,
-  username VARCHAR(255),
-  password VARCHAR(255)
-);
-
-CREATE TABLE author_music (
-  author_id BIGINT NOT NULL REFERENCES author (author_id),
-  music_id  BIGINT NOT NULL REFERENCES music (music_id)
-);
-
-CREATE TABLE instrument_music (
-  instrument_id BIGINT NOT NULL REFERENCES instrument (instrument_id),
-  music_id      BIGINT NOT NULL REFERENCES music (music_id)
+  music_id   SERIAL PRIMARY KEY NOT NULL,
+  name       VARCHAR(255),
+  subname    VARCHAR(255),
+  difficulty INTEGER REFERENCES difficulty (rating),
+  storage_id BIGINT REFERENCES storage (storage_id)
 );
 
 CREATE TABLE music_composer (
@@ -91,10 +64,4 @@ CREATE TABLE music_instrument (
 CREATE TABLE music_writer (
   music_id  BIGINT NOT NULL REFERENCES music (music_id),
   writer_id BIGINT NOT NULL REFERENCES author (author_id)
-);
-
-CREATE TABLE users_roles (
-  user_id BIGINT NOT NULL REFERENCES users (id),
-  role_id BIGINT NOT NULL REFERENCES roles (id),
-  CONSTRAINT users_roles_pkey PRIMARY KEY (user_id, role_id)
 );

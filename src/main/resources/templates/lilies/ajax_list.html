@@ -1,12 +1,12 @@
 {% block content %}
-    {% regroup object_list by name|first as musics %}
+    {% regroup object_list by name|upper|first as musics %}
     {% for obj_list in musics %}
     <div class="col-md-4">
-        <h2>{{ obj_list.grouper }}</h2>
+        <h2>{{ obj_list.key }}</h2>
         <ul class="list-unstyled">
-        {% for obj in obj_list.objects %}
-            <li><a href="/sheet-{{obj.id}}/">
-                <small class="text-muted">{% for c in obj.composer %}{{ c.fio }} {% endfor %}</small>
+        {% for obj in obj_list.value|sort %}
+            <li><a href="/sheet/{{obj.id}}/">
+                <small class="text-muted">{% for c in obj.composer %}{{ c.name }} {% endfor %}</small>
                 {{ obj.name }}
                 <small class="text-muted">{{ obj.subname }}</small>
                 </a>
