@@ -6,7 +6,7 @@
     - file: path=/tmp/lilies-deploy state=directory
     - copy: src=../build/libs/lilies-2.0-all.jar dest=/tmp/lilies-deploy/lilies.jar
     - copy: src=Dockerfile dest=/tmp/lilies-deploy/Dockerfile
-    - copy: src=../add.sh dest=/tmp/lilies-deploy/add.sh
+    - copy: src=add.sh dest=/tmp/lilies-deploy/add.sh
 
     - name: stop and delete obsolete containers
       docker_container:

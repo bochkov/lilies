@@ -38,8 +38,8 @@ public final class App {
                 .serverConfig(config -> {
                     config.development(develop);
                     config.baseDir(develop ?
-                            new File(System.getProperty("user.dir")) :
-                            BaseDir.find().toFile()
+                            new File(System.getProperty("user.dir")).toPath() :
+                            BaseDir.find()
                     );
                 })
                 .registry(reg -> {
