@@ -73,8 +73,8 @@
             var next = $("#pdf-next"), prev = $("#pdf-prev");
             prev.removeClass("disabled");
             next.removeClass("disabled");
-            if (num == pdfdoc.numPages) { next.addClass("disabled"); }
-            if (num == 1) { prev.addClass("disabled"); }
+            if (num === pdfdoc.numPages) { next.addClass("disabled"); }
+            if (num === 1) { prev.addClass("disabled"); }
         });
     }
 
@@ -117,12 +117,12 @@
 
     $(function(){
         $(".audio-control").click(function(){ audio_play($(this)); });
-        $(document).keypress(function(event){ if (event.which == 112) audio_play($(".audio-control")); })
+        $(document).keypress(function(event){ if (event.which === 112) audio_play($(".audio-control")); })
     });
 
     $(document).keyup(function(event){
-        if (event.keyCode == 37) goPrev();
-        if (event.keyCode == 39) goNext();
+        if (event.keyCode === 37) goPrev();
+        if (event.keyCode === 39) goNext();
     });
 </script>
 {% endblock %}
