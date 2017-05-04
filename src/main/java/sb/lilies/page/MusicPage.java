@@ -5,9 +5,9 @@ import ratpack.exec.Promise;
 import ratpack.form.Form;
 import ratpack.handling.Context;
 import ratpack.handling.Handler;
+import sb.lilies.CtMusics;
 import sb.lilies.FilterDifficulties;
 import sb.lilies.FilterInstrument;
-import sb.lilies.PgMusics;
 
 import javax.sql.DataSource;
 import java.io.StringWriter;
@@ -32,7 +32,7 @@ public final class MusicPage implements Handler {
             map.put("object_list",
                     new FilterDifficulties(f.getAll("difficulties[]"),
                             new FilterInstrument(f.getAll("instruments[]"),
-                                    new PgMusics(ds))
+                                    new CtMusics(ds))
                     ).iterate());
             StringWriter str = new StringWriter();
             pebble.getTemplate("templates/lilies/ajax_list.html")

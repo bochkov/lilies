@@ -2,7 +2,7 @@ package sb.lilies.page;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import ratpack.handling.Context;
-import sb.lilies.PgMusic;
+import sb.lilies.CtMusics;
 
 import javax.sql.DataSource;
 import java.io.StringWriter;
@@ -22,7 +22,7 @@ public final class DetailPage implements Page {
     @Override
     public void handle(Context ctx) throws Exception {
         Map<String, Object> map = new HashMap<>();
-        map.put("object", new PgMusic(ds, ctx.getAllPathTokens().asInt("id")));
+        map.put("object", new CtMusics(ds).find(ctx.getAllPathTokens().asInt("id")));
         try {
             StringWriter str = new StringWriter();
             pebble.getTemplate("templates/lilies/detail.html")

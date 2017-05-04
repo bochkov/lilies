@@ -24,17 +24,17 @@
             <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
         </dl>
         <div class="btn-group-vertical" role="group">
-            {% if object.hasMp3 %}
+            {% if object.storage.hasMp3 %}
                 <a class="btn btn-default audio-control">
-                    <audio src="/media/{{ object.mp3Filename }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
+                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
                     <i class="fa fa-music"></i> Слушать</a>
             {% endif %}
-            {% if object.hasPdf %}
-                <a class="btn btn-default" target="_blank" href="/media/{{ object.pdfFilename }}">
+            {% if object.storage.hasPdf %}
+                <a class="btn btn-default" target="_blank" href="/media/{{ object.storage.pdfFn }}">
                     <i class="fa fa-save"></i> PDF</a>
             {% endif %}
-            {% if object.hasSrc %}
-                <a class="btn btn-default" target="_blank" href="/media/{{ object.srcFilename }}">
+            {% if object.storage.hasSrc %}
+                <a class="btn btn-default" target="_blank" href="/media/{{ object.storage.srcFn }}">
                     <i class="fa fa-file"></i> .ly файл</a>
             {% endif %}
         </div>
@@ -90,7 +90,7 @@
         renderPage(pageNum);
     }
 
-    PDFJS.getDocument("/media/{{ object.pdfFilename }}").then(function(_pdfdoc){
+    PDFJS.getDocument("/media/{{ object.storage.pdfFn }}").then(function(_pdfdoc){
         pdfdoc = _pdfdoc;
         renderPage(pageNum);
     });

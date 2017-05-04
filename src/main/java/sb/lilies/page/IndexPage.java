@@ -2,8 +2,8 @@ package sb.lilies.page;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import ratpack.handling.Context;
-import sb.lilies.PgDifficulties;
-import sb.lilies.PgInstruments;
+import sb.lilies.CtDifficulties;
+import sb.lilies.CtInstruments;
 
 import javax.sql.DataSource;
 import java.io.StringWriter;
@@ -23,8 +23,8 @@ public final class IndexPage implements Page {
     @Override
     public void handle(Context ctx) throws Exception {
         Map<String, Object> map = new HashMap<>();
-        map.put("instruments", new PgInstruments(ds).iterate());
-        map.put("difficulties", new PgDifficulties(ds).iterate());
+        map.put("instruments", new CtInstruments(ds).iterate());
+        map.put("difficulties", new CtDifficulties(ds).iterate());
         StringWriter str = new StringWriter();
         pebble.getTemplate("templates/lilies/index.html")
                 .evaluate(str, map);

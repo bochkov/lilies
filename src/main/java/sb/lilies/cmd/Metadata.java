@@ -1,9 +1,9 @@
 package sb.lilies.cmd;
 
+import sb.lilies.CtInstruments;
 import sb.lilies.Difficulty;
 import sb.lilies.Instrument;
 import sb.lilies.PgDifficulty;
-import sb.lilies.PgInstruments;
 
 import javax.sql.DataSource;
 import java.io.IOException;
@@ -47,7 +47,7 @@ public final class Metadata {
     public List<Instrument> instruments(DataSource ds) throws SQLException {
         List<Instrument> insts = new ArrayList<>();
         for (String i : instrument)
-            insts.add(new PgInstruments(ds).find(i));
+            insts.add(new CtInstruments(ds).find(i));
         return insts;
     }
 

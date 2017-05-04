@@ -32,6 +32,11 @@ public final class FilterInstrument implements Musics {
     }
 
     @Override
+    public Music find(int id) throws SQLException {
+        return this.origin.find(id);
+    }
+
+    @Override
     public Iterable<Music> search(String token) throws SQLException {
         return origin.search(token);
     }

@@ -32,6 +32,18 @@ public final class PgMusics implements Musics {
     }
 
     @Override
+    public Music find(int id) throws SQLException {
+        return new JdbcSession(ds)
+                .sql("SELECT music_id FROM music WHERE music_id = ?")
+                .set(id)
+                .select(
+                        new ListOutcome<>(
+                                (ListOutcome.Mapping<Music>) rset -> new PgMusic(ds, rset.getInt(1))
+                        )
+                ).get(0);
+    }
+
+    @Override
     public Iterable<Music> search(String token) throws SQLException {
         String tk = String.format("%%%s%%", token);
         return new JdbcSession(ds)
