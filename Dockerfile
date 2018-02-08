@@ -12,6 +12,7 @@ ENV TZ=Asia/Yekaterinburg
 WORKDIR /opt
 ADD lilies.jar .
 ADD add.sh .
+ADD database.sql .
 RUN mkdir logs && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone && \
     chmod 755 add.sh

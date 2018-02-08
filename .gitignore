@@ -1,15 +1,9 @@
 .idea/
 .gradle
 build/
-*.iml
 .DS_Store
-*.ly
-*.pdf
-*.midi
-*.mp3
 media/
-*.log
+logs/
 target/
-*.wav
 lilies.properties
 *.retry
