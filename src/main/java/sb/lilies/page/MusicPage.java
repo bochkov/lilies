@@ -25,7 +25,7 @@ public final class MusicPage implements Handler {
     }
 
     @Override
-    public void handle(Context context) throws Exception {
+    public void handle(Context context) {
         Promise<Form> promise = context.parse(Form.class);
         promise.then(f -> {
             Map<String, Object> map = new HashMap<>();

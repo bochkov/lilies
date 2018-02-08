@@ -1,7 +1,5 @@
 package sb.lilies;
 
-import java.sql.SQLException;
-
 public final class CtWriter implements Author {
 
     private final Author origin;
@@ -13,7 +11,7 @@ public final class CtWriter implements Author {
     }
 
     @Override
-    public String name() throws SQLException {
+    public String name() {
         return name;
     }
 }

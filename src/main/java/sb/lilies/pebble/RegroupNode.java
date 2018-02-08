@@ -7,7 +7,6 @@ import com.mitchellbosecke.pebble.node.expression.*;
 import com.mitchellbosecke.pebble.template.EvaluationContext;
 import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
 
-import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +33,7 @@ public final class RegroupNode extends AbstractRenderableNode {
     }
 
     @Override
-    public void render(PebbleTemplateImpl tmpl, Writer writer, EvaluationContext ctx) throws PebbleException, IOException {
+    public void render(PebbleTemplateImpl tmpl, Writer writer, EvaluationContext ctx) throws PebbleException {
         Map<String, List<Object>> map = new TreeMap<>();
 
         List list = (List) this.source.evaluate(tmpl, ctx);
@@ -68,7 +67,7 @@ public final class RegroupNode extends AbstractRenderableNode {
         }
 
         @Override
-        public Object evaluate(PebbleTemplateImpl self, EvaluationContext context) throws PebbleException {
+        public Object evaluate(PebbleTemplateImpl self, EvaluationContext context) {
             return object;
         }
 

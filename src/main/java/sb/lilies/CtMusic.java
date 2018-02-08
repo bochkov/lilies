@@ -47,7 +47,7 @@ public final class CtMusic implements Music, Comparable {
     }
 
     @Override
-    public Difficulty difficulty() throws SQLException {
+    public Difficulty difficulty() {
         return this.difficulty;
     }
 
@@ -68,7 +68,7 @@ public final class CtMusic implements Music, Comparable {
     }
 
     @Override
-    public Storage storage() throws SQLException {
+    public Storage storage() {
         return this.storage;
     }
 

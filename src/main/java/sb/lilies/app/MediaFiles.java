@@ -12,7 +12,7 @@ public final class MediaFiles implements Action<FileHandlerSpec> {
     }
 
     @Override
-    public void execute(FileHandlerSpec fhs) throws Exception {
+    public void execute(FileHandlerSpec fhs) {
         if (develop) {
             fhs.files("media");
         }

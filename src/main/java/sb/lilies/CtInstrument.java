@@ -1,7 +1,5 @@
 package sb.lilies;
 
-import java.sql.SQLException;
-
 public final class CtInstrument implements Instrument {
 
     private final Instrument origin;
@@ -20,12 +18,12 @@ public final class CtInstrument implements Instrument {
     }
 
     @Override
-    public String name() throws SQLException {
+    public String name() {
         return this.name;
     }
 
     @Override
-    public String slug() throws SQLException {
+    public String slug() {
         return this.slug;
     }
 }

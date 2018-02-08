@@ -12,7 +12,7 @@ public final class StaticFiles implements Action<FileHandlerSpec> {
     }
 
     @Override
-    public void execute(FileHandlerSpec fhs) throws Exception {
+    public void execute(FileHandlerSpec fhs) {
         if (develop) {
             fhs.path("static").dir("src/main/resources/static");
         } else {

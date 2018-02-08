@@ -17,12 +17,12 @@ public final class CtStorage implements Storage {
 
 
     @Override
-    public String filename() throws SQLException {
+    public String filename() {
         return this.filename;
     }
 
     @Override
-    public String srcFn() throws SQLException {
+    public String srcFn() {
         return String.format("src/%s.ly", filename());
     }
 
@@ -44,7 +44,7 @@ public final class CtStorage implements Storage {
     }
 
     @Override
-    public String pdfFn() throws SQLException {
+    public String pdfFn() {
         return String.format("pdf/%s.pdf", filename());
     }
 
@@ -66,7 +66,7 @@ public final class CtStorage implements Storage {
     }
 
     @Override
-    public String mp3Fn() throws SQLException {
+    public String mp3Fn() {
         return String.format("mp3/%s.mp3", filename());
     }
 
