@@ -10,7 +10,7 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN rm -rf /var/lib/apt/lists/*
 ENV TZ=Asia/Yekaterinburg
 WORKDIR /opt
-ADD lilies.jar .
+ADD build/libs/lilies-2.0-all.jar lilies.jar
 ADD add.sh .
 ADD database.sql .
 RUN mkdir logs && \
