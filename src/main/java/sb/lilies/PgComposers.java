@@ -19,7 +19,9 @@ public final class PgComposers implements Authors {
         return new JdbcSession(ds)
                 .sql("SELECT author_id FROM author")
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Author>) rset -> new PgComposer(ds, rset.getInt(1))));
+                                rset -> new PgComposer(ds, rset.getInt(1))
+                        )
+                );
     }
 
     @Override
@@ -28,6 +30,8 @@ public final class PgComposers implements Authors {
                 .sql("SELECT composer_id FROM music_composer WHERE music_id = ?")
                 .set(id)
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Author>) rset -> new PgComposer(ds, rset.getInt(1))));
+                                rset -> new PgComposer(ds, rset.getInt(1))
+                        )
+                );
     }
 }

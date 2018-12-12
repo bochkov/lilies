@@ -21,7 +21,9 @@ public final class PgMusics implements Musics {
                 .sql("SELECT music_id FROM music")
                 .select(
                         new ListOutcome<>(
-                                (ListOutcome.Mapping<Music>) rset -> new PgMusic(ds, rset.getInt(1))));
+                                rset -> new PgMusic(ds, rset.getInt(1))
+                        )
+                );
     }
 
     @Override
@@ -56,6 +58,6 @@ public final class PgMusics implements Musics {
                         "OR UPPER(a.last_name) LIKE UPPER(?)")
                 .set(tk).set(tk).set(tk)
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Music>) rset -> new PgMusic(ds, rset.getInt(1))));
+                        rset -> new PgMusic(ds, rset.getInt(1))));
     }
 }

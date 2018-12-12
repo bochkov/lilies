@@ -37,7 +37,9 @@ public final class PgInstruments implements Instruments {
         return new JdbcSession(ds)
                 .sql("SELECT instrument_id FROM instrument")
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Instrument>) rset -> new PgInstrument(ds, rset.getLong(1))));
+                                rset -> new PgInstrument(ds, rset.getLong(1))
+                        )
+                );
     }
 
     @Override
@@ -46,6 +48,8 @@ public final class PgInstruments implements Instruments {
                 .sql("SELECT instrument_id, name, slug FROM instrument WHERE instrument_id = (SELECT instrument_id FROM music_instrument WHERE music_id = ?)")
                 .set(id)
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Instrument>) rset -> new PgInstrument(ds, rset.getInt(1))));
+                                rset -> new PgInstrument(ds, rset.getInt(1))
+                        )
+                );
     }
 }

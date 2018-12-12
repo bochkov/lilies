@@ -27,10 +27,11 @@ public final class CtDifficulties implements Difficulties {
         return new JdbcSession(ds)
                 .sql("SELECT rating, name FROM difficulty")
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Difficulty>) rset ->
-                                new CtDifficulty(
+                                rset -> new CtDifficulty(
                                         new PgDifficulty(ds, rset.getInt(1)),
                                         rset.getString(2)
-                                )));
+                                )
+                        )
+                );
     }
 }

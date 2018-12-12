@@ -22,6 +22,7 @@ public final class Save implements Execute {
         this.md = md;
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public void act() throws Exception {
         Long storageId = new JdbcSession(ds)

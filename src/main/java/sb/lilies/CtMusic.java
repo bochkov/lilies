@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public final class CtMusic implements Music, Comparable {
+public final class CtMusic implements Music {
 
     private final Music origin;
     private final String name;
@@ -86,7 +86,7 @@ public final class CtMusic implements Music, Comparable {
     public int compareTo(Object o) {
         if (o instanceof Music) {
             try {
-                return this.name().compareTo(((Music) o).name());
+                return this.name.compareTo(((Music) o).name());
             } catch (SQLException e) {
                 return 0;
             }

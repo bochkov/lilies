@@ -27,6 +27,8 @@ public final class PgDifficulties implements Difficulties {
         return new JdbcSession(ds)
                 .sql("SELECT rating FROM difficulty")
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Difficulty>) rset -> new PgDifficulty(ds, rset.getInt(1))));
+                                rset -> new PgDifficulty(ds, rset.getInt(1))
+                        )
+                );
     }
 }

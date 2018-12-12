@@ -19,10 +19,12 @@ public final class CtWriters implements Authors {
         return new JdbcSession(ds)
                 .sql("SELECT author_id, last_name FROM author")
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Author>) rset ->
-                                new CtWriter(
+                                rset -> new CtWriter(
                                         new PgWriter(ds, rset.getInt(1)),
-                                        rset.getString(2))));
+                                        rset.getString(2)
+                                )
+                        )
+                );
     }
 
     @Override
@@ -31,10 +33,12 @@ public final class CtWriters implements Authors {
                 .sql("SELECT author_id, last_name FROM author WHERE author_id = (SELECT writer_id FROM music_writer WHERE music_id = ?)")
                 .set(id)
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Author>) rset ->
-                                new CtWriter(
+                                rset -> new CtWriter(
                                         new PgWriter(ds, rset.getInt(1)),
-                                        rset.getString(2))));
+                                        rset.getString(2)
+                                )
+                        )
+                );
     }
 
 }

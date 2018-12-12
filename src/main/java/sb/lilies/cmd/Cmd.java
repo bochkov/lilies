@@ -53,12 +53,17 @@ public final class Cmd {
                     if (lm.find()) {
                         String key = lm.group("key").trim();
                         String value = lm.group("value").trim();
-                        if ("title".equals(key))
-                            title = value;
-                        else if ("subtitle".equals(key))
-                            subtitle = value;
-                        else if ("composer".equals(key))
-                            composer = value;
+                        switch (key) {
+                            case "title":
+                                title = value;
+                                break;
+                            case "subtitle":
+                                subtitle = value;
+                                break;
+                            case "composer":
+                                composer = value;
+                                break;
+                        }
                     }
                 }
                 if (cli.hasOption("na"))

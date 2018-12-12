@@ -32,6 +32,7 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasSrc() throws IOException, SQLException {
         File outFile = new File("media", srcFn());
@@ -57,6 +58,7 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasPdf() throws SQLException, IOException {
         File outFile = new File("media", pdfFn());
@@ -82,6 +84,7 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasMp3() throws SQLException, IOException {
         File outFile = new File("media", mp3Fn());

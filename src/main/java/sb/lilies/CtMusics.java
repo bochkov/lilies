@@ -5,6 +5,7 @@ import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public final class CtMusics implements Musics {
@@ -15,6 +16,22 @@ public final class CtMusics implements Musics {
         this.ds = ds;
     }
 
+    private Music musicMap(ResultSet rset) throws SQLException {
+        return new CtMusic(
+                new PgMusic(ds, rset.getInt(1)),
+                rset.getString(2),
+                rset.getString(3),
+                new CtStorage(
+                        new PgStorage(ds, rset.getInt(4)),
+                        rset.getString(5)
+                ),
+                new CtDifficulty(
+                        new PgDifficulty(ds, rset.getInt(6)),
+                        rset.getString(7)
+                )
+        );
+    }
+
     @Override
     public Iterable<Music> iterate() throws SQLException {
         return new JdbcSession(this.ds)
@@ -22,21 +39,8 @@ public final class CtMusics implements Musics {
                         "LEFT JOIN storage s ON m.storage_id = s.storage_id " +
                         "LEFT JOIN difficulty d ON m.difficulty = d.rating")
                 .select(
-                        new ListOutcome<>(
-                                (ListOutcome.Mapping<Music>) rset ->
-                                        new CtMusic(
-                                                new PgMusic(ds, rset.getInt(1)),
-                                                rset.getString(2),
-                                                rset.getString(3),
-                                                new CtStorage(
-                                                        new PgStorage(ds, rset.getInt(4)),
-                                                        rset.getString(5)
-                                                ),
-                                                new CtDifficulty(
-                                                        new PgDifficulty(ds, rset.getInt(6)),
-                                                        rset.getString(7)
-                                                )
-                                        )));
+                        new ListOutcome<>(this::musicMap)
+                );
     }
 
     @Override
@@ -55,21 +59,7 @@ public final class CtMusics implements Musics {
                         "WHERE m.music_id = ?")
                 .set(id)
                 .select(
-                        new ListOutcome<>(
-                                (ListOutcome.Mapping<Music>) rset ->
-                                        new CtMusic(
-                                                new PgMusic(ds, rset.getInt(1)),
-                                                rset.getString(2),
-                                                rset.getString(3),
-                                                new CtStorage(
-                                                        new PgStorage(ds, rset.getInt(4)),
-                                                        rset.getString(5)
-                                                ),
-                                                new CtDifficulty(
-                                                        new PgDifficulty(ds, rset.getInt(6)),
-                                                        rset.getString(7)
-                                                )
-                                        ))
+                        new ListOutcome<>(this::musicMap)
                 ).get(0);
     }
 
@@ -87,20 +77,8 @@ public final class CtMusics implements Musics {
                         "OR UPPER(m.subname) LIKE UPPER(?) " +
                         "OR UPPER(a.last_name) LIKE UPPER(?)")
                 .set(tk).set(tk).set(tk)
-                .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Music>) rset ->
-                                new CtMusic(
-                                        new PgMusic(ds, rset.getInt(1)),
-                                        rset.getString(2),
-                                        rset.getString(3),
-                                        new CtStorage(
-                                                new PgStorage(ds, rset.getInt(4)),
-                                                rset.getString(5)
-                                        ),
-                                        new CtDifficulty(
-                                                new PgDifficulty(ds, rset.getInt(6)),
-                                                rset.getString(7)
-                                        )
-                                )));
+                .select(
+                        new ListOutcome<>(this::musicMap)
+                );
     }
 }
