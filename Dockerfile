@@ -1,4 +1,4 @@
-FROM openjdk:jre-slim
+FROM openjdk:8-slim
 RUN apt-get update && apt-get install -y timidity lame wget
 VOLUME /tmp
 WORKDIR /tmp
