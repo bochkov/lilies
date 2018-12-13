@@ -4,7 +4,7 @@ import java.sql.SQLException;
 
 public interface Difficulties {
 
-    long count() throws SQLException;
+    int maxValue() throws SQLException;
 
     Iterable<Difficulty> iterate() throws SQLException;
 

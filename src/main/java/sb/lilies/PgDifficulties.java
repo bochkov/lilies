@@ -16,10 +16,11 @@ public final class PgDifficulties implements Difficulties {
     }
 
     @Override
-    public long count() throws SQLException {
+    public int maxValue() throws SQLException {
         return new JdbcSession(ds)
-                .sql("SELECT count(*) FROM difficulty")
-                .select(new SingleOutcome<>(Long.class));
+                .sql("SELECT MAX(rating) FROM difficulty")
+                .select(new SingleOutcome<>(Long.class))
+                .intValue();
     }
 
     @Override

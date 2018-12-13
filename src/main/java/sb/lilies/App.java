@@ -90,7 +90,7 @@ public final class App {
         DataSource ds = new HikariDataSource(config);
         PebbleEngine pebble = new PebbleEngine.Builder()
                 .loader(new ClasspathLoader())
-                .extension(new LiliesExtension((int) new PgDifficulties(ds).count()))
+                .extension(new LiliesExtension(new PgDifficulties(ds).maxValue()))
                 .build();
         Logger.info(App.class, "Starting with params {develop=%s}", develop);
         new App(ds, pebble, develop).start();
