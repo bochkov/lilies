@@ -10,8 +10,8 @@ apply plugin: 'java'
 apply plugin: 'io.ratpack.ratpack-java'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-sourceCompatibility = JavaVersion.VERSION_12
-targetCompatibility = JavaVersion.VERSION_12
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories() {
     jcenter()
