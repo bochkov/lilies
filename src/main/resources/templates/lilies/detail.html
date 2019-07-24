@@ -54,8 +54,8 @@
 <script type="text/javascript" src="/static/js/pdf.js"></script>
 <script type="text/javascript" src="/static/js/compatibility.js"></script>
 <script type="text/javascript">
-    PDFJS.workerSrc = '/static/js/pdf.worker.js';
-    PDFJS.disableWorker = true;
+    var pfdjslib = window['/static/js/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
     var pdfdoc = null,
             pageNum = 1,
             canvas = document.getElementById("pdf-canvas"),
@@ -90,7 +90,7 @@
         renderPage(pageNum);
     }
 
-    PDFJS.getDocument("/media/{{ object.storage.pdfFn }}").then(function(_pdfdoc){
+    pdfjsLib.getDocument("/media/{{ object.storage.pdfFn }}").then(function(_pdfdoc){
         pdfdoc = _pdfdoc;
         renderPage(pageNum);
     });
