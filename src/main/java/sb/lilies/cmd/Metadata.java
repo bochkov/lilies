@@ -1,19 +1,20 @@
 package sb.lilies.cmd;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import javax.sql.DataSource;
+
+import lombok.ToString;
 import sb.lilies.CtInstruments;
 import sb.lilies.Difficulty;
 import sb.lilies.Instrument;
 import sb.lilies.PgDifficulty;
 
-import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
-
+@ToString
 public final class Metadata {
 
     private final String title;
@@ -23,11 +24,11 @@ public final class Metadata {
     private final String[] instrument;
     private final int difficulty;
 
-    public Metadata(String title, String subtitle, String composer, String writer, String[] instrument, int difficulty) {
-        this.title = title;
-        this.subtitle = subtitle.replaceAll("\\\\", "");
-        this.composer = composer;
-        this.writer = writer;
+    public Metadata(Map<String, String> headers, String[] instrument, int difficulty) {
+        this.title = headers.getOrDefault("title", "");
+        this.subtitle = headers.getOrDefault("subtitle", "").replace("\\", "");
+        this.composer = headers.getOrDefault("composer", "");
+        this.writer = headers.getOrDefault("writer", "");
         this.instrument = instrument;
         this.difficulty = difficulty;
     }
@@ -45,10 +46,10 @@ public final class Metadata {
     }
 
     public List<Instrument> instruments(DataSource ds) throws SQLException {
-        List<Instrument> insts = new ArrayList<>();
+        List<Instrument> instruments = new ArrayList<>();
         for (String i : instrument)
-            insts.add(new CtInstruments(ds).find(i));
-        return insts;
+            instruments.add(new CtInstruments(ds).find(i));
+        return instruments;
     }
 
     public String composer() {
@@ -62,21 +63,16 @@ public final class Metadata {
     public void print(DataSource ds, OutputStream out) throws SQLException, IOException {
         Difficulty diff = new PgDifficulty(ds, difficulty);
         String diffName = diff.name();
-        List<String> strInst = instruments(ds).stream().map(inst -> {
-            try {
-                return String.format("%s (%s)", inst.name(), inst.slug());
-            } catch (SQLException e) {
-                return "<unknown>";
-            }
-        }).collect(Collectors.toList());
-        String str = String.format("title=%s\nsubtitle=%s\ndifficulty=%s(%s)\ninstruments=%s\ncomposer=%s\nwriter=%s\n\n",
+        List<String> strInst = instruments(ds).stream()
+                .map(inst -> {
+                    try {
+                        return String.format("%s (%s)", inst.name(), inst.slug());
+                    } catch (SQLException e) {
+                        return "<unknown>";
+                    }
+                }).toList();
+        String str = String.format("title=%s%nsubtitle=%s%ndifficulty=%s(%s)%ninstruments=%s%ncomposer=%s%nwriter=%s%n%n",
                 title, subtitle, diff.rating(), diffName, strInst, composer, writer);
         out.write(str.getBytes());
-    }
-
-    @Override
-    public String toString() {
-        return String.format("Metadata {title='%s', subtitle='%s', composer='%s', instrument=%s, difficulty=%d}",
-                title, subtitle, composer, Arrays.toString(instrument), difficulty);
     }
 }

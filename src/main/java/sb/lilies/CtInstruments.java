@@ -1,19 +1,17 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class CtInstruments implements Instruments {
 
     private final DataSource ds;
-
-    public CtInstruments(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public long count() throws SQLException {

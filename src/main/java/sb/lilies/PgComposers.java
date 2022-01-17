@@ -1,27 +1,22 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class PgComposers implements Authors {
 
     private final DataSource ds;
-
-    public PgComposers(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public Iterable<Author> iterate() throws SQLException {
         return new JdbcSession(ds)
                 .sql("SELECT author_id FROM author")
-                .select(new ListOutcome<>(
-                                rset -> new PgComposer(ds, rset.getInt(1))
-                        )
-                );
+                .select(new ListOutcome<>(rset -> new PgComposer(ds, rset.getInt(1))));
     }
 
     @Override
@@ -29,9 +24,6 @@ public final class PgComposers implements Authors {
         return new JdbcSession(ds)
                 .sql("SELECT composer_id FROM music_composer WHERE music_id = ?")
                 .set(id)
-                .select(new ListOutcome<>(
-                                rset -> new PgComposer(ds, rset.getInt(1))
-                        )
-                );
+                .select(new ListOutcome<>(rset -> new PgComposer(ds, rset.getInt(1))));
     }
 }

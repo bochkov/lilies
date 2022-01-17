@@ -1,45 +1,42 @@
 package sb.lilies.cmd;
 
-import org.postgresql.PGConnection;
-import org.postgresql.largeobject.LargeObject;
-import org.postgresql.largeobject.LargeObjectManager;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 
+import lombok.RequiredArgsConstructor;
+import org.postgresql.PGConnection;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
+
+@RequiredArgsConstructor
 public final class PgOidIncome {
 
-    private final byte[] buf =  new byte[2048];
+    private final byte[] buf = new byte[2048];
 
     private final DataSource ds;
     private final File file;
 
-    public PgOidIncome(DataSource ds, File file) {
-        this.ds = ds;
-        this.file = file;
-    }
-
     public long id() throws SQLException, IOException {
-        Connection con = ds.getConnection();
-        con.setAutoCommit(false);
-        LargeObjectManager lobj = con.unwrap(PGConnection.class).getLargeObjectAPI();
-        long oid = lobj.createLO(LargeObjectManager.READWRITE);
-        LargeObject obj = lobj.open(oid, LargeObjectManager.WRITE);
-        try (FileInputStream fis = new FileInputStream(file)) {
-            int s;
-            while ((s = fis.read(buf)) > 0) {
-                obj.write(buf, 0, s);
+        try (Connection con = ds.getConnection()) {
+            con.setAutoCommit(false);
+            LargeObjectManager lom = con.unwrap(PGConnection.class).getLargeObjectAPI();
+            long oid = lom.createLO(LargeObjectManager.READWRITE);
+            try (LargeObject obj = lom.open(oid, LargeObjectManager.WRITE);
+                 FileInputStream fis = new FileInputStream(file)) {
+                int s;
+                while ((s = fis.read(buf)) > 0) {
+                    obj.write(buf, 0, s);
+                }
+                con.commit();
+                return oid;
+            } catch (SQLException ex) {
+                con.rollback();
+                throw ex;
             }
-            obj.close();
-            con.commit();
-            return oid;
-        } catch (SQLException ex) {
-            con.rollback();
-            throw ex;
         }
     }
 }

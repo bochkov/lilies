@@ -1,20 +1,17 @@
 package sb.lilies;
 
-import com.google.common.collect.Iterables;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Iterables;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class FilterDifficulties implements Musics {
 
-    private final Musics origin;
     private final List<String> difficulties;
-
-    public FilterDifficulties(List<String> difficulties, Musics origin) {
-        this.origin = origin;
-        this.difficulties = difficulties;
-    }
+    private final Musics origin;
 
     @Override
     public Iterable<Music> iterate() throws SQLException {

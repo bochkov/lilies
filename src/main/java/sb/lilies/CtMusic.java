@@ -4,6 +4,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class CtMusic implements Music {
 
     private final Music origin;
@@ -14,14 +17,6 @@ public final class CtMusic implements Music {
     private final List<Author> composer = new ArrayList<>();
     private final List<Author> writer = new ArrayList<>();
     private final List<Instrument> instruments = new ArrayList<>();
-
-    public CtMusic(Music origin, String name, String subname, Storage storage, Difficulty difficulty) {
-        this.origin = origin;
-        this.name = name;
-        this.subname = subname;
-        this.storage = storage;
-        this.difficulty = difficulty;
-    }
 
     @Override
     public int id() {
@@ -83,14 +78,11 @@ public final class CtMusic implements Music {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if (o instanceof Music) {
-            try {
-                return this.name.compareTo(((Music) o).name());
-            } catch (SQLException e) {
-                return 0;
-            }
+    public int compareTo(Music o) {
+        try {
+            return this.name.compareTo(o.name());
+        } catch (SQLException e) {
+            return 0;
         }
-        return 0;
     }
 }

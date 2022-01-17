@@ -4,123 +4,133 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="col-md-2 text-right">
-        <dl>
-            {% if object.composer.size > 0 %}
-            <dt>Композитор</dt>
-            <dd>{% for composer in object.composer %}{{ composer.name }}<br/>{% endfor %}</dd>
-            {% endif %}
+    <div class="row">
+        <div class="col-2 text-end">
+            <dl>
+                {% if object.composer.size > 0 %}
+                <dt>Композитор</dt>
+                <dd>{% for composer in object.composer %}{{ composer.name }}<br/>{% endfor %}</dd>
+                {% endif %}
 
-            {% if object.writer.size > 0 %}
-            <dt>Слова</dt>
-            <dd>{% for writer in object.writer %}{{ writer.name }}<br/>{% endfor %}</dd>
-            {% endif %}
+                {% if object.writer.size > 0 %}
+                <dt>Слова</dt>
+                <dd>{% for writer in object.writer %}{{ writer.name }}<br/>{% endfor %}</dd>
+                {% endif %}
 
-            {% if object.instrument.size > 0 %}
-            <dt>Инструмент</dt>
-            <dd>{% for inst in object.instrument %}{{ inst.name }}<br/>{% endfor %}</dd>
-            {% endif %}
+                {% if object.instrument.size > 0 %}
+                <dt>Инструмент</dt>
+                <dd>{% for inst in object.instrument %}{{ inst.name }}<br/>{% endfor %}</dd>
+                {% endif %}
 
-            <dt>Сложность</dt><dd>{{ object.difficulty.rating|stars|raw }}</dd>
-        </dl>
-        <div class="btn-group-vertical" role="group">
-            {% if object.storage.hasMp3 %}
-                <a class="btn btn-default audio-control">
-                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.id }}" type="audio/mpeg" preload="none"></audio>
-                    <i class="fa fa-music"></i> Слушать</a>
-            {% endif %}
-            {% if object.storage.hasPdf %}
-                <a class="btn btn-default" target="_blank" href="/media/{{ object.storage.pdfFn }}">
-                    <i class="fa fa-save"></i> PDF</a>
-            {% endif %}
-            {% if object.storage.hasSrc %}
-                <a class="btn btn-default" target="_blank" href="/media/{{ object.storage.srcFn }}">
-                    <i class="fa fa-file"></i> .ly файл</a>
-            {% endif %}
+                <dt>Сложность</dt>
+                <dd>{{ object.difficulty.rating|stars|raw }}</dd>
+            </dl>
+            <div class="btn-group-vertical" role="group">
+                {% if object.storage.hasMp3 %}
+                <a class="btn btn-outline-dark audio-control">
+                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.id }}" type="audio/mpeg"
+                           preload="none"></audio>
+                    <i class="fas fa-music"></i> Слушать</a>
+                {% endif %}
+                {% if object.storage.hasPdf %}
+                <a class="btn btn-outline-dark" target="_blank" href="/media/{{ object.storage.pdfFn }}">
+                    <i class="fas fa-save"></i> PDF</a>
+                {% endif %}
+                {% if object.storage.hasSrc %}
+                <a class="btn btn-outline-dark" target="_blank" href="/media/{{ object.storage.srcFn }}">
+                    <i class="fas fa-file"></i> .ly файл</a>
+                {% endif %}
+            </div>
         </div>
+        <canvas class="col-10" id="pdf-canvas"></canvas>
     </div>
-    <canvas class="col-md-10" id="pdf-canvas"></canvas>
 </div>
 
-<div class="container-fluid">
-    <ul class="pager">
-        <li class="disabled" id="pdf-prev"><a href="#" onclick="goPrev()">&laquo; Предыдущая страница</a></li>
-        <li class="disabled" id="pdf-next"><a href="#" onclick="goNext()">Следующая страница &raquo;</a></li>
+<nav>
+    <ul class="pagination justify-content-center">
+        <li class="page-item" id="pdf-prev"><a class="page-link" href="#" onclick="goPrev()"><i class="fas fa-angle-left"></i> Предыдущая страница</a></li>
+        <li class="page-item" id="pdf-next"><a class="page-link" href="#" onclick="goNext()">Следующая страница <i class="fas fa-angle-right"></i></a></li>
     </ul>
-</div>
+</nav>
 {% endblock %}
 
 {% block custom_js %}
 <script type="text/javascript" src="/static/js/pdf.js"></script>
-<script type="text/javascript" src="/static/js/compatibility.js"></script>
 <script type="text/javascript">
-    var pfdjslib = window['/static/js/pdf'];
     pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
     var pdfdoc = null,
-            pageNum = 1,
-            canvas = document.getElementById("pdf-canvas"),
-            ctx = canvas.getContext("2d");
+        pageNum = 1,
+        canvas = document.getElementById("pdf-canvas"),
+        ctx = canvas.getContext("2d");
 
-    function renderPage(num){
-        pdfdoc.getPage(num).then(function(page) {
-            var scale = 1025 / page.getViewport(1.0, 0).width;
-            var viewport = page.getViewport(scale, 0);
+    function renderPage(num) {
+        pdfdoc.getPage(num).then(function (page) {
+            var scale = 1025 / page.getViewport({scale: 1.0}).width;
+            var viewport = page.getViewport({scale: scale});
             canvas.height = viewport.height;
             canvas.width = viewport.width;
-            var renderContext = { canvasContext: ctx, viewport: viewport };
+            var renderContext = {canvasContext: ctx, viewport: viewport};
             page.render(renderContext);
 
             var next = $("#pdf-next"), prev = $("#pdf-prev");
             prev.removeClass("disabled");
             next.removeClass("disabled");
-            if (num === pdfdoc.numPages) { next.addClass("disabled"); }
-            if (num === 1) { prev.addClass("disabled"); }
+            if (num === pdfdoc.numPages) {
+                next.addClass("disabled");
+            }
+            if (num === 1) {
+                prev.addClass("disabled");
+            }
         });
     }
 
-    function goPrev(){
+    function goPrev() {
         if (pageNum <= 1) return;
         --pageNum;
         renderPage(pageNum);
     }
 
-    function goNext(){
+    function goNext() {
         if (pageNum >= pdfdoc.numPages) return;
         ++pageNum;
         renderPage(pageNum);
     }
 
-    pdfjsLib.getDocument("/media/{{ object.storage.pdfFn }}").then(function(_pdfdoc){
-        pdfdoc = _pdfdoc;
+    const loadTask = pdfjsLib.getDocument("/media/{{ object.storage.pdfFn }}");
+    (async () => {
+        pdfdoc = await loadTask.promise;
         renderPage(pageNum);
-    });
+    })();
 
-    function audio_play(object){
+    function audio_play(object) {
         var i = object.children("i");
 
         var id = object.children("audio").attr("id");
         var audio = document.getElementById(id);
-        audio.addEventListener("ended", function(){
+        audio.addEventListener("ended", function () {
             i.removeClass("fa-pause").addClass("fa-music");
         });
 
         if (audio.paused) {
             i.removeClass("fa-music").addClass("fa-pause");
             audio.play();
-        }
-        else {
+        } else {
             i.removeClass("fa-pause").addClass("fa-music");
             audio.pause();
             audio.currentTime = 0;
         }
     }
 
-    $(function(){
-        $(".audio-control").click(function(){ audio_play($(this)); });
-        $(document).keypress(function(event){ if (event.which === 112) audio_play($(".audio-control")); })
+    $(function () {
+        $(".audio-control").click(function () {
+            audio_play($(this));
+        });
+        $(document).keypress(function (event) {
+            if (event.which === 112) audio_play($(".audio-control"));
+        })
     });
 
-    $(document).keyup(function(event){
+    $(document).keyup(function (event) {
         if (event.keyCode === 37) goPrev();
         if (event.keyCode === 39) goNext();
     });

@@ -3,7 +3,7 @@ package sb.lilies;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface Music extends Comparable {
+public interface Music extends Comparable<Music> {
 
     int id();
 

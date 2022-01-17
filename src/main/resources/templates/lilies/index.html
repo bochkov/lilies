@@ -1,34 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <title>{% block title %}{% endblock %}Lilies on Lilypond</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
     <link rel="icon" type="image/png" href="/static/favicon.png"/>
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar fixed-top navbar-light bg-light">
     <div class="container">
+        <a class="navbar-brand" href="/">Lilies on Lilypond</a>
+        <form class="d-flex" role="search" action="/search/">
+            <input class="form-control me-2" type="text" placeholder="По нотному архиву" name="query"
+                   value="{{ query }}"/>
+        </form>
 
-        <div class="navbar-header">
-            <a class="navbar-brand" href="/">Lilies on Lilypond</a>
-        </div>
-
-        <div class="navbar-right">
-            <form class="navbar-form navbar-left" role="search" action="/search/">
-                <div class="form-group">
-                    <input class="form-control" type="text" placeholder="По нотному архиву" name="query" value="{{ query }}" />
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                </div>
-            </form>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="{% block a_about %}{% endblock %}"><a href="/about/">О сервисе</a> </li>
-            </ul>
-        </div>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link {% block a_about %}{% endblock %}" href="/about/">О сервисе</a>
+            </li>
+        </ul>
     </div>
 </nav>
 
@@ -36,10 +30,10 @@
     {% block header %}{% endblock %}
 
     {% block content %}
-    <div>
-        <div class="col-md-3">
-            <img src="/static/img/logo.png" class="logo">
-            <h4>Инструмент</h4>
+    <div class="row">
+        <div class="col-3">
+            <img alt="logo" src="/static/img/logo.png" class="logo">
+            <h3>Инструмент</h3>
             {% for i in instruments %}
             <div class="checkbox">
                 <label>
@@ -48,7 +42,7 @@
             </div>
             {% endfor %}
 
-            <h4>Сложность</h4>
+            <h3>Сложность</h3>
             {% for d in difficulties %}
             <div class="checkbox">
                 <label>
@@ -58,8 +52,8 @@
             </div>
             {% endfor %}
         </div>
-        <div class="col-md-8" id="content">
-            <img id="preloader" src="/static/img/preloader2.gif" class="img-responsive center-block" />
+        <div class="col-8" id="content">
+            <img alt="preloader" id="preloader" src="/static/img/preloader2.gif" class="img-responsive center-block"/>
         </div>
     </div>
     {% endblock %}
@@ -67,52 +61,58 @@
 
 <footer class="container">
     <hr/>
-    <div class="col-md-4">
-        <ul class="list-unstyled">
-            <li><a href="/about/">О сервисе</a></li>
-        </ul>
-    </div>
-    <div class="col-md-4"></div>
-    <div class="col-md-4 text-right">
-        Сергей Бочков,
-        <script>
-            var year = new Date().getFullYear();
-            if (year > 2015) document.write("2015&ndash;" + year);
-            else document.write("2015");
-        </script>
-        <br/>
-        <a href="mailto:bochkov.sa@gmail.com">bochkov.sa@gmail.com</a>
+    <div class="row">
+        <div class="col-4">
+            <ul class="list-unstyled">
+                <li><a href="/about/">О сервисе</a></li>
+            </ul>
+        </div>
+        <div class="col-4"></div>
+        <div class="col-4 text-end">
+            Сергей Бочков,
+            <script>
+                var year = new Date().getFullYear();
+                if (year > 2015) document.write("2015&ndash;" + year);
+                else document.write("2015");
+            </script>
+            <br/>
+            <a href="mailto:bochkov.sa@gmail.com">bochkov.sa@gmail.com</a>
+        </div>
     </div>
 </footer>
 
-<script src="/static/js/jquery-3.2.1.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% block custom_js %}
 <script>
-    function load(){
+    function load() {
         $("#preloader").show();
-        var instruments = [], difficulties = [];
-        $(".instruments").each(function(index){
+        let instruments = [], difficulties = [];
+        $(".instruments").each(function (index) {
             if ($(this).is(":checked")) instruments.push($(this).attr("value"));
             else delete instruments[index];
         });
-        $(".difficulties").each(function(index){
+        $(".difficulties").each(function (index) {
             if ($(this).is(":checked")) difficulties.push($(this).attr("value"));
             else delete difficulties[index];
         });
         $.post("/a/music/",
-                {'difficulties[]':difficulties, 'instruments[]':instruments},
-                function(data){
-                    $("#preloader").hide();
-                    $("#content").html(data); });
+            {'difficulties[]': difficulties, 'instruments[]': instruments},
+            function (data) {
+                $("#preloader").hide();
+                $("#content").html(data);
+            });
     }
-    $(function(){
-        $("input").click(function(){ load(); });
+
+    $(function () {
+        $("input").click(function () {
+            load();
+        });
         load();
     });
 </script>
 {% endblock %}
 
-<!-- Yandex.Metrika counter -->
+<!-- Yandex.Metrika counter --
 <script type="text/javascript">
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function() {
@@ -141,7 +141,7 @@
     })(document, window, "yandex_metrika_callbacks");
 </script>
 <noscript><div><img src="https://mc.yandex.ru/watch/44549657?ut=noindex" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
-<!-- /Yandex.Metrika counter -->
+-- /Yandex.Metrika counter -->
 
 </body>
 </html>

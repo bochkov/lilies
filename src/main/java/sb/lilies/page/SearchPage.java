@@ -1,23 +1,20 @@
 package sb.lilies.page;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import ratpack.handling.Context;
-import sb.lilies.PgMusics;
-
-import javax.sql.DataSource;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
+import javax.sql.DataSource;
 
+import com.mitchellbosecke.pebble.PebbleEngine;
+import lombok.RequiredArgsConstructor;
+import ratpack.handling.Context;
+import sb.lilies.PgMusics;
+
+@RequiredArgsConstructor
 public final class SearchPage implements Page {
 
     private final DataSource ds;
     private final PebbleEngine pebble;
-
-    public SearchPage(DataSource ds, PebbleEngine pebble) {
-        this.ds = ds;
-        this.pebble = pebble;
-    }
 
     @Override
     public void handle(Context ctx) throws Exception {

@@ -1,23 +1,21 @@
 package sb.lilies;
 
-import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.SingleOutcome;
-
-import javax.sql.DataSource;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import javax.sql.DataSource;
 
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
+import org.apache.commons.io.FileUtils;
+
+@RequiredArgsConstructor
 public final class PgStorage implements Storage {
 
     private final DataSource ds;
     private final int id;
-
-    public PgStorage(DataSource ds, int id) {
-        this.ds = ds;
-        this.id = id;
-    }
 
     @Override
     public String srcFn() throws SQLException {
@@ -32,12 +30,11 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasSrc() throws IOException, SQLException {
         File outFile = new File("media", srcFn());
         if (!outFile.exists()) {
-            outFile.getParentFile().mkdirs();
+            FileUtils.forceMkdirParent(outFile);
             try (FileOutputStream out = new FileOutputStream(outFile)) {
                 out.write(src());
             }
@@ -58,12 +55,11 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasPdf() throws SQLException, IOException {
         File outFile = new File("media", pdfFn());
         if (!outFile.exists()) {
-            outFile.getParentFile().mkdirs();
+            FileUtils.forceMkdirParent(outFile);
             try (FileOutputStream out = new FileOutputStream(outFile)) {
                 out.write(pdf());
             }
@@ -84,12 +80,11 @@ public final class PgStorage implements Storage {
                 .select(new PgOidOutcome());
     }
 
-    @SuppressWarnings("ResultOfMethodCallIgnored")
     @Override
     public boolean hasMp3() throws SQLException, IOException {
         File outFile = new File("media", mp3Fn());
         if (!outFile.exists()) {
-            outFile.getParentFile().mkdirs();
+            FileUtils.forceMkdirParent(outFile);
             try (FileOutputStream out = new FileOutputStream(outFile)) {
                 out.write(mp3());
             }
@@ -100,8 +95,8 @@ public final class PgStorage implements Storage {
     @Override
     public String filename() throws SQLException {
         return new JdbcSession(ds)
-                        .sql("SELECT filename FROM storage WHERE storage_id = ?")
-                        .set(id)
-                        .select(new SingleOutcome<>(String.class));
+                .sql("SELECT filename FROM storage WHERE storage_id = ?")
+                .set(id)
+                .select(new SingleOutcome<>(String.class));
     }
 }

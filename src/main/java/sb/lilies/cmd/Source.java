@@ -1,6 +1,7 @@
 package sb.lilies.cmd;
 
 import java.io.File;
+import java.io.IOException;
 
 public interface Source {
 
@@ -8,8 +9,8 @@ public interface Source {
 
     File ly();
 
-    File pdf() throws Exception;
+    File pdf() throws IOException;
 
-    File mp3() throws Exception;
+    File mp3() throws IOException;
 
 }

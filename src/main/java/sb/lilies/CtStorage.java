@@ -3,16 +3,13 @@ package sb.lilies;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class CtStorage implements Storage {
 
     private final Storage origin;
     private final String filename;
-
-    public CtStorage(Storage origin, String filename) {
-        this.origin = origin;
-        this.filename = filename;
-    }
-
 
     @Override
     public String filename() {

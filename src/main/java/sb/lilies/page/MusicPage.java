@@ -1,6 +1,8 @@
 package sb.lilies.page;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ratpack.exec.Promise;
 import ratpack.form.Form;
 import ratpack.handling.Context;
@@ -14,15 +16,12 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
+@RequiredArgsConstructor
 public final class MusicPage implements Handler {
 
     private final DataSource ds;
     private final PebbleEngine pebble;
-
-    public MusicPage(DataSource ds, PebbleEngine pebble) {
-        this.ds = ds;
-        this.pebble = pebble;
-    }
 
     @Override
     public void handle(Context context) {

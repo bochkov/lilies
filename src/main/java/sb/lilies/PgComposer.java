@@ -1,20 +1,17 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class PgComposer implements Author {
 
-    private final int id;
     private final DataSource ds;
-
-    public PgComposer(DataSource ds, int id) {
-        this.ds = ds;
-        this.id = id;
-    }
+    private final int id;
 
     @Override
     public String name() throws SQLException {

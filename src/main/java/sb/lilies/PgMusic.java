@@ -1,21 +1,18 @@
 package sb.lilies;
 
-import com.jcabi.jdbc.JdbcSession;
-import com.jcabi.jdbc.SingleOutcome;
-
-import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
+import javax.sql.DataSource;
 
+import com.jcabi.jdbc.JdbcSession;
+import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class PgMusic implements Music {
 
     private final DataSource ds;
     private final int id;
-
-    public PgMusic(DataSource ds, int id) {
-        this.ds = ds;
-        this.id = id;
-    }
 
     @Override
     public int id() {
@@ -87,14 +84,11 @@ public final class PgMusic implements Music {
     }
 
     @Override
-    public int compareTo(Object o) {
-        if (o instanceof Music) {
-            try {
-                return this.name().compareTo(((Music) o).name());
-            } catch (SQLException e) {
-                return 0;
-            }
+    public int compareTo(Music o) {
+        try {
+            return this.name().compareTo(o.name());
+        } catch (SQLException e) {
+            return 0;
         }
-        return 0;
     }
 }

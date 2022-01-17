@@ -1,28 +1,30 @@
 package sb.lilies.pebble;
 
-import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.extension.NodeVisitor;
-import com.mitchellbosecke.pebble.node.AbstractRenderableNode;
-import com.mitchellbosecke.pebble.node.expression.*;
-import com.mitchellbosecke.pebble.template.EvaluationContext;
-import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
-
+import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.mitchellbosecke.pebble.error.PebbleException;
+import com.mitchellbosecke.pebble.extension.NodeVisitor;
+import com.mitchellbosecke.pebble.node.AbstractRenderableNode;
+import com.mitchellbosecke.pebble.node.expression.*;
+import com.mitchellbosecke.pebble.template.EvaluationContextImpl;
+import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+import lombok.RequiredArgsConstructor;
+
 public final class RegroupNode extends AbstractRenderableNode {
 
-    private final Expression source;
+    private final Expression<?> source;
     private final String field;
     private final List<FilterInvocationExpression> filters;
     private final String outName;
     private final String filename;
     private final int lineNumber;
 
-    public RegroupNode(Expression source, String field, List<FilterInvocationExpression> filters,
+    public RegroupNode(Expression<?> source, String field, List<FilterInvocationExpression> filters,
                        String outName, String filename, int lineNumber) {
         this.source = source;
         this.field = field;
@@ -33,10 +35,10 @@ public final class RegroupNode extends AbstractRenderableNode {
     }
 
     @Override
-    public void render(PebbleTemplateImpl tmpl, Writer writer, EvaluationContext ctx) throws PebbleException {
+    public void render(PebbleTemplateImpl tmpl, Writer writer, EvaluationContextImpl ctx) throws IOException {
         Map<String, List<Object>> map = new TreeMap<>();
 
-        List list = (List) this.source.evaluate(tmpl, ctx);
+        List<?> list = (List<?>) this.source.evaluate(tmpl, ctx);
         for (Object object : list) {
             map.computeIfAbsent(
                     new FilteredExpression(filters,
@@ -54,20 +56,17 @@ public final class RegroupNode extends AbstractRenderableNode {
 
     @Override
     public void accept(NodeVisitor nodeVisitor) {
+        //
     }
 
-    private class ObjectExpression implements Expression {
+    @RequiredArgsConstructor
+    private static final class ObjectExpression implements Expression<Object> {
 
         private final Object object;
         private final int lineNumber;
 
-        public ObjectExpression(Object object, int lineNumber) {
-            this.object = object;
-            this.lineNumber = lineNumber;
-        }
-
         @Override
-        public Object evaluate(PebbleTemplateImpl self, EvaluationContext context) {
+        public Object evaluate(PebbleTemplateImpl self, EvaluationContextImpl context) {
             return object;
         }
 
@@ -78,22 +77,19 @@ public final class RegroupNode extends AbstractRenderableNode {
 
         @Override
         public void accept(NodeVisitor visitor) {
+            //
         }
     }
 
-    private class FilteredExpression implements Expression {
+    @RequiredArgsConstructor
+    private static final class FilteredExpression implements Expression<Object> {
 
-        private final Expression origin;
         private final List<FilterInvocationExpression> filters;
-
-        public FilteredExpression(List<FilterInvocationExpression> filters, Expression origin) {
-            this.origin = origin;
-            this.filters = filters;
-        }
+        private final Expression<Object> origin;
 
         @Override
-        public Object evaluate(PebbleTemplateImpl self, EvaluationContext context) throws PebbleException {
-            Expression last = origin;
+        public Object evaluate(PebbleTemplateImpl self, EvaluationContextImpl context) throws PebbleException {
+            Expression<?> last = origin;
             for (FilterInvocationExpression filter : filters) {
                 FilterExpression fexp = new FilterExpression();
                 fexp.setRight(filter);
@@ -110,7 +106,7 @@ public final class RegroupNode extends AbstractRenderableNode {
 
         @Override
         public void accept(NodeVisitor visitor) {
-
+            //
         }
     }
 }

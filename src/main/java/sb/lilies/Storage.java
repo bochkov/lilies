@@ -3,7 +3,6 @@ package sb.lilies;
 import java.io.IOException;
 import java.sql.SQLException;
 
-@SuppressWarnings("unused")
 public interface Storage {
 
     String filename() throws SQLException;

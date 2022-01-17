@@ -3,17 +3,15 @@ package sb.lilies;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+@RequiredArgsConstructor
 public final class PgInstruments implements Instruments {
 
     private final DataSource ds;
-
-    public PgInstruments(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public long count() throws SQLException {

@@ -1,6 +1,7 @@
 package sb.lilies.cmd;
 
 import java.io.File;
+import java.io.IOException;
 
 public final class Src implements Source {
 
@@ -16,7 +17,7 @@ public final class Src implements Source {
     public String filename() {
         return ly.getName()
                 .substring(0, ly.getName().lastIndexOf("."))
-                .replaceAll("'", "");
+                .replace("'", "");
     }
 
     @Override
@@ -25,12 +26,12 @@ public final class Src implements Source {
     }
 
     @Override
-    public File pdf() throws Exception {
+    public File pdf() throws IOException {
         return lilypond.pdf();
     }
 
     @Override
-    public File mp3() throws Exception {
+    public File mp3() throws IOException {
         return new Lame(new Timidity(lilypond)).mp3();
     }
 }

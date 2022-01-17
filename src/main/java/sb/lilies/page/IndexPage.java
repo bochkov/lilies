@@ -1,24 +1,21 @@
 package sb.lilies.page;
 
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import javax.sql.DataSource;
+
 import com.mitchellbosecke.pebble.PebbleEngine;
+import lombok.RequiredArgsConstructor;
 import ratpack.handling.Context;
 import sb.lilies.CtDifficulties;
 import sb.lilies.CtInstruments;
 
-import javax.sql.DataSource;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-
+@RequiredArgsConstructor
 public final class IndexPage implements Page {
 
     private final DataSource ds;
     private final PebbleEngine pebble;
-
-    public IndexPage(DataSource ds, PebbleEngine pebble) {
-        this.ds = ds;
-        this.pebble = pebble;
-    }
 
     @Override
     public void handle(Context ctx) throws Exception {

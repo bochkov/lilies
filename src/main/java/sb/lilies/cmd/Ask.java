@@ -1,20 +1,18 @@
 package sb.lilies.cmd;
 
-import javax.sql.DataSource;
 import java.util.Scanner;
+import javax.sql.DataSource;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class Ask implements Execute {
 
-    private final Execute origin;
     private final Metadata md;
     private final DataSource ds;
+    private final Execute origin;
 
-    public Ask(Metadata md, DataSource ds, Execute origin) {
-        this.origin = origin;
-        this.ds = ds;
-        this.md = md;
-    }
-
+    @SuppressWarnings("java:S106")
     @Override
     public void act() {
         Scanner scanner = new Scanner(System.in);

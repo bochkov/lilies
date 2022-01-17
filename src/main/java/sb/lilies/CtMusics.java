@@ -1,20 +1,18 @@
 package sb.lilies;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class CtMusics implements Musics {
 
     private final DataSource ds;
-
-    public CtMusics(DataSource ds) {
-        this.ds = ds;
-    }
 
     private Music musicMap(ResultSet rset) throws SQLException {
         return new CtMusic(

@@ -1,6 +1,7 @@
 package sb.lilies.page;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
+import lombok.RequiredArgsConstructor;
 import ratpack.handling.Context;
 import sb.lilies.CtMusics;
 
@@ -9,15 +10,11 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+@RequiredArgsConstructor
 public final class DetailPage implements Page {
 
     private final DataSource ds;
     private final PebbleEngine pebble;
-
-    public DetailPage(DataSource ds, PebbleEngine pebble) {
-        this.ds = ds;
-        this.pebble = pebble;
-    }
 
     @Override
     public void handle(Context ctx) throws Exception {

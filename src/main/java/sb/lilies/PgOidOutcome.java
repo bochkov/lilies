@@ -19,9 +19,9 @@ public final class PgOidOutcome implements Outcome<byte[]> {
         LargeObjectManager lobj = con.unwrap(PGConnection.class).getLargeObjectAPI();
         byte[] buf = new byte[0];
         if (rset.next()) {
-            LargeObject obj = lobj.open(rset.getLong(1), LargeObjectManager.READ);
-            buf = obj.read(obj.size());
-            obj.close();
+            try (LargeObject obj = lobj.open(rset.getLong(1), LargeObjectManager.READ)) {
+                buf = obj.read(obj.size());
+            }
         }
         con.commit();
         return buf;

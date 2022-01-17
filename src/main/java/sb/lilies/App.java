@@ -1,10 +1,17 @@
 package sb.lilies;
 
-import com.jcabi.log.Logger;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.Properties;
+import javax.sql.DataSource;
+
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ratpack.error.ClientErrorHandler;
 import ratpack.error.ServerErrorHandler;
 import ratpack.registry.Registry;
@@ -15,23 +22,13 @@ import sb.lilies.app.StaticFiles;
 import sb.lilies.page.*;
 import sb.lilies.pebble.LiliesExtension;
 
-import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
-import java.util.Properties;
-
+@Slf4j
+@RequiredArgsConstructor
 public final class App {
 
     private final DataSource ds;
     private final PebbleEngine pebble;
     private final boolean develop;
-
-    public App(DataSource ds, PebbleEngine pebble, boolean develop) {
-        this.ds = ds;
-        this.pebble = pebble;
-        this.develop = develop;
-    }
 
     public void start() throws Exception {
         RatpackServer.start(server -> server
@@ -73,14 +70,14 @@ public final class App {
     public static void main(String[] args) throws Exception {
         boolean develop = false;
         for (String arg : args) {
-            if (arg.equals("develop"))
+            if (arg.equals("develop")) {
                 develop = true;
+                break;
+            }
         }
         Properties props = new Properties();
-        try (InputStream fis = new FileInputStream(
-                new File(
-                        System.getProperty("user.dir"),
-                        "lilies.properties"))) {
+        File propFile = new File(System.getProperty("user.dir"), "lilies.properties");
+        try (InputStream fis = new FileInputStream(propFile)) {
             props.load(fis);
         }
         HikariConfig config = new HikariConfig();
@@ -92,7 +89,7 @@ public final class App {
                 .loader(new ClasspathLoader())
                 .extension(new LiliesExtension(new PgDifficulties(ds).maxValue()))
                 .build();
-        Logger.info(App.class, "Starting with params {develop=%s}", develop);
+        LOG.info("Starting with params: develop={}", develop);
         new App(ds, pebble, develop).start();
     }
 

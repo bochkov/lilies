@@ -1,19 +1,17 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class PgDifficulties implements Difficulties {
 
     private final DataSource ds;
-
-    public PgDifficulties(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public int maxValue() throws SQLException {
@@ -27,9 +25,6 @@ public final class PgDifficulties implements Difficulties {
     public Iterable<Difficulty> iterate() throws SQLException {
         return new JdbcSession(ds)
                 .sql("SELECT rating FROM difficulty")
-                .select(new ListOutcome<>(
-                                rset -> new PgDifficulty(ds, rset.getInt(1))
-                        )
-                );
+                .select(new ListOutcome<>(rset -> new PgDifficulty(ds, rset.getInt(1))));
     }
 }

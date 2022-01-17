@@ -1,15 +1,13 @@
 package sb.lilies.app;
 
+import lombok.RequiredArgsConstructor;
 import ratpack.file.FileHandlerSpec;
 import ratpack.func.Action;
 
+@RequiredArgsConstructor
 public final class MediaFiles implements Action<FileHandlerSpec> {
 
     private final boolean develop;
-
-    public MediaFiles(boolean develop) {
-        this.develop = develop;
-    }
 
     @Override
     public void execute(FileHandlerSpec fhs) {

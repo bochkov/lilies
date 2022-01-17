@@ -2,17 +2,15 @@ package sb.lilies;
 
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
+import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+@RequiredArgsConstructor
 public final class CtWriters implements Authors {
 
     private final DataSource ds;
-
-    public CtWriters(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public Iterable<Author> iterate() throws SQLException {

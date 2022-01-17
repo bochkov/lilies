@@ -1,5 +1,8 @@
 package sb.lilies.pebble;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.mitchellbosecke.pebble.error.ParserException;
 import com.mitchellbosecke.pebble.lexer.Token;
 import com.mitchellbosecke.pebble.lexer.TokenStream;
@@ -7,12 +10,9 @@ import com.mitchellbosecke.pebble.node.RenderableNode;
 import com.mitchellbosecke.pebble.node.expression.Expression;
 import com.mitchellbosecke.pebble.node.expression.FilterInvocationExpression;
 import com.mitchellbosecke.pebble.parser.Parser;
-import com.mitchellbosecke.pebble.tokenParser.AbstractTokenParser;
+import com.mitchellbosecke.pebble.tokenParser.TokenParser;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public final class RegroupParser extends AbstractTokenParser {
+public final class RegroupParser implements TokenParser {
 
     @Override
     public String getTag() {
@@ -23,7 +23,7 @@ public final class RegroupParser extends AbstractTokenParser {
     public RenderableNode parse(Token token, Parser parser) throws ParserException {
         TokenStream stream = parser.getStream();
         stream.next(); // skip the "regroup" token
-        Expression srcList = parser.getExpressionParser().parseExpression();
+        Expression<?> srcList = parser.getExpressionParser().parseExpression();
         stream.expect(Token.Type.NAME, "by");
         String field = parser.getExpressionParser().parseNewVariableName(); // String name
         stream.next(); // skip operator

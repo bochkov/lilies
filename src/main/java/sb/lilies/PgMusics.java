@@ -1,19 +1,17 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
-import javax.sql.DataSource;
-import java.sql.SQLException;
-
+@RequiredArgsConstructor
 public final class PgMusics implements Musics {
 
     private final DataSource ds;
-
-    public PgMusics(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public Iterable<Music> iterate() throws SQLException {

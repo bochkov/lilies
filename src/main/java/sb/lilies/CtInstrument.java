@@ -1,16 +1,13 @@
 package sb.lilies;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public final class CtInstrument implements Instrument {
 
     private final Instrument origin;
     private final String name;
     private final String slug;
-
-    public CtInstrument(Instrument origin, String name, String slug) {
-        this.origin = origin;
-        this.name = name;
-        this.slug = slug;
-    }
 
     @Override
     public Long id() {

@@ -3,17 +3,15 @@ package sb.lilies;
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import com.jcabi.jdbc.SingleOutcome;
+import lombok.RequiredArgsConstructor;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+@RequiredArgsConstructor
 public final class CtDifficulties implements Difficulties {
 
     private final DataSource ds;
-
-    public CtDifficulties(DataSource ds) {
-        this.ds = ds;
-    }
 
     @Override
     public int maxValue() throws SQLException {

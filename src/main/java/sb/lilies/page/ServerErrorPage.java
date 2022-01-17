@@ -1,20 +1,18 @@
 package sb.lilies.page;
 
-import com.mitchellbosecke.pebble.PebbleEngine;
-import ratpack.error.ServerErrorHandler;
-import ratpack.handling.Context;
-
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.mitchellbosecke.pebble.PebbleEngine;
+import lombok.RequiredArgsConstructor;
+import ratpack.error.ServerErrorHandler;
+import ratpack.handling.Context;
+
+@RequiredArgsConstructor
 public final class ServerErrorPage implements ServerErrorHandler {
 
     private final PebbleEngine pebble;
-
-    public ServerErrorPage(PebbleEngine pebble) {
-        this.pebble = pebble;
-    }
 
     @Override
     public void error(Context context, Throwable throwable) throws Exception {
