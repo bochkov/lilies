@@ -6,8 +6,8 @@ import java.util.Map;
 
 import com.mitchellbosecke.pebble.PebbleEngine;
 import lombok.RequiredArgsConstructor;
-import ratpack.error.ServerErrorHandler;
-import ratpack.handling.Context;
+import ratpack.core.error.ServerErrorHandler;
+import ratpack.core.handling.Context;
 
 @RequiredArgsConstructor
 public final class ServerErrorPage implements ServerErrorHandler {

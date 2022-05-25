@@ -1,7 +1,7 @@
 package sb.lilies.app;
 
 import lombok.RequiredArgsConstructor;
-import ratpack.file.FileHandlerSpec;
+import ratpack.core.file.FileHandlerSpec;
 import ratpack.func.Action;
 
 @RequiredArgsConstructor

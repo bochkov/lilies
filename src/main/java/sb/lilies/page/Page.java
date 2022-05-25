@@ -1,6 +1,6 @@
 package sb.lilies.page;
 
-import ratpack.handling.Handler;
+import ratpack.core.handling.Handler;
 
 public interface Page extends Handler {
 }

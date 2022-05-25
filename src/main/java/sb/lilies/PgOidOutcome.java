@@ -1,14 +1,14 @@
 package sb.lilies;
 
-import com.jcabi.jdbc.Outcome;
-import org.postgresql.PGConnection;
-import org.postgresql.largeobject.LargeObject;
-import org.postgresql.largeobject.LargeObjectManager;
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import com.jcabi.jdbc.Outcome;
+import org.postgresql.PGConnection;
+import org.postgresql.largeobject.LargeObject;
+import org.postgresql.largeobject.LargeObjectManager;
 
 public final class PgOidOutcome implements Outcome<byte[]> {
 

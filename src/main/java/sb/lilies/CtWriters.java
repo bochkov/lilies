@@ -1,11 +1,11 @@
 package sb.lilies;
 
+import java.sql.SQLException;
+import javax.sql.DataSource;
+
 import com.jcabi.jdbc.JdbcSession;
 import com.jcabi.jdbc.ListOutcome;
 import lombok.RequiredArgsConstructor;
-
-import javax.sql.DataSource;
-import java.sql.SQLException;
 
 @RequiredArgsConstructor
 public final class CtWriters implements Authors {
