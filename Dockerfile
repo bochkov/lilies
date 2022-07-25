@@ -1,13 +1,10 @@
 FROM eclipse-temurin:17-jre
 RUN apt-get update && apt-get install -y timidity lame wget
-VOLUME /tmp
-WORKDIR /tmp
-RUN wget https://lilypond.org/download/binaries/linux-64/lilypond-2.22.1-1.linux-64.sh && \
-    chmod +x lilypond-2.22.1-1.linux-64.sh && ./lilypond-2.22.1-1.linux-64.sh --batch && \
-    rm lilypond-2.22.1-1.linux-64.sh
-RUN rm -rf /var/lib/apt/lists/*
-ENV TZ=Asia/Yekaterinburg
 WORKDIR /opt
+RUN wget https://lilypond.org/download/binaries/linux-64/lilypond-2.22.2-1.linux-64.sh && \
+    chmod +x lilypond-2.22.2-1.linux-64.sh && ./lilypond-2.22.2-1.linux-64.sh --batch && \
+    rm lilypond-2.22.2-1.linux-64.sh
+ENV TZ=Asia/Yekaterinburg
 ADD build/libs/lilies-2.0-all.jar lilies.jar
 ADD add.sh .
 ADD database.sql .
