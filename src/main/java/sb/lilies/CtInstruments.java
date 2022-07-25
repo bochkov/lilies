@@ -26,12 +26,11 @@ public final class CtInstruments implements Instruments {
                 .sql("SELECT instrument_id, name, slug FROM instrument WHERE slug = ?")
                 .set(slug)
                 .select(new ListOutcome<>(
-                                (ListOutcome.Mapping<Instrument>) rset ->
-                                        new CtInstrument(
-                                                new PgInstrument(ds, rset.getLong(1)),
-                                                rset.getString(2),
-                                                rset.getString(3)
-                                        )
+                                rset -> new CtInstrument(
+                                        new PgInstrument(ds, rset.getLong(1)),
+                                        rset.getString(2),
+                                        rset.getString(3)
+                                )
                         )
                 ).get(0);
     }

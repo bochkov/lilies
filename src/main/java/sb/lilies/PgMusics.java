@@ -36,26 +36,25 @@ public final class PgMusics implements Musics {
         return new JdbcSession(ds)
                 .sql("SELECT music_id FROM music WHERE music_id = ?")
                 .set(id)
-                .select(
-                        new ListOutcome<>(
-                                (ListOutcome.Mapping<Music>) rset -> new PgMusic(ds, rset.getInt(1))
-                        )
-                ).get(0);
+                .select(new ListOutcome<>(rset -> new PgMusic(ds, rset.getInt(1))))
+                .get(0);
     }
 
     @Override
     public Iterable<Music> search(String token) throws SQLException {
         String tk = String.format("%%%s%%", token);
         return new JdbcSession(ds)
-                .sql("SELECT m.music_id FROM music m " +
-                        "LEFT JOIN music_composer mc on m.music_id = mc.music_id " +
-                        "LEFT JOIN music_writer mw on m.music_id = mw.music_id " +
-                        "LEFT JOIN author a on a.author_id = mc.composer_id or a.author_id = mw.writer_id " +
-                        "WHERE UPPER(m.name) LIKE UPPER(?) " +
-                        "OR UPPER(m.subname) LIKE UPPER(?) " +
-                        "OR UPPER(a.last_name) LIKE UPPER(?)")
-                .set(tk).set(tk).set(tk)
-                .select(new ListOutcome<>(
-                        rset -> new PgMusic(ds, rset.getInt(1))));
+                .sql("select * from music m " +
+                        "left join music_composer mc on m.music_id = mc.music_id " +
+                        "left join music_writer mw on m.music_id = mw.music_id " +
+                        "left join author a1 on mc.composer_id = a1.author_id " +
+                        "left join author a2 on mw.writer_id = a2.author_id " +
+                        " where upper(m.name) like upper(?) " +
+                        "    or upper(m.subname) like  upper(?) " +
+                        " or upper(a1.last_name) like upper(?) " +
+                        " or upper(a2.last_name) like upper(?) " +
+                        "order by 1")
+                .set(tk).set(tk).set(tk).set(tk)
+                .select(new ListOutcome<>(rset -> new PgMusic(ds, rset.getInt(1))));
     }
 }

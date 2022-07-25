@@ -26,7 +26,7 @@ public final class PgInstruments implements Instruments {
                 .sql("SELECT instrument_id FROM instrument WHERE slug = ?")
                 .set(slug)
                 .select(new ListOutcome<>(
-                        (ListOutcome.Mapping<Instrument>) rset -> new PgInstrument(ds, rset.getLong(1))))
+                        rset -> new PgInstrument(ds, rset.getLong(1))))
                 .get(0);
     }
 
