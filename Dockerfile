@@ -1,5 +1,8 @@
-FROM eclipse-temurin:17-jre
-RUN apt-get update && apt-get install -y timidity lame wget
+FROM ubuntu:latest
+RUN apt-get update && \
+    apt-get install -y timidity lame wget
+RUN curl -s "https://get.sdkman.io" | bash && \
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
 WORKDIR /opt
 RUN wget https://lilypond.org/download/binaries/linux-64/lilypond-2.22.2-1.linux-64.sh && \
     chmod +x lilypond-2.22.2-1.linux-64.sh && ./lilypond-2.22.2-1.linux-64.sh --batch && \
