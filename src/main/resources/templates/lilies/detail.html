@@ -1,4 +1,4 @@
-{% extends 'templates/lilies/index.html' %}
+{% extends 'index' %}
 
 {% block title %}{{ object.name }} - {% endblock %}
 
@@ -7,19 +7,19 @@
     <div class="row">
         <div class="col-2 text-end">
             <dl>
-                {% if object.composer.size > 0 %}
+                {% if object.composers.size > 0 %}
                 <dt>Композитор</dt>
-                <dd>{% for composer in object.composer %}{{ composer.name }}<br/>{% endfor %}</dd>
+                <dd>{% for composer in object.composers %}{{ composer.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
-                {% if object.writer.size > 0 %}
+                {% if object.writers.size > 0 %}
                 <dt>Слова</dt>
-                <dd>{% for writer in object.writer %}{{ writer.name }}<br/>{% endfor %}</dd>
+                <dd>{% for writer in object.writers %}{{ writer.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
-                {% if object.instrument.size > 0 %}
+                {% if object.instruments.size > 0 %}
                 <dt>Инструмент</dt>
-                <dd>{% for inst in object.instrument %}{{ inst.name }}<br/>{% endfor %}</dd>
+                <dd>{% for inst in object.instruments %}{{ inst.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
                 <dt>Сложность</dt>
@@ -55,9 +55,9 @@
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="/static/js/pdf.js"></script>
+<script type="text/javascript" src="/js/pdf.js"></script>
 <script type="text/javascript">
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/static/js/pdf.worker.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.js';
     var pdfdoc = null,
         pageNum = 1,
         canvas = document.getElementById("pdf-canvas"),

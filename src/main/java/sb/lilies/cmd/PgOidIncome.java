@@ -8,9 +8,6 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 
 import lombok.RequiredArgsConstructor;
-import org.postgresql.PGConnection;
-import org.postgresql.largeobject.LargeObject;
-import org.postgresql.largeobject.LargeObjectManager;
 
 @RequiredArgsConstructor
 public final class PgOidIncome {
@@ -21,22 +18,6 @@ public final class PgOidIncome {
     private final File file;
 
     public long id() throws SQLException, IOException {
-        try (Connection con = ds.getConnection()) {
-            con.setAutoCommit(false);
-            LargeObjectManager lom = con.unwrap(PGConnection.class).getLargeObjectAPI();
-            long oid = lom.createLO(LargeObjectManager.READWRITE);
-            try (LargeObject obj = lom.open(oid, LargeObjectManager.WRITE);
-                 FileInputStream fis = new FileInputStream(file)) {
-                int s;
-                while ((s = fis.read(buf)) > 0) {
-                    obj.write(buf, 0, s);
-                }
-                con.commit();
-                return oid;
-            } catch (SQLException ex) {
-                con.rollback();
-                throw ex;
-            }
-        }
+        return 0L;
     }
 }

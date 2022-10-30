@@ -20,7 +20,7 @@ import ratpack.exec.registry.Registry;
 import sb.lilies.app.MediaFiles;
 import sb.lilies.app.StaticFiles;
 import sb.lilies.page.*;
-import sb.lilies.pebble.LiliesExtension;
+import sb.lilies2.cfg.pebble.LiliesExtension;
 
 @Slf4j
 @RequiredArgsConstructor

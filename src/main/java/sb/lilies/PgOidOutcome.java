@@ -6,9 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import com.jcabi.jdbc.Outcome;
-import org.postgresql.PGConnection;
-import org.postgresql.largeobject.LargeObject;
-import org.postgresql.largeobject.LargeObjectManager;
+
 
 public final class PgOidOutcome implements Outcome<byte[]> {
 
@@ -16,13 +14,16 @@ public final class PgOidOutcome implements Outcome<byte[]> {
     public byte[] handle(ResultSet rset, Statement stmt) throws SQLException {
         Connection con = stmt.getConnection();
         con.setAutoCommit(false);
-        LargeObjectManager lobj = con.unwrap(PGConnection.class).getLargeObjectAPI();
         byte[] buf = new byte[0];
+        /*
+        LargeObjectManager lobj = con.unwrap(PGConnection.class).getLargeObjectAPI();
         if (rset.next()) {
             try (LargeObject obj = lobj.open(rset.getLong(1), LargeObjectManager.READ)) {
                 buf = obj.read(obj.size());
             }
         }
+
+         */
         con.commit();
         return buf;
     }

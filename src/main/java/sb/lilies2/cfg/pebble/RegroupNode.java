@@ -1,4 +1,4 @@
-package sb.lilies.pebble;
+package sb.lilies2.cfg.pebble;
 
 import java.io.IOException;
 import java.io.Writer;

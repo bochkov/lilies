@@ -1,35 +1,43 @@
 plugins {
     id "io.ratpack.ratpack-java" version '2.0.0-rc-1'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id 'java'
 }
 
 group = 'com.sergeybochkov'
-version = '2.0'
-
-apply plugin: 'java'
-
+version = '3.0'
 sourceCompatibility = JavaVersion.VERSION_17
 targetCompatibility = JavaVersion.VERSION_17
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories() {
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.postgresql:postgresql:42.3.6'
-    implementation 'com.zaxxer:HikariCP:5.0.1'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'io.pebbletemplates:pebble-spring-boot-starter:3.1.6'
+
+    compileOnly 'org.projectlombok:lombok'
+    runtimeOnly 'org.postgresql:postgresql'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
     implementation 'com.jcabi:jcabi-jdbc:0.17.7'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'ch.qos.logback:logback-classic:1.2.11'
     implementation 'commons-cli:commons-cli:1.5.0'
-    implementation 'io.pebbletemplates:pebble:3.1.5'
-
-    compileOnly 'org.projectlombok:lombok:1.18.24'
-    annotationProcessor 'org.projectlombok:lombok:1.18.24'
-
-    testCompileOnly 'org.projectlombok:lombok:1.18.24'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.24'
-
 }
 
-mainClassName = "sb.lilies.App"
+tasks.named('test') {
+    useJUnitPlatform()
+}

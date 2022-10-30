@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8"/>
     <title>{% block title %}{% endblock %}Lilies on Lilypond</title>
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css"/>
-    <link rel="stylesheet" type="text/css" href="/static/css/style.css"/>
-    <link rel="icon" type="image/png" href="/static/favicon.png"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
+    <link rel="icon" type="image/png" href="/favicon.png"/>
 </head>
 <body>
 
@@ -32,7 +32,7 @@
     {% block content %}
     <div class="row">
         <div class="col-3">
-            <img alt="logo" src="/static/img/logo.png" class="logo">
+            <img alt="logo" src="/img/logo.png" class="logo">
             <h3>Инструмент</h3>
             {% for i in instruments %}
             <div class="checkbox">
@@ -53,7 +53,7 @@
             {% endfor %}
         </div>
         <div class="col-8" id="content">
-            <img alt="preloader" id="preloader" src="/static/img/preloader2.gif" class="img-responsive center-block"/>
+            <img alt="preloader" id="preloader" src="/img/preloader2.gif" class="img-responsive center-block"/>
         </div>
     </div>
     {% endblock %}

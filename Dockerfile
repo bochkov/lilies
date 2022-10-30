@@ -1,5 +1,6 @@
 FROM ubuntu:latest
-RUN apt-get update && \
+RUN apt-get purge libappstream3 && \
+    apt-get update && \
     apt-get install -y timidity lame wget
 RUN curl -s "https://get.sdkman.io" | bash && \
     source "$HOME/.sdkman/bin/sdkman-init.sh"
