@@ -38,7 +38,6 @@ CREATE UNIQUE INDEX instrument_index
 CREATE TABLE storage
 (
     storage_id SERIAL PRIMARY KEY NOT NULL,
-    music_id   BIGINT REFERENCES music (music_id),
     filename   VARCHAR(255)       NOT NULL,
     src        OID,
     pdf        OID,
@@ -51,7 +50,8 @@ CREATE TABLE music
     music_id   SERIAL PRIMARY KEY NOT NULL,
     name       VARCHAR(255),
     subname    VARCHAR(255),
-    difficulty INTEGER REFERENCES difficulty (rating)
+    difficulty INTEGER REFERENCES difficulty (rating),
+    storage_id bigint references storage (storage_id)
 );
 
 CREATE TABLE music_composer

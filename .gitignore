@@ -6,6 +6,6 @@ media/
 logs/
 *.log
 target/
-application.properties
+lilies.properties
 *.retry
 out/

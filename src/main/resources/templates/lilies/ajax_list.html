@@ -8,7 +8,7 @@
         {% for obj in obj_list.value|sort %}
         <li>
             <a class="text-decoration-none" href="/sheet/{{obj.id}}/">
-                <small class="text-muted">{% for c in obj.composer %}{{ c.name }} {% endfor %}</small>
+                <small class="text-muted">{% for c in obj.composers %}{{ c.name }} {% endfor %}</small>
                 {{ obj.name }}
                 <small class="text-muted">{{ obj.subname }}</small>
             </a>
