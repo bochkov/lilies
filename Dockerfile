@@ -1,6 +1,5 @@
 FROM eclipse-temurin:17-jre
-RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 timidity lame && \
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends bzip2 timidity lame && \
     rm -rf /var/lib/apt/lists/*
 WORKDIR /opt
 RUN wget https://lilypond.org/download/binaries/linux-64/lilypond-2.22.2-1.linux-64.sh && \
