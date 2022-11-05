@@ -1,5 +1,8 @@
-FROM eclipse-temurin:17-jre
-ENV TZ=Asia/Yekaterinburg
+FROM eclipse-temurin:17-jre-alpine
+ENV TZ Asia/Yekaterinburg
+ENV LANG ru_RU.UTF-8
+ENV LANGUAGE ru_RU:en
+ENV LC_ALL ru_RU.UTF-8
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 WORKDIR /opt
 ADD build/libs/lilies-3.0.jar lilies.jar
