@@ -1,6 +1,6 @@
 package sb.lilies.cfg;
 
-import com.mitchellbosecke.pebble.extension.Extension;
+import io.pebbletemplates.pebble.extension.Extension;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import sb.lilies.cfg.pebble.LiliesExtension;

@@ -14,7 +14,7 @@ public final class Api {
 
     private final Musics musics;
 
-    @RequestMapping("/sheet/{id}")
+    @RequestMapping("/sheet/{id}/")
     public MusicView sheet(@PathVariable Long id) {
         return musics.get(id);
     }

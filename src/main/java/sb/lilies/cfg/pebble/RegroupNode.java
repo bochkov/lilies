@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.mitchellbosecke.pebble.error.PebbleException;
-import com.mitchellbosecke.pebble.extension.NodeVisitor;
-import com.mitchellbosecke.pebble.node.AbstractRenderableNode;
-import com.mitchellbosecke.pebble.node.expression.*;
-import com.mitchellbosecke.pebble.template.EvaluationContextImpl;
-import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
+import io.pebbletemplates.pebble.error.PebbleException;
+import io.pebbletemplates.pebble.extension.NodeVisitor;
+import io.pebbletemplates.pebble.node.AbstractRenderableNode;
+import io.pebbletemplates.pebble.node.expression.*;
+import io.pebbletemplates.pebble.template.EvaluationContextImpl;
+import io.pebbletemplates.pebble.template.PebbleTemplateImpl;
 import lombok.RequiredArgsConstructor;
 
 public final class RegroupNode extends AbstractRenderableNode {

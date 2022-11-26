@@ -1,8 +1,8 @@
 package sb.lilies.model;
 
 import java.util.Set;
-import javax.persistence.*;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data

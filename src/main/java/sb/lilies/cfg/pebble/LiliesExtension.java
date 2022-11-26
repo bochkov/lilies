@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.mitchellbosecke.pebble.extension.AbstractExtension;
-import com.mitchellbosecke.pebble.extension.Filter;
-import com.mitchellbosecke.pebble.tokenParser.TokenParser;
+import io.pebbletemplates.pebble.extension.AbstractExtension;
+import io.pebbletemplates.pebble.extension.Filter;
+import io.pebbletemplates.pebble.tokenParser.TokenParser;
 
 public final class LiliesExtension extends AbstractExtension {
 

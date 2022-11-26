@@ -18,7 +18,7 @@ public final class Web {
 
     private final Musics musics;
 
-    @GetMapping("/about")
+    @GetMapping("/about/")
     public String about(Model model) {
         model.addAttribute("sheets", musics.totalSheets());
         model.addAttribute("instruments", musics.totalInstruments());
@@ -32,7 +32,7 @@ public final class Web {
         return "index";
     }
 
-    @PostMapping("/a/music")
+    @PostMapping("/a/music/")
     public String allSheets(@RequestParam(required = false, name = "difficulties[]", defaultValue = "") List<String> difficulties,
                             @RequestParam(required = false, name = "instruments[]", defaultValue = "") List<String> instruments,
                             Model model) {
@@ -41,13 +41,13 @@ public final class Web {
         return "ajax_list";
     }
 
-    @GetMapping("/sheet/{id}")
+    @GetMapping("/sheet/{id}/")
     public String oneSheet(@PathVariable Long id, Model model) {
         model.addAttribute("object", musics.get(id));
         return "detail";
     }
 
-    @GetMapping("/search")
+    @GetMapping("/search/")
     public String search(@RequestParam String query, Model model) {
         model.addAttribute("query", query);
         model.addAttribute("object_list", musics.search(query));
