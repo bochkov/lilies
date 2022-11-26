@@ -40,3 +40,7 @@ tasks.named('test') {
 tasks.named('bootRun') {
     args += ['--spring.config.name=lilies']
 }
+
+tasks.named('bootJar') {
+    archiveFileName = 'lilies.jar'
+}
