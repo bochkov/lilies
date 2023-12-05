@@ -10,8 +10,9 @@ import lombok.Data;
 public final class Storage {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "storage_id_seq")
     @Column(name = "storage_id")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "storage_id_gen")
+    @SequenceGenerator(name = "storage_id_gen", sequenceName = "storage_id_seq", allocationSize = 1)
     private Long id;
 
     private String filename;

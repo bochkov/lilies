@@ -12,7 +12,8 @@ public final class Music {
 
     @Id
     @Column(name = "music_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "music_id_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "music_id_gen")
+    @SequenceGenerator(name = "music_id_gen", sequenceName = "music_id_seq", allocationSize = 1)
     private Long id;
 
     private String name;
