@@ -48,16 +48,18 @@
 
 <nav>
     <ul class="pagination justify-content-center">
-        <li class="page-item" id="pdf-prev"><a class="page-link" href="#" onclick="goPrev()"><i class="fas fa-angle-left"></i> Предыдущая страница</a></li>
-        <li class="page-item" id="pdf-next"><a class="page-link" href="#" onclick="goNext()">Следующая страница <i class="fas fa-angle-right"></i></a></li>
+        <li class="page-item" id="pdf-prev"><a class="page-link" href="#" onclick="goPrev()"><i
+                class="fas fa-angle-left"></i> Предыдущая страница</a></li>
+        <li class="page-item" id="pdf-next"><a class="page-link" href="#" onclick="goNext()">Следующая страница <i
+                class="fas fa-angle-right"></i></a></li>
     </ul>
 </nav>
 {% endblock %}
 
 {% block custom_js %}
-<script type="text/javascript" src="/js/pdf.js"></script>
-<script type="text/javascript">
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '/js/pdf.worker.js';
+<script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.0.375/pdf.min.mjs"></script>
+<script type="module">
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/5.0.375/pdf.worker.min.mjs';
     var pdfdoc = null,
         pageNum = 1,
         canvas = document.getElementById("pdf-canvas"),
