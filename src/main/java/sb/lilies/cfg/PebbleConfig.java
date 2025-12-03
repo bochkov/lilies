@@ -10,6 +10,6 @@ public class PebbleConfig {
 
     @Bean
     public Extension liliesExtension() {
-        return new LiliesExtension(5);
+        return new LiliesExtension();
     }
 }

@@ -1,20 +1,20 @@
 package sb.lilies.cfg.pebble;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import io.pebbletemplates.pebble.error.PebbleException;
 import io.pebbletemplates.pebble.extension.Filter;
 import io.pebbletemplates.pebble.template.EvaluationContext;
 import io.pebbletemplates.pebble.template.PebbleTemplate;
 import lombok.RequiredArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 @RequiredArgsConstructor
 public final class StarsFilter implements Filter {
 
-    private static final String EMPTY_STAR = "<i class=\"fas fa-star-o\"></i>";
-    private static final String FILL_STAR = "<i class=\"fas fa-star\"></i>";
+    private static final String EMPTY_STAR = "<i class=\"fa-regular fa-star\"></i>";
+    private static final String FILL_STAR = "<i class=\"fa-solid fa-star\"></i>";
 
     private final int maxSize;
 

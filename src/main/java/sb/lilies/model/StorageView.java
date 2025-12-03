@@ -1,10 +1,8 @@
 package sb.lilies.model;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import sb.lilies.service.Storages;
 
-import org.apache.commons.io.FileUtils;
+import java.io.File;
 
 public interface StorageView {
 
@@ -22,45 +20,27 @@ public interface StorageView {
         return String.format("src/%s.ly", getFilename());
     }
 
-    default boolean hasSrc() throws IOException {
-        File outFile = new File("media", srcFn());
-        if (!outFile.exists()) {
-            FileUtils.forceMkdirParent(outFile);
-            try (FileOutputStream out = new FileOutputStream(outFile)) {
-                out.write(getSrc());
-            }
-        }
-        return outFile.exists();
+    default boolean hasSrc() {
+        File src = new File("media", srcFn());
+        return src.exists() || Storages.ensureBytes(src, this::getSrc);
     }
 
     default String pdfFn() {
         return String.format("pdf/%s.pdf", getFilename());
     }
 
-    default boolean hasPdf() throws IOException {
-        File outFile = new File("media", pdfFn());
-        if (!outFile.exists()) {
-            FileUtils.forceMkdirParent(outFile);
-            try (FileOutputStream out = new FileOutputStream(outFile)) {
-                out.write(getPdf());
-            }
-        }
-        return outFile.exists();
+    default boolean hasPdf() {
+        File pdf = new File("media", pdfFn());
+        return pdf.exists() || Storages.ensureBytes(pdf, this::getPdf);
     }
 
     default String mp3Fn() {
         return String.format("mp3/%s.mp3", getFilename());
     }
 
-    default boolean hasMp3() throws IOException {
-        File outFile = new File("media", mp3Fn());
-        if (!outFile.exists()) {
-            FileUtils.forceMkdirParent(outFile);
-            try (FileOutputStream out = new FileOutputStream(outFile)) {
-                out.write(getMp3());
-            }
-        }
-        return outFile.exists();
+    default boolean hasMp3() {
+        File mp3 = new File("media", mp3Fn());
+        return mp3.exists() || Storages.ensureBytes(mp3, this::getMp3);
     }
 
 }

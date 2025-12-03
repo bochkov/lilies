@@ -1,0 +1,22 @@
+spring:
+  application:
+    name: lilies
+  config:
+    import: file:lilies.properties
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${db.url}
+    username: ${db.user}
+    password: ${db.pass}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: true
+    show-sql: false
+  sql:
+    init:
+      mode: never
+
+pebble:
+  prefix: /templates/lilies
+  suffix: .html

@@ -1,7 +1,5 @@
 package sb.lilies.web;
 
-import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sb.lilies.model.MusicView;
 import sb.lilies.service.Musics;
+
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -33,7 +33,7 @@ public final class Web {
     }
 
     @PostMapping("/a/music/")
-    public String allSheets(@RequestParam(required = false, name = "difficulties[]", defaultValue = "") List<String> difficulties,
+    public String allSheets(@RequestParam(required = false, name = "difficulties[]", defaultValue = "") List<Integer> difficulties,
                             @RequestParam(required = false, name = "instruments[]", defaultValue = "") List<String> instruments,
                             Model model) {
         List<MusicView> list = musics.filter(difficulties, instruments);

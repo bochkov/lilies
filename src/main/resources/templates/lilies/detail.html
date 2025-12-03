@@ -1,34 +1,34 @@
 {% extends 'index' %}
 
-{% block title %}{{ object.name }} - {% endblock %}
+{% block title %}{{ object.music.name }} - {% endblock %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="row">
         <div class="col-2 text-end">
             <dl>
-                {% if object.composers.size > 0 %}
+                {% if object.music.composers.size > 0 %}
                 <dt>Композитор</dt>
-                <dd>{% for composer in object.composers %}{{ composer.name }}<br/>{% endfor %}</dd>
+                <dd>{% for composer in object.music.composers %}{{ composer.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
-                {% if object.writers.size > 0 %}
+                {% if object.music.writers.size > 0 %}
                 <dt>Слова</dt>
-                <dd>{% for writer in object.writers %}{{ writer.name }}<br/>{% endfor %}</dd>
+                <dd>{% for writer in object.music.writers %}{{ writer.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
-                {% if object.instruments.size > 0 %}
+                {% if object.music.instruments.size > 0 %}
                 <dt>Инструмент</dt>
-                <dd>{% for inst in object.instruments %}{{ inst.name }}<br/>{% endfor %}</dd>
+                <dd>{% for inst in object.music.instruments %}{{ inst.name }}<br/>{% endfor %}</dd>
                 {% endif %}
 
                 <dt>Сложность</dt>
-                <dd>{{ object.difficulty.rating|stars|raw }}</dd>
+                <dd>{{ object.music.difficulty.rating|stars|raw }}</dd>
             </dl>
             <div class="btn-group-vertical" role="group">
                 {% if object.storage.hasMp3 %}
                 <a class="btn btn-outline-dark audio-control">
-                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.id }}" type="audio/mpeg"
+                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.music.id }}" type="audio/mpeg"
                            preload="none"></audio>
                     <i class="fas fa-music"></i> Слушать</a>
                 {% endif %}

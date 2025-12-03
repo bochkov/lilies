@@ -1,9 +1,9 @@
 package sb.lilies.model;
 
-import java.util.Set;
-
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Set;
 
 @Data
 @Entity
@@ -16,6 +16,7 @@ public final class Music {
     @SequenceGenerator(name = "music_id_gen", sequenceName = "music_id_seq", allocationSize = 1)
     private Long id;
 
+    @Column(nullable = false)
     private String name;
 
     private String subname;
