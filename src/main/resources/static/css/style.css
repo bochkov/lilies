@@ -3,9 +3,8 @@ body {
     padding-bottom: 90px;
 }
 
-.logo {
-    padding-top: 20px;
-    padding-bottom: 40px;
+.checkboxes {
+    font-size: 0.9em;
 }
 
 .icon-success {

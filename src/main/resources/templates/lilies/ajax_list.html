@@ -3,7 +3,7 @@
 
 <div>
     {% for obj_list in musics %}
-    <h3>{{ obj_list.key }}</h3>
+    <h3 class="display-6">{{ obj_list.key }}</h3>
     <ul class="list-unstyled">
         {% for obj in obj_list.value|sort %}
         <li>
