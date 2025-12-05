@@ -2,6 +2,7 @@ package sb.lilies.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.hibernate.annotations.NaturalId;
 
 @Data
 @Entity
@@ -16,7 +17,7 @@ public final class Instrument {
 
     private String name;
 
-    @Column(unique = true)
+    @NaturalId
     private String slug;
 
 }

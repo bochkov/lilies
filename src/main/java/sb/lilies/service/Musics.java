@@ -1,5 +1,6 @@
 package sb.lilies.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -53,8 +54,12 @@ public class Musics {
 
     public SheetView get(Long id) {
         MusicView music = musicRepo.fetch(id);
+        if (music == null)
+            throw new EntityNotFoundException("Sheet with id=" + id + " not found");
         StorageView storage = storageRepo.fetch(music.getStorageId());
-        return new SheetView(music, storage);
+        return storage == null
+                ? new SheetView(music, null)
+                : new SheetView(music, new StorageLink(storage));
     }
 
     public List<MusicView> search(String query) {

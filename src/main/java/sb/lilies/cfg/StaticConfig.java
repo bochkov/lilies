@@ -6,8 +6,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class StaticConfig implements WebMvcConfigurer {
+
+    public static final String MEDIA_URL = "/media/";
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/media/**").addResourceLocations("file:./media/");
+        registry.addResourceHandler(MEDIA_URL + "**").addResourceLocations("file:./media/");
     }
 }

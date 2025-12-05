@@ -12,11 +12,11 @@ spring:
     hibernate:
       ddl-auto: validate
     open-in-view: true
-    show-sql: false
+    show-sql: true
   sql:
     init:
       mode: never
 
 pebble:
-  prefix: /templates/lilies
+  prefix: /templates
   suffix: .html

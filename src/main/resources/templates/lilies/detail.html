@@ -1,4 +1,4 @@
-{% extends 'index' %}
+{% extends 'lilies/index' %}
 
 {% block title %}{{ object.music.name }} - {% endblock %}
 
@@ -28,16 +28,16 @@
             <div class="btn-group-vertical" role="group">
                 {% if object.storage.hasMp3 %}
                 <a class="btn btn-outline-dark audio-control">
-                    <audio src="/media/{{ object.storage.mp3Fn }}" id="sheet-{{ object.music.id }}" type="audio/mpeg"
+                    <audio src="{{ object.storage.mp3 }}" id="sheet-{{ object.music.id }}" type="audio/mpeg"
                            preload="none"></audio>
                     <i class="fas fa-music"></i> Слушать</a>
                 {% endif %}
                 {% if object.storage.hasPdf %}
-                <a class="btn btn-outline-dark" target="_blank" href="/media/{{ object.storage.pdfFn }}">
+                <a class="btn btn-outline-dark" target="_blank" href="{{ object.storage.pdf }}">
                     <i class="fas fa-save"></i> PDF</a>
                 {% endif %}
                 {% if object.storage.hasSrc %}
-                <a class="btn btn-outline-dark" target="_blank" href="/media/{{ object.storage.srcFn }}">
+                <a class="btn btn-outline-dark" target="_blank" href="{{ object.storage.src }}">
                     <i class="fas fa-file"></i> .ly файл</a>
                 {% endif %}
             </div>
@@ -48,10 +48,18 @@
 
 <nav>
     <ul class="pagination justify-content-center">
-        <li class="page-item" id="pdf-prev"><a class="page-link" href="#" onclick="goPrev()"><i
-                class="fas fa-angle-left"></i> Предыдущая страница</a></li>
-        <li class="page-item" id="pdf-next"><a class="page-link" href="#" onclick="goNext()">Следующая страница <i
-                class="fas fa-angle-right"></i></a></li>
+        <li class="page-item disabled" id="pdf-prev">
+            <a class="page-link" href="#" id="prev-btn">
+                <i class="fas fa-angle-left"></i>
+                Предыдущая страница
+            </a>
+        </li>
+        <li class="page-item disabled" id="pdf-next">
+            <a class="page-link" href="#" id="next-btn">
+                Следующая страница
+                <i class="fas fa-angle-right"></i>
+            </a>
+        </li>
     </ul>
 </nav>
 {% endblock %}
@@ -98,7 +106,7 @@
         renderPage(pageNum);
     }
 
-    const loadTask = pdfjsLib.getDocument("/media/{{ object.storage.pdfFn }}");
+    const loadTask = pdfjsLib.getDocument("{{ object.storage.pdf }}");
     (async () => {
         pdfdoc = await loadTask.promise;
         renderPage(pageNum);
@@ -130,6 +138,8 @@
         $(document).keypress(function (event) {
             if (event.which === 112) audio_play($(".audio-control"));
         })
+        $("#prev-btn").click(function() { goPrev(); });
+        $("#next-btn").click(function() { goNext(); });
     });
 
     $(document).keyup(function (event) {

@@ -8,6 +8,6 @@ import lombok.RequiredArgsConstructor;
 public final class SheetView {
 
     private final MusicView music;
-    private final StorageView storage;
+    private final StorageLink storage;
 
 }
