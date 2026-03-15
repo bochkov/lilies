@@ -1,21 +1,10 @@
 spring:
   application:
     name: lilies
+---
+spring:
   config:
-    import: file:lilies.properties
-  datasource:
-    driver-class-name: org.postgresql.Driver
-    url: ${db.url}
-    username: ${db.user}
-    password: ${db.pass}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    open-in-view: true
-  sql:
-    init:
-      mode: never
-
-pebble:
-  prefix: /templates
-  suffix: .html
+    import: optional:configserver:${CONFIG_SERVER_URL}
+  cloud:
+    config:
+      fail-fast: true
